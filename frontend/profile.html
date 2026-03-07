@@ -21,7 +21,7 @@
                     <path d="M11 19c-1.7 0-3-1.3-3-3v-2h8v2c0 1.7-1.3 3-3 3Z" />
                     <path d="M12 22v-3" />
                 </svg></div>
-            <div class="sidebar-brand">Evero Budget<span>Pro Finance</span></div>
+            <div class="sidebar-brand">Evero Budget<span>Premium Finance</span></div>
         </div>
         <nav class="sidebar-nav">
             <div class="sidebar-section-label">Menu</div>
@@ -31,13 +31,23 @@
             <div class="sidebar-section-label">Account</div>
             <a href="/profile.html" class="sidebar-link active"><i data-lucide="user"></i> Profile</a>
             <a href="/settings.html" class="sidebar-link"><i data-lucide="settings"></i> Settings</a>
-            <a href="/referrals.html" class="sidebar-link"><i data-lucide="users"></i> Referral <span class="badge badge-emerald ml-auto" style="font-size:10px;padding:2px 6px;">Program</span></a>
+            <a href="/referrals.html" class="sidebar-link"><i data-lucide="users"></i> Referral <span
+                    class="badge badge-emerald ml-auto" style="font-size:10px;padding:2px 6px;">Program</span></a>
             <div class="sidebar-section-label">Legal & Info</div>
             <a href="/privacy.html" class="sidebar-link"><i data-lucide="shield-alert"></i> Privacy</a>
             <a href="/terms.html" class="sidebar-link"><i data-lucide="file-text"></i> Terms</a>
             <a href="/about.html" class="sidebar-link"><i data-lucide="info"></i> About</a>
         </nav>
         <div class="sidebar-footer">
+            <div id="upgradeBanner" class="hidden">
+                <a href="/pricing.html" class="upgrade-banner">
+                    <i data-lucide="zap" style="width:16px;height:16px;color:hsl(var(--emerald));flex-shrink:0;"></i>
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-size:0.8125rem;font-weight:600;">Upgrade to Premium</div>
+                        <div style="font-size:0.6875rem;color:hsl(var(--muted-foreground));">Unlimited features</div>
+                    </div>
+                </a>
+            </div>
             <div class="sidebar-user" onclick="window.location.href='/profile.html'">
                 <div class="sidebar-avatar" id="sidebarAvatar">U</div>
                 <div style="flex:1;min-width:0;">
@@ -153,7 +163,7 @@
 
                 if (user.is_premium) {
                     document.getElementById('premiumBadge').classList.remove('hidden');
-                    document.getElementById('planName').textContent = 'Premium Pro';
+                    document.getElementById('planName').textContent = 'Premium';
                     document.getElementById('planBadge').textContent = 'PRO';
                     document.getElementById('planBadge').className = 'badge badge-emerald';
                 }

@@ -127,6 +127,7 @@ function loadSidebar(user) {
         name: document.getElementById('sidebarName'),
         email: document.getElementById('sidebarEmail'),
         avatar: document.getElementById('sidebarAvatar'),
+        upgradeBanner: document.getElementById('upgradeBanner')
     };
     if (els.name) els.name.textContent = user.name || 'User';
     if (els.email) els.email.textContent = user.email;
@@ -135,6 +136,15 @@ function loadSidebar(user) {
             els.avatar.innerHTML = `<img src="${user.image}" style="width:100%;height:100%;border-radius:inherit;object-fit:cover;">`;
         } else {
             els.avatar.textContent = (user.name || 'U')[0].toUpperCase();
+        }
+    }
+
+    // Show upgrade banner for free users
+    if (els.upgradeBanner) {
+        if (!user.is_premium) {
+            els.upgradeBanner.classList.remove('hidden');
+        } else {
+            els.upgradeBanner.classList.add('hidden');
         }
     }
 }
