@@ -32,6 +32,7 @@
             <a href="/dashboard.html" class="sidebar-link active"><i data-lucide="layout-dashboard"></i> Dashboard</a>
             <a href="/transactions.html" class="sidebar-link"><i data-lucide="arrow-left-right"></i> Transactions</a>
             <a href="/pricing.html" class="sidebar-link"><i data-lucide="gem"></i> Pricing</a>
+            <a href="/calendar.html" class="sidebar-link"><i data-lucide="calendar"></i> Calendar</a>
             <div class="sidebar-section-label">Account</div>
             <a href="/profile.html" class="sidebar-link"><i data-lucide="user"></i> Profile</a>
             <a href="/settings.html" class="sidebar-link"><i data-lucide="settings"></i> Settings</a>
@@ -140,6 +141,115 @@
                 </div>
             </div>
         </div>
+
+        <!-- Calendar Widget -->
+        <div class="grid gap-4 mb-6" style="grid-template-columns: 1fr 1fr;">
+            <div class="card animate-slide-up delay-3">
+                <div class="card-header flex justify-between items-center" style="flex-direction:row;">
+                    <div>
+                        <div class="card-title">Activity Calendar</div>
+                        <div class="card-description">Your transaction history at a glance</div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button class="btn btn-ghost btn-icon btn-sm" onclick="calendarPrev()" title="Previous">
+                            <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+                        </button>
+                        <span class="text-sm font-medium" id="calMonthLabel"
+                            style="min-width:100px;text-align:center;"></span>
+                        <button class="btn btn-ghost btn-icon btn-sm" onclick="calendarNext()" title="Next">
+                            <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="mini-calendar" id="miniCalendar"></div>
+                </div>
+            </div>
+            <div class="card animate-slide-up delay-3">
+                <div class="card-header">
+                    <div class="card-title" id="calDayTitle">Select a Date</div>
+                    <div class="card-description" id="calDaySubtitle">Click on a day to see transactions</div>
+                </div>
+                <div class="card-content" id="calDayTransactions">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📅</div>
+                        <p class="text-muted">Click a day on the calendar</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .mini-calendar {
+                display: grid;
+                grid-template-columns: repeat(7, 1fr);
+                gap: 2px;
+                font-size: 0.75rem;
+            }
+
+            .mini-calendar .cal-header {
+                text-align: center;
+                font-weight: 600;
+                font-size: 0.625rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: hsl(var(--muted-foreground));
+                padding: 6px 0;
+            }
+
+            .mini-calendar .cal-day {
+                text-align: center;
+                padding: 6px 2px;
+                border-radius: 8px;
+                cursor: pointer;
+                position: relative;
+                transition: all 150ms;
+                font-weight: 500;
+                color: hsl(var(--foreground));
+            }
+
+            .mini-calendar .cal-day:hover {
+                background: hsl(var(--accent));
+            }
+
+            .mini-calendar .cal-day.today {
+                background: hsl(var(--primary));
+                color: hsl(var(--primary-foreground));
+                font-weight: 700;
+            }
+
+            .mini-calendar .cal-day.other-month {
+                color: hsl(var(--muted-foreground));
+                opacity: 0.4;
+            }
+
+            .mini-calendar .cal-day.selected {
+                outline: 2px solid hsl(var(--ring));
+                outline-offset: 1px;
+            }
+
+            .mini-calendar .cal-day .cal-dots {
+                display: flex;
+                justify-content: center;
+                gap: 2px;
+                margin-top: 2px;
+                min-height: 6px;
+            }
+
+            .mini-calendar .cal-day .cal-dot {
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+            }
+
+            .mini-calendar .cal-day .cal-dot.income {
+                background: hsl(var(--emerald));
+            }
+
+            .mini-calendar .cal-day .cal-dot.expense {
+                background: hsl(var(--rose));
+            }
+        </style>
 
         <!-- Budget Progress + Quick Actions Row -->
         <div class="grid gap-4 mb-6" style="grid-template-columns: 1fr 1fr;">
@@ -312,6 +422,9 @@
 
                 // Recent transactions
                 renderRecentTx(transactions.slice(0, 8));
+
+                // Calendar
+                renderCalendar();
 
                 renderIcons();
             } catch (err) {
@@ -537,6 +650,92 @@
                 showToast(err.message, 'error');
             } finally { btn.disabled = false; btn.textContent = 'Add Transaction'; }
         });
+
+        // ---- Calendar ----
+        let calYear, calMonth;
+        (function initCal() { const d = new Date(); calYear = d.getFullYear(); calMonth = d.getMonth(); })();
+
+        function calendarPrev() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); renderIcons(); }
+        function calendarNext() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); renderIcons(); }
+
+        function renderCalendar() {
+            const el = document.getElementById('miniCalendar');
+            if (!el) return;
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('calMonthLabel').textContent = monthNames[calMonth] + ' ' + calYear;
+
+            const today = new Date();
+            const firstDay = new Date(calYear, calMonth, 1).getDay();
+            const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+            const daysInPrev = new Date(calYear, calMonth, 0).getDate();
+
+            const dayTypes = {};
+            transactions.forEach(t => {
+                const d = new Date(t.date);
+                if (d.getMonth() === calMonth && d.getFullYear() === calYear) {
+                    const day = d.getDate();
+                    if (!dayTypes[day]) dayTypes[day] = new Set();
+                    dayTypes[day].add(t.type);
+                }
+            });
+
+            let html = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => `<div class="cal-header">${d}</div>`).join('');
+
+            for (let i = firstDay - 1; i >= 0; i--) {
+                html += `<div class="cal-day other-month"><span>${daysInPrev - i}</span><div class="cal-dots"></div></div>`;
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const isToday = day === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear();
+                const types = dayTypes[day];
+                let dots = '<div class="cal-dots">';
+                if (types) {
+                    if (types.has('income')) dots += '<div class="cal-dot income"></div>';
+                    if (types.has('expense')) dots += '<div class="cal-dot expense"></div>';
+                }
+                dots += '</div>';
+                html += `<div class="cal-day${isToday ? ' today' : ''}" onclick="selectCalDay(${day})"><span>${day}</span>${dots}</div>`;
+            }
+
+            const totalCells = firstDay + daysInMonth;
+            const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+            for (let i = 1; i <= remaining; i++) {
+                html += `<div class="cal-day other-month"><span>${i}</span><div class="cal-dots"></div></div>`;
+            }
+            el.innerHTML = html;
+        }
+
+        function selectCalDay(day) {
+            document.querySelectorAll('.cal-day.selected').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('.cal-day:not(.other-month)').forEach(el => {
+                if (el.querySelector('span')?.textContent == day) el.classList.add('selected');
+            });
+
+            const dateStr = `${calYear}-${String(calMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const dayTx = transactions.filter(t => t.date?.startsWith(dateStr));
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            document.getElementById('calDayTitle').textContent = `${monthNames[calMonth]} ${day}, ${calYear}`;
+
+            const income = dayTx.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+            const expense = dayTx.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+            document.getElementById('calDaySubtitle').textContent = dayTx.length === 0
+                ? 'No transactions on this day'
+                : `${dayTx.length} transaction${dayTx.length > 1 ? 's' : ''} · Income: ${formatCurrency(income)} · Expenses: ${formatCurrency(expense)}`;
+
+            const el = document.getElementById('calDayTransactions');
+            if (dayTx.length === 0) {
+                el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🍃</div><p class="text-muted">No transactions on this day</p></div>';
+                return;
+            }
+            el.innerHTML = dayTx.map(t => {
+                const meta = getCategoryMeta(t.category);
+                return `<div class="tx-row">
+                    <div class="tx-icon" style="background:hsl(${meta.color.replace('var(--', '').replace(')', '')}-light));">${meta.icon}</div>
+                    <div class="tx-info"><div class="tx-desc">${t.description}</div><div class="tx-meta">${t.category}</div></div>
+                    <span class="tx-amount ${t.type}">${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}</span>
+                </div>`;
+            }).join('');
+        }
 
         loadDashboard();
     </script>

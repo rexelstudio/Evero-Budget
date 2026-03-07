@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evero Budget — Calendar</title>
+    <meta name="description"
+        content="View your financial activity on a monthly calendar with daily transaction details.">
+    <link rel="stylesheet" href="/css/globals.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        .full-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .full-calendar .fc-header {
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: hsl(var(--muted-foreground));
+            padding: 10px 0;
+        }
+
+        .full-calendar .fc-day {
+            min-height: 90px;
+            border: 1px solid hsl(var(--border));
+            border-radius: 8px;
+            padding: 6px 8px;
+            cursor: pointer;
+            transition: all 150ms;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .full-calendar .fc-day:hover {
+            border-color: hsl(var(--ring));
+            box-shadow: var(--shadow-sm);
+        }
+
+        .full-calendar .fc-day.today {
+            border-color: hsl(var(--primary));
+            background: hsl(var(--accent));
+        }
+
+        .full-calendar .fc-day.selected {
+            border-color: hsl(var(--ring));
+            box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
+        }
+
+        .full-calendar .fc-day.other-month {
+            opacity: 0.35;
+            background: hsl(var(--muted) / 0.3);
+        }
+
+        .fc-day-num {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .fc-day.today .fc-day-num {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .fc-day-items {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .fc-item {
+            font-size: 0.5625rem;
+            padding: 2px 4px;
+            border-radius: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 500;
+        }
+
+        .fc-item.income {
+            background: hsl(var(--emerald) / 0.12);
+            color: hsl(var(--emerald));
+        }
+
+        .fc-item.expense {
+            background: hsl(var(--rose) / 0.12);
+            color: hsl(var(--rose));
+        }
+
+        .fc-more {
+            font-size: 0.5625rem;
+            color: hsl(var(--muted-foreground));
+            font-weight: 600;
+            padding: 1px 4px;
+        }
+
+        .fc-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .fc-summary-card {
+            padding: 16px;
+            border-radius: 10px;
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+        }
+
+        .day-detail-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m13 2-2 2.5h3L12 7" />
+                    <path d="M10 14v-3" />
+                    <path d="M14 14v-3" />
+                    <path d="M11 19c-1.7 0-3-1.3-3-3v-2h8v2c0 1.7-1.3 3-3 3Z" />
+                    <path d="M12 22v-3" />
+                </svg></div>
+            <div class="sidebar-brand">Evero Budget<span>Premium Finance</span></div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-section-label">Menu</div>
+            <a href="/dashboard.html" class="sidebar-link"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="/transactions.html" class="sidebar-link"><i data-lucide="arrow-left-right"></i> Transactions</a>
+            <a href="/pricing.html" class="sidebar-link"><i data-lucide="gem"></i> Pricing</a>
+            <a href="/calendar.html" class="sidebar-link active"><i data-lucide="calendar"></i> Calendar</a>
+            <div class="sidebar-section-label">Account</div>
+            <a href="/profile.html" class="sidebar-link"><i data-lucide="user"></i> Profile</a>
+            <a href="/settings.html" class="sidebar-link"><i data-lucide="settings"></i> Settings</a>
+            <a href="/referrals.html" class="sidebar-link"><i data-lucide="users"></i> Referral <span
+                    class="badge badge-emerald ml-auto" style="font-size:10px;padding:2px 6px;">Program</span></a>
+            <div class="sidebar-section-label">Legal & Info</div>
+            <a href="/privacy.html" class="sidebar-link"><i data-lucide="shield-alert"></i> Privacy</a>
+            <a href="/terms.html" class="sidebar-link"><i data-lucide="file-text"></i> Terms</a>
+            <a href="/about.html" class="sidebar-link"><i data-lucide="info"></i> About</a>
+        </nav>
+        <div class="sidebar-footer">
+            <div id="upgradeBanner" class="hidden">
+                <a href="/pricing.html" class="upgrade-banner">
+                    <i data-lucide="zap" style="width:16px;height:16px;color:hsl(var(--emerald));flex-shrink:0;"></i>
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-size:0.8125rem;font-weight:600;">Upgrade to Premium</div>
+                        <div style="font-size:0.6875rem;color:hsl(var(--muted-foreground));">Unlimited features</div>
+                    </div>
+                </a>
+            </div>
+            <div class="sidebar-user" onclick="window.location.href='/profile.html'">
+                <div class="sidebar-avatar" id="sidebarAvatar">U</div>
+                <div style="flex:1;min-width:0;">
+                    <div class="sidebar-user-name" id="sidebarName">User</div>
+                    <div class="sidebar-user-email" id="sidebarEmail">loading...</div>
+                </div>
+                <button class="btn btn-ghost btn-icon btn-sm" onclick="event.stopPropagation(); logout();"
+                    title="Log out"><i data-lucide="log-out" style="width:14px;height:14px;"></i></button>
+            </div>
+        </div>
+    </aside>
+
+    <main class="page-content">
+        <div class="page-header flex justify-between items-center">
+            <div>
+                <h1 class="page-title tracking-tight">Calendar</h1>
+                <p class="page-description">Track your spending day by day</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <button class="btn btn-ghost btn-icon" onclick="calPrev()" title="Previous month">
+                    <i data-lucide="chevron-left" style="width:18px;height:18px;"></i>
+                </button>
+                <span class="text-base font-semibold" id="calTitle" style="min-width:140px;text-align:center;"></span>
+                <button class="btn btn-ghost btn-icon" onclick="calNext()" title="Next month">
+                    <i data-lucide="chevron-right" style="width:18px;height:18px;"></i>
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="calToday()">Today</button>
+                <button class="btn btn-ghost btn-icon" onclick="toggleTheme()" title="Toggle theme">
+                    <i data-lucide="moon" style="width:16px;height:16px;"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Monthly Summary -->
+        <div class="fc-summary animate-fade-in" id="calSummary">
+            <div class="fc-summary-card">
+                <p class="text-xs text-muted font-bold uppercase tracking-wider mb-1">Monthly Income</p>
+                <h3 id="calIncome" style="color:hsl(var(--emerald))">$0.00</h3>
+            </div>
+            <div class="fc-summary-card">
+                <p class="text-xs text-muted font-bold uppercase tracking-wider mb-1">Monthly Expenses</p>
+                <h3 id="calExpenses" style="color:hsl(var(--rose))">$0.00</h3>
+            </div>
+            <div class="fc-summary-card">
+                <p class="text-xs text-muted font-bold uppercase tracking-wider mb-1">Net Flow</p>
+                <h3 id="calNet">$0.00</h3>
+            </div>
+        </div>
+
+        <!-- Full Calendar Grid -->
+        <div class="grid gap-6" style="grid-template-columns: 1fr 320px;">
+            <div class="card animate-slide-up">
+                <div class="card-content" style="padding:16px;">
+                    <div class="full-calendar" id="fullCalendar"></div>
+                </div>
+            </div>
+
+            <!-- Day Detail Panel -->
+            <div class="card animate-slide-up delay-1" style="position: sticky; top: 20px; align-self: start;">
+                <div class="card-header">
+                    <div class="card-title" id="dayDetailTitle">Select a Date</div>
+                    <div class="card-description" id="dayDetailSub">Click on any day to see details</div>
+                </div>
+                <div class="card-content day-detail-list" id="dayDetailList">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📅</div>
+                        <p class="text-muted">Click a day on the calendar</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script>
+        requireAuth();
+        let transactions = [];
+        let calYear, calMonth;
+
+        (function () {
+            const d = new Date();
+            calYear = d.getFullYear();
+            calMonth = d.getMonth();
+        })();
+
+        function calPrev() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } render(); renderIcons(); }
+        function calNext() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } render(); renderIcons(); }
+        function calToday() { const d = new Date(); calYear = d.getFullYear(); calMonth = d.getMonth(); render(); renderIcons(); }
+
+        async function loadCalendar() {
+            try {
+                const [txData, user] = await Promise.all([apiFetch('/api/transactions'), apiFetch('/api/user')]);
+                transactions = txData.transactions;
+                loadSidebar(user);
+                render();
+                renderIcons();
+            } catch (err) {
+                showToast('Failed to load calendar', 'error');
+            }
+        }
+
+        function render() {
+            renderFullCalendar();
+            renderSummary();
+        }
+
+        function renderSummary() {
+            const monthTx = transactions.filter(t => {
+                const d = new Date(t.date);
+                return d.getMonth() === calMonth && d.getFullYear() === calYear;
+            });
+            const income = monthTx.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+            const expenses = monthTx.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+            document.getElementById('calIncome').textContent = formatCurrency(income);
+            document.getElementById('calExpenses').textContent = formatCurrency(expenses);
+            const net = income - expenses;
+            const netEl = document.getElementById('calNet');
+            netEl.textContent = (net >= 0 ? '+' : '') + formatCurrency(net);
+            netEl.style.color = net >= 0 ? 'hsl(var(--emerald))' : 'hsl(var(--rose))';
+        }
+
+        function renderFullCalendar() {
+            const el = document.getElementById('fullCalendar');
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('calTitle').textContent = monthNames[calMonth] + ' ' + calYear;
+
+            const today = new Date();
+            const firstDay = new Date(calYear, calMonth, 1).getDay();
+            const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+            const daysInPrev = new Date(calYear, calMonth, 0).getDate();
+
+            // Group transactions by day
+            const txByDay = {};
+            transactions.forEach(t => {
+                const d = new Date(t.date);
+                if (d.getMonth() === calMonth && d.getFullYear() === calYear) {
+                    const day = d.getDate();
+                    if (!txByDay[day]) txByDay[day] = [];
+                    txByDay[day].push(t);
+                }
+            });
+
+            let html = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+                .map(d => `<div class="fc-header">${d}</div>`).join('');
+
+            // Previous month padding
+            for (let i = firstDay - 1; i >= 0; i--) {
+                html += `<div class="fc-day other-month"><div class="fc-day-num">${daysInPrev - i}</div></div>`;
+            }
+
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const isToday = day === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear();
+                const dayTx = txByDay[day] || [];
+
+                let items = '';
+                const show = dayTx.slice(0, 3);
+                show.forEach(t => {
+                    items += `<div class="fc-item ${t.type}">${t.type === 'income' ? '+' : '-'}$${t.amount.toFixed(0)} ${t.description}</div>`;
+                });
+                if (dayTx.length > 3) {
+                    items += `<div class="fc-more">+${dayTx.length - 3} more</div>`;
+                }
+
+                html += `<div class="fc-day${isToday ? ' today' : ''}" onclick="selectDay(${day})">
+                    <div class="fc-day-num">${day}</div>
+                    <div class="fc-day-items">${items}</div>
+                </div>`;
+            }
+
+            // Next month padding
+            const totalCells = firstDay + daysInMonth;
+            const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+            for (let i = 1; i <= remaining; i++) {
+                html += `<div class="fc-day other-month"><div class="fc-day-num">${i}</div></div>`;
+            }
+
+            el.innerHTML = html;
+        }
+
+        function selectDay(day) {
+            // Visual selection
+            document.querySelectorAll('.fc-day.selected').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('.fc-day:not(.other-month)').forEach(el => {
+                if (el.querySelector('.fc-day-num')?.textContent == day) el.classList.add('selected');
+            });
+
+            const dateStr = `${calYear}-${String(calMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const dayTx = transactions.filter(t => t.date?.startsWith(dateStr));
+
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('dayDetailTitle').textContent = `${monthNames[calMonth]} ${day}, ${calYear}`;
+
+            const income = dayTx.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+            const expense = dayTx.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+            document.getElementById('dayDetailSub').textContent = dayTx.length === 0
+                ? 'No transactions'
+                : `${dayTx.length} transaction${dayTx.length > 1 ? 's' : ''} · +${formatCurrency(income)} / -${formatCurrency(expense)}`;
+
+            const el = document.getElementById('dayDetailList');
+            if (dayTx.length === 0) {
+                el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🍃</div><p class="text-muted">No transactions on this day</p></div>';
+                return;
+            }
+
+            el.innerHTML = dayTx.map(t => {
+                const meta = getCategoryMeta(t.category);
+                return `<div class="tx-row">
+                    <div class="tx-icon" style="background:hsl(${meta.color.replace('var(--', '').replace(')', '')}-light));">${meta.icon}</div>
+                    <div class="tx-info">
+                        <div class="tx-desc">${t.description}</div>
+                        <div class="tx-meta">${t.category}</div>
+                    </div>
+                    <span class="tx-amount ${t.type}">${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}</span>
+                </div>`;
+            }).join('');
+        }
+
+        loadCalendar();
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
