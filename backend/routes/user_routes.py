@@ -5,6 +5,10 @@ from typing import Optional
 import os
 import shutil
 import uuid
+import pyotp
+import qrcode
+import base64
+from io import BytesIO
 
 from database import get_db
 from models import User
@@ -116,3 +120,56 @@ async def upload_image(
     db.commit()
 
     return {"success": True, "image_url": current_user.image}
+
+
+class Verify2FARequest(BaseModel):
+    code: str
+
+
+@router.get("/2fa/setup")
+def setup_2fa(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    if current_user.two_factor_enabled:
+        raise HTTPException(status_code=400, detail="2FA is already enabled")
+
+    # Generate secret if not exists
+    if not current_user.two_factor_secret:
+        current_user.two_factor_secret = pyotp.random_base32()
+        db.commit()
+
+    # Generate TOTP provisioning URI
+    totp = pyotp.TOTP(current_user.two_factor_secret)
+    provisioning_uri = totp.provisioning_uri(name=current_user.email, issuer_name="Evero Budget")
+
+    # Generate QR Code
+    img = qrcode.make(provisioning_uri)
+    buffered = BytesIO()
+    img.save(buffered, format="PNG")
+    qr_base64 = base64.b64encode(buffered.getvalue()).decode()
+
+    return {
+        "secret": current_user.two_factor_secret,
+        "qr_code": f"data:image/png;base64,{qr_base64}",
+        "provisioning_uri": provisioning_uri
+    }
+
+
+@router.post("/2fa/verify")
+def verify_2fa_setup(body: Verify2FARequest, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    if not current_user.two_factor_secret:
+        raise HTTPException(status_code=400, detail="2FA setup not initiated")
+
+    totp = pyotp.TOTP(current_user.two_factor_secret)
+    if totp.verify(body.code):
+        current_user.two_factor_enabled = True
+        db.commit()
+        return {"success": True}
+    else:
+        raise HTTPException(status_code=400, detail="Invalid verification code")
+
+
+@router.post("/2fa/disable")
+def disable_2fa(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    current_user.two_factor_enabled = False
+    current_user.two_factor_secret = None
+    db.commit()
+    return {"success": True}

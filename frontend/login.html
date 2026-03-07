@@ -43,6 +43,21 @@
                     <button type="submit" id="submitBtn" class="btn btn-default btn-full" style="height:40px;">Sign
                         In</button>
                 </form>
+
+                <form id="2faForm" class="flex flex-col gap-4 hidden">
+                    <div class="text-center mb-2">
+                        <div class="badge badge-secondary mb-2">Security Step</div>
+                        <p class="text-sm">Please enter the 6-digit code from your authenticator app</p>
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Authentication Code</label>
+                        <input type="text" id="2faCode" class="input text-center" placeholder="000000" maxlength="6"
+                            pattern="\d{6}" autofocus>
+                    </div>
+                    <button type="submit" id="2faBtn" class="btn btn-default btn-full" style="height:40px;">Verify
+                        Code</button>
+                    <button type="button" class="btn btn-ghost btn-sm" onclick="showLoginForm()">Back to login</button>
+                </form>
             </div>
         </div>
 
@@ -58,20 +73,58 @@
     <script src="/js/api.js"></script>
     <script>
         if (getToken()) window.location.href = '/dashboard.html';
+
+        function showLoginForm() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('2faForm').classList.add('hidden');
+        }
+
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
             const btn = document.getElementById('submitBtn');
             btn.disabled = true; btn.textContent = 'Signing in...';
             try {
                 const data = await apiFetch('/api/auth/login', {
                     method: 'POST',
-                    body: JSON.stringify({ email: document.getElementById('email').value, password: document.getElementById('password').value }),
+                    body: JSON.stringify({ email, password }),
                 });
+
+                if (data.status === 'requires_2fa') {
+                    document.getElementById('loginForm').classList.add('hidden');
+                    document.getElementById('2faForm').classList.remove('hidden');
+                    document.getElementById('2faCode').focus();
+                    return;
+                }
+
                 setToken(data.token); setUser(data.user);
                 window.location.href = '/dashboard.html';
             } catch (err) {
                 showToast(err.message, 'error');
                 btn.disabled = false; btn.textContent = 'Sign In';
+            }
+        });
+
+        document.getElementById('2faForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const code = document.getElementById('2faCode').value;
+            const btn = document.getElementById('2faBtn');
+            if (!code) return showToast('Enter code', 'error');
+
+            btn.disabled = true; btn.textContent = 'Verifying...';
+            try {
+                const data = await apiFetch('/api/auth/verify-2fa', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password, code }),
+                });
+                setToken(data.token); setUser(data.user);
+                window.location.href = '/dashboard.html';
+            } catch (err) {
+                showToast(err.message, 'error');
+                btn.disabled = false; btn.textContent = 'Verify Code';
             }
         });
         lucide.createIcons();

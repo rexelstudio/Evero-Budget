@@ -18,6 +18,8 @@ class User(Base):
     image = Column(Text, nullable=True)
     hashed_password = Column(String, nullable=True)
     monthly_goal = Column(Float, default=2000.0)
+    two_factor_enabled = Column(Boolean, default=False)
+    two_factor_secret = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

@@ -5,6 +5,7 @@ from pydantic import BaseModel, EmailStr
 from database import get_db
 from models import User, LoginHistory
 from auth import hash_password, verify_password, create_access_token, get_current_user
+import pyotp
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
@@ -18,6 +19,7 @@ class RegisterRequest(BaseModel):
 class LoginRequest(BaseModel):
     email: str
     password: str
+    code: Optional[str] = None
 
 
 @router.post("/register")
@@ -66,6 +68,47 @@ def login(body: LoginRequest, request: Request, db: Session = Depends(get_db)):
     )
     db.add(history)
     db.commit()
+
+    if user.two_factor_enabled:
+        return {
+            "status": "requires_2fa",
+            "email": user.email,
+            "message": "Two-factor authentication is required"
+        }
+
+    token = create_access_token(data={"sub": user.id})
+    return {
+        "token": token,
+        "user": {
+            "id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "image": user.image,
+        },
+    }
+
+
+class Verify2FALogin(BaseModel):
+    email: str
+    password: str
+    code: str
+
+
+@router.post("/verify-2fa")
+def verify_2fa_login(body: Verify2FALogin, request: Request, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == body.email.lower().strip()).first()
+    if not user or not user.hashed_password:
+        raise HTTPException(status_code=401, detail="Invalid request")
+
+    if not verify_password(body.password, user.hashed_password):
+        raise HTTPException(status_code=401, detail="Invalid request")
+
+    if not user.two_factor_enabled or not user.two_factor_secret:
+        raise HTTPException(status_code=400, detail="2FA not enabled for this user")
+
+    totp = pyotp.TOTP(user.two_factor_secret)
+    if not totp.verify(body.code):
+        raise HTTPException(status_code=400, detail="Invalid 2FA code")
 
     token = create_access_token(data={"sub": user.id})
     return {

@@ -93,6 +93,28 @@
                     <button class="btn btn-default" onclick="changePassword()">Update Password</button>
                 </div>
             </div>
+
+            <!-- Two-Factor Authentication -->
+            <div class="card mb-4 animate-fade-in">
+                <div class="card-header">
+                    <div class="card-title flex items-center gap-2"><i data-lucide="shield-check"
+                            style="width:14px;height:14px;"></i> Two-Factor Authentication</div>
+                    <div class="card-description">Add an extra layer of security to your account</div>
+                </div>
+                <div class="card-content">
+                    <div class="flex justify-between items-center p-4 rounded-md mb-4"
+                        style="background:hsl(var(--muted));">
+                        <div>
+                            <p class="text-sm font-medium">Authenticator App</p>
+                            <p class="text-xs text-muted">Use an app like Google Authenticator or Authy</p>
+                        </div>
+                        <div id="2faStatusBadge"><span class="badge badge-secondary">Disabled</span></div>
+                    </div>
+                    <div id="2faActionArea">
+                        <button class="btn btn-outline btn-full" onclick="show2FASetup()">Enable 2FA</button>
+                    </div>
+                </div>
+            </div>
             <div class="card animate-fade-in" style="border-color:hsl(var(--destructive) / 0.3);">
                 <div class="card-header">
                     <div class="card-title flex items-center gap-2" style="color:hsl(var(--destructive));"><i
@@ -194,6 +216,36 @@
         </div>
     </div>
 
+    <!-- 2FA Setup Modal -->
+    <div id="tfOverlay" class="hidden"></div>
+    <div id="tfModal" class="hidden">
+        <div class="dialog-header">
+            <div class="dialog-title">Setup 2FA</div>
+            <div class="dialog-description">Scan the QR code with your authenticator app</div>
+            <button class="dialog-close" onclick="close2FAModal()"><i data-lucide="x"
+                    style="width:16px;height:16px;"></i></button>
+        </div>
+        <div class="dialog-content flex flex-col items-center gap-4 text-center">
+            <div id="qrContainer" class="p-4 rounded-lg bg-white"
+                style="border: 1px solid hsl(var(--border)); min-height: 200px; min-width: 200px; display: flex; align-items: center; justify-content: center;">
+                <p class="text-xs text-muted">Generating QR code...</p>
+            </div>
+            <div class="w-full">
+                <p class="text-xs text-muted mb-2">Can't scan? Use this code instead:</p>
+                <code id="tfSecret" class="p-2 bg-muted rounded font-mono text-xs block truncate"
+                    style="background: hsl(var(--muted));">...</code>
+            </div>
+            <div class="input-group w-full text-left">
+                <label class="label">Verification Code</label>
+                <input type="text" id="tfVerifyCode" class="input" placeholder="000000" maxlength="6" pattern="\d{6}">
+            </div>
+        </div>
+        <div class="dialog-footer">
+            <button class="btn btn-outline" onclick="close2FAModal()">Cancel</button>
+            <button class="btn btn-default" id="tfVerifyBtn" onclick="verify2FASetup()">Verify & Activate</button>
+        </div>
+    </div>
+
     <script src="/js/api.js"></script>
     <script>
         requireAuth();
@@ -211,7 +263,20 @@
                 const user = await apiFetch('/api/user');
                 loadSidebar(user);
                 document.getElementById('nameInput').value = user.name || '';
+                update2FAUI(user.two_factor_enabled);
             } catch (err) { showToast('Failed to load', 'error'); }
+        }
+
+        function update2FAUI(enabled) {
+            const badge = document.getElementById('2faStatusBadge');
+            const area = document.getElementById('2faActionArea');
+            if (enabled) {
+                badge.innerHTML = '<span class="badge badge-emerald">Enabled</span>';
+                area.innerHTML = '<button class="btn btn-outline btn-full" onclick="disable2FA()" style="color:hsl(var(--destructive)); border-color:hsl(var(--destructive)/0.3);">Disable 2FA</button>';
+            } else {
+                badge.innerHTML = '<span class="badge badge-secondary">Disabled</span>';
+                area.innerHTML = '<button class="btn btn-outline btn-full" onclick="show2FASetup()">Enable 2FA</button>';
+            }
         }
 
         async function saveName() {
@@ -272,6 +337,56 @@
             } catch (err) {
                 showToast(err.message, 'error');
                 btn.disabled = false; btn.textContent = 'Delete Forever';
+            }
+        }
+
+        // 2FA Functions
+        function close2FAModal() {
+            document.getElementById('tfOverlay').className = 'hidden';
+            document.getElementById('tfModal').className = 'hidden';
+        }
+
+        async function show2FASetup() {
+            document.getElementById('tfOverlay').className = 'overlay';
+            document.getElementById('tfModal').className = 'dialog';
+            renderIcons();
+
+            try {
+                const data = await apiFetch('/api/user/2fa/setup');
+                document.getElementById('qrContainer').innerHTML = `<img src="${data.qr_code}" style="width:100%; height:100%;">`;
+                document.getElementById('tfSecret').textContent = data.secret;
+            } catch (err) {
+                showToast(err.message, 'error');
+                close2FAModal();
+            }
+        }
+
+        async function verify2FASetup() {
+            const code = document.getElementById('tfVerifyCode').value;
+            if (!code) return showToast('Enter code', 'error');
+            const btn = document.getElementById('tfVerifyBtn');
+            btn.disabled = true; btn.textContent = 'Verifying...';
+
+            try {
+                await apiFetch('/api/user/2fa/verify', { method: 'POST', body: JSON.stringify({ code }) });
+                showToast('2FA Activated!', 'success');
+                close2FAModal();
+                update2FAUI(true);
+            } catch (err) {
+                showToast(err.message, 'error');
+            } finally {
+                btn.disabled = false; btn.textContent = 'Verify & Activate';
+            }
+        }
+
+        async function disable2FA() {
+            if (!confirm('Are you sure you want to disable Two-Factor Authentication? Your account will be less secure.')) return;
+            try {
+                await apiFetch('/api/user/2fa/disable', { method: 'POST' });
+                showToast('2FA Disabled', 'success');
+                update2FAUI(false);
+            } catch (err) {
+                showToast(err.message, 'error');
             }
         }
 
