@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evero Budget — Privacy Policy</title>
+    <meta name="description"
+        content="Privacy Policy for Evero Budget. Learn how we collect, use, and protect your financial data.">
+    <link rel="stylesheet" href="/css/globals.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <style>
+        .legal-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+        }
+
+        .legal-hero {
+            text-align: center;
+            margin-bottom: 48px;
+            padding: 48px 32px;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .legal-hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--color-primary-glow), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .legal-hero-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: var(--color-primary-light);
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin: 0 auto 16px;
+        }
+
+        .legal-hero h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .legal-hero .effective-date {
+            font-size: 0.8125rem;
+            color: var(--color-text-muted);
+            font-weight: 500;
+        }
+
+        .legal-section {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.25s ease;
+        }
+
+        .legal-section:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .legal-section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--color-primary-light);
+            color: var(--color-primary);
+            font-size: 0.75rem;
+            font-weight: 800;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .legal-section h2 {
+            display: flex;
+            align-items: center;
+            font-size: 1.125rem;
+            margin-bottom: 16px;
+        }
+
+        .legal-section p,
+        .legal-section li {
+            font-size: 0.9375rem;
+            line-height: 1.75;
+            color: var(--color-text-secondary);
+        }
+
+        .legal-section p {
+            margin-bottom: 12px;
+        }
+
+        .legal-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .legal-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .legal-section ul li {
+            padding: 8px 0 8px 24px;
+            position: relative;
+        }
+
+        .legal-section ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 16px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            opacity: 0.6;
+        }
+
+        .legal-section strong {
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        .legal-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            background: var(--color-bg-card);
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .legal-nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--color-text);
+        }
+
+        .legal-nav-logo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--color-primary), #14b8a6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+        }
+
+        .legal-nav-links {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="legal-nav">
+        <a href="/" class="legal-nav-logo">
+            <div class="legal-nav-logo-icon">⚡</div>
+            <span style="font-weight:700;font-size:0.9375rem;">Evero Budget</span>
+        </a>
+        <div class="legal-nav-links">
+            <a href="/privacy.html" class="btn btn-ghost btn-sm"
+                style="color:var(--color-primary);font-weight:600;">Privacy</a>
+            <a href="/terms.html" class="btn btn-ghost btn-sm">Terms</a>
+            <a href="/about.html" class="btn btn-ghost btn-sm">About</a>
+            <button class="btn btn-ghost btn-icon btn-sm" onclick="toggleTheme()" style="font-size:1rem;">🌙</button>
+        </div>
+    </nav>
+
+    <div class="legal-container">
+        <!-- Hero -->
+        <div class="legal-hero animate-fade-in">
+            <div class="legal-hero-icon">🛡️</div>
+            <h1 class="text-gradient">Privacy Policy</h1>
+            <p class="effective-date">Effective Date: March 7, 2026</p>
+        </div>
+
+        <!-- Section 1 -->
+        <div class="legal-section animate-slide-up">
+            <h2><span class="legal-section-number">1</span> Information We Collect</h2>
+            <p>To provide you with the best budgeting experience, we collect the following types of information:</p>
+            <ul>
+                <li><strong>Account Information:</strong> Your name, email address, and encrypted password.</li>
+                <li><strong>Financial Data:</strong> Transaction amounts, categories, dates, and merchant names that you
+                    manually enter or sync.</li>
+                <li><strong>Technical Data:</strong> IP addresses, browser types, and device information to help us
+                    troubleshoot and improve app performance.</li>
+            </ul>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="legal-section animate-slide-up delay-1">
+            <h2><span class="legal-section-number">2</span> How We Use Your Data</h2>
+            <p>We use your information strictly for the following:</p>
+            <ul>
+                <li>To maintain your account and provide core budgeting features.</li>
+                <li>To send you security alerts and account-related notifications.</li>
+                <li>To analyze aggregated (non-identifiable) usage trends to improve the app.</li>
+            </ul>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="legal-section animate-slide-up delay-2">
+            <h2><span class="legal-section-number">3</span> Data Sharing and Disclosure</h2>
+            <p>We do not sell, rent, or trade your personal financial data to third parties. We only share data when:
+            </p>
+            <ul>
+                <li><strong>Service Providers:</strong> We use trusted third-party services (like hosting or email
+                    providers) who are contractually obligated to keep your data private.</li>
+                <li><strong>Legal Requirements:</strong> We may disclose information if required by law or to protect
+                    our legal rights.</li>
+            </ul>
+        </div>
+
+        <!-- Section 4 -->
+        <div class="legal-section animate-slide-up delay-3">
+            <h2><span class="legal-section-number">4</span> Security Measures</h2>
+            <p>The security of your financial data is our top priority. We implement:</p>
+            <ul>
+                <li><strong>Encryption:</strong> All data is transmitted via SSL/TLS and sensitive database fields are
+                    encrypted at rest.</li>
+                <li><strong>Access Control:</strong> Only authorized systems have access to the database, and we use
+                    industry-standard hashing for passwords.</li>
+            </ul>
+        </div>
+
+        <!-- Section 5 -->
+        <div class="legal-section animate-slide-up delay-4">
+            <h2><span class="legal-section-number">5</span> Your Rights and Choices</h2>
+            <p>You have full control over your data:</p>
+            <ul>
+                <li><strong>Export:</strong> You can request a copy of your transaction data at any time.</li>
+                <li><strong>Deletion:</strong> You may delete your account and all associated data through the settings
+                    menu. Once deleted, this data cannot be recovered.</li>
+            </ul>
+        </div>
+
+        <!-- Section 6 -->
+        <div class="legal-section animate-slide-up">
+            <h2><span class="legal-section-number">6</span> Updates to This Policy</h2>
+            <p>We may update this policy from time to time. We will notify you of any significant changes via the email
+                address associated with your account.</p>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+</body>
+
+</html>
