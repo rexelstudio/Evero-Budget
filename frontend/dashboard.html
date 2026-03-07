@@ -376,8 +376,8 @@
                         {
                             label: 'Income',
                             data: last30.map(d => incomeByDay[d] || 0),
-                            borderColor: 'hsl(160, 84%, 39%)',
-                            backgroundColor: 'hsla(160, 84%, 39%, 0.08)',
+                            borderColor: 'hsl(174, 63%, 40%)',
+                            backgroundColor: 'hsla(174, 63%, 40%, 0.08)',
                             fill: true,
                             tension: 0.4,
                             borderWidth: 2,
@@ -387,8 +387,8 @@
                         {
                             label: 'Expenses',
                             data: last30.map(d => expensesByDay[d] || 0),
-                            borderColor: 'hsl(347, 77%, 50%)',
-                            backgroundColor: 'hsla(347, 77%, 50%, 0.08)',
+                            borderColor: 'hsl(350, 80%, 60%)',
+                            backgroundColor: 'hsla(350, 80%, 60%, 0.08)',
                             fill: true,
                             tension: 0.4,
                             borderWidth: 2,
@@ -432,7 +432,7 @@
             const data = sorted.map(e => e[1]);
             const total = data.reduce((s, v) => s + v, 0);
 
-            const colors = ['#f97316', '#3b82f6', '#8b5cf6', '#06b6d4', '#f59e0b', '#10b981', '#ec4899', '#6366f1'];
+            const colors = ['#0ea5e9', '#06b6d4', '#14b8a6', '#2dd4bf', '#0284c7', '#0891b2', '#0d9488', '#10b981'];
 
             catChartInstance = new Chart(ctx, {
                 type: 'doughnut',

@@ -7,52 +7,59 @@
 
 :root {
     /* === shadcn/ui Color Tokens (HSL) === */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --background: 210 20% 98%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 195 70% 50%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
+    --secondary: 210 10% 94%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
+    --muted: 210 10% 94%;
+    --muted-foreground: 215 15% 45%;
 
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+    --accent: 195 70% 50%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 195 70% 50%;
 
     /* Radius */
     --radius: 0.5rem;
 
-    /* Semantic Colors */
-    --emerald: 160 84% 39%;
-    --emerald-light: 160 84% 39% / 0.1;
-    --rose: 347 77% 50%;
-    --rose-light: 347 77% 50% / 0.1;
-    --blue: 217 91% 60%;
-    --blue-light: 217 91% 60% / 0.1;
-    --amber: 38 92% 50%;
-    --amber-light: 38 92% 50% / 0.1;
-    --violet: 263 70% 50%;
-    --violet-light: 263 70% 50% / 0.1;
-    --cyan: 189 94% 43%;
-    --cyan-light: 189 94% 43% / 0.1;
-    --orange: 25 95% 53%;
-    --orange-light: 25 95% 53% / 0.1;
+    /* Semantic Colors (Updated for Ocean Breeze) */
+    --emerald: 174 63% 40%;
+    /* Seafoam success */
+    --emerald-light: 174 63% 40% / 0.1;
+    --rose: 350 80% 60%;
+    /* Coral reef destructive */
+    --rose-light: 350 80% 60% / 0.1;
+    --blue: 195 70% 50%;
+    /* Ocean blue */
+    --blue-light: 195 70% 50% / 0.1;
+    --amber: 35 70% 55%;
+    /* Sandy amber */
+    --amber-light: 35 70% 55% / 0.1;
+    --violet: 240 60% 65%;
+    /* Misty lavender */
+    --violet-light: 240 60% 65% / 0.1;
+    --cyan: 185 80% 45%;
+    /* Tropical teal */
+    --cyan-light: 185 80% 45% / 0.1;
+    --orange: 25 90% 60%;
+    /* Sunset orange */
+    --orange-light: 25 90% 60% / 0.1;
 
     /* Chart Colors */
     --chart-1: 173 58% 39%;
@@ -73,33 +80,33 @@
 
 /* === DARK MODE === */
 [data-theme="dark"] {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 222 47% 6%;
+    --foreground: 210 20% 98%;
 
-    --card: 0 0% 6%;
-    --card-foreground: 0 0% 98%;
+    --card: 222 47% 8%;
+    --card-foreground: 210 20% 98%;
 
-    --popover: 0 0% 6%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 20% 98%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
+    --primary: 195 70% 50%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 217 10% 15%;
+    --secondary-foreground: 210 20% 98%;
 
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
+    --muted: 217 10% 15%;
+    --muted-foreground: 215 15% 65%;
 
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 195 70% 50%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --border: 217 10% 15%;
+    --input: 217 10% 15%;
+    --ring: 195 70% 50%;
 
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
