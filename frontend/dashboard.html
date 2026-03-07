@@ -130,6 +130,17 @@
                         <canvas id="trendChart"></canvas>
                     </div>
                 </div>
+                <div class="card-footer" id="trendFooter"
+                    style="padding:12px 24px 16px; border-top:1px solid hsl(var(--border)); display:flex; align-items:flex-start; gap:8px; font-size:0.8125rem;">
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:6px; font-weight:500;" id="trendChangeLabel">
+                            <span id="trendChangeText">Calculating...</span>
+                            <i data-lucide="trending-up" style="width:14px;height:14px;" id="trendIcon"></i>
+                        </div>
+                        <div class="text-muted" style="font-size:0.75rem;" id="trendPeriodLabel">Income &amp; Expenses
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- Category Donut -->
             <div class="card animate-slide-up delay-3">
@@ -356,7 +367,8 @@
         }
 
         function renderTrendChart() {
-            const ctx = document.getElementById('trendChart').getContext('2d');
+            const canvas = document.getElementById('trendChart');
+            const ctx = canvas.getContext('2d');
             if (trendChartInstance) trendChartInstance.destroy();
 
             const dark = isDarkMode();
@@ -374,6 +386,16 @@
                 else incomeByDay[d] = (incomeByDay[d] || 0) + t.amount;
             });
 
+            // Gradient for Income
+            const incomeGradient = ctx.createLinearGradient(0, 0, 0, canvas.parentElement.offsetHeight);
+            incomeGradient.addColorStop(0, 'hsla(142, 70%, 45%, 0.5)');
+            incomeGradient.addColorStop(1, 'hsla(142, 70%, 45%, 0.02)');
+
+            // Gradient for Expenses
+            const expenseGradient = ctx.createLinearGradient(0, 0, 0, canvas.parentElement.offsetHeight);
+            expenseGradient.addColorStop(0, 'hsla(0, 70%, 50%, 0.5)');
+            expenseGradient.addColorStop(1, 'hsla(0, 70%, 50%, 0.02)');
+
             trendChartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -383,23 +405,29 @@
                             label: 'Income',
                             data: last30.map(d => incomeByDay[d] || 0),
                             borderColor: 'hsl(142, 70%, 45%)',
-                            backgroundColor: 'hsla(142, 70%, 45%, 0.08)',
+                            backgroundColor: incomeGradient,
                             fill: true,
                             tension: 0.4,
                             borderWidth: 2,
                             pointRadius: 0,
-                            pointHoverRadius: 4,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: 'hsl(142, 70%, 45%)',
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 2,
                         },
                         {
                             label: 'Expenses',
                             data: last30.map(d => expensesByDay[d] || 0),
                             borderColor: 'hsl(0, 70%, 50%)',
-                            backgroundColor: 'hsla(0, 70%, 50%, 0.08)',
+                            backgroundColor: expenseGradient,
                             fill: true,
                             tension: 0.4,
                             borderWidth: 2,
                             pointRadius: 0,
-                            pointHoverRadius: 4,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: 'hsl(0, 70%, 50%)',
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 2,
                         }
                     ]
                 },
@@ -408,15 +436,80 @@
                     maintainAspectRatio: false,
                     interaction: { intersect: false, mode: 'index' },
                     plugins: {
-                        legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 8, boxHeight: 8, usePointStyle: true, font: { size: 11, family: 'Inter' }, color: dark ? '#a1a1aa' : '#71717a', padding: 16 } },
-                        tooltip: { backgroundColor: dark ? '#27272a' : '#fff', titleColor: dark ? '#fafafa' : '#09090b', bodyColor: dark ? '#a1a1aa' : '#71717a', borderColor: dark ? '#3f3f46' : '#e4e4e7', borderWidth: 1, padding: 12, cornerRadius: 8, titleFont: { weight: '600' } }
+                        legend: {
+                            display: true, position: 'top', align: 'end',
+                            labels: {
+                                boxWidth: 8, boxHeight: 8, usePointStyle: true, pointStyle: 'circle',
+                                font: { size: 11, family: 'Inter' },
+                                color: dark ? '#a1a1aa' : '#71717a', padding: 16
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: dark ? '#27272a' : '#fff',
+                            titleColor: dark ? '#fafafa' : '#09090b',
+                            bodyColor: dark ? '#a1a1aa' : '#71717a',
+                            borderColor: dark ? '#3f3f46' : '#e4e4e7',
+                            borderWidth: 1, padding: 12, cornerRadius: 8,
+                            titleFont: { weight: '600', family: 'Inter' },
+                            bodyFont: { family: 'Inter' },
+                            callbacks: {
+                                label: function (context) {
+                                    return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+                                }
+                            }
+                        }
                     },
                     scales: {
-                        x: { grid: { display: false }, ticks: { font: { size: 10, family: 'Inter' }, color: dark ? '#71717a' : '#a1a1aa', maxTicksLimit: 8 }, border: { display: false } },
-                        y: { grid: { color: dark ? '#27272a' : '#f4f4f5' }, ticks: { font: { size: 10, family: 'Inter' }, color: dark ? '#71717a' : '#a1a1aa', callback: v => '$' + v }, border: { display: false } }
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { size: 10, family: 'Inter' }, color: dark ? '#71717a' : '#a1a1aa', maxTicksLimit: 6 },
+                            border: { display: false }
+                        },
+                        y: {
+                            grid: { color: dark ? 'hsla(0,0%,100%,0.06)' : 'hsla(0,0%,0%,0.06)', drawTicks: false },
+                            ticks: { font: { size: 10, family: 'Inter' }, color: dark ? '#71717a' : '#a1a1aa', callback: v => '$' + v.toLocaleString(), padding: 8 },
+                            border: { display: false }
+                        }
                     }
                 }
             });
+
+            // Update footer with trend info
+            updateTrendFooter(last30, incomeByDay, expensesByDay);
+        }
+
+        function updateTrendFooter(last30, incomeByDay, expensesByDay) {
+            const mid = Math.floor(last30.length / 2);
+            const firstHalf = last30.slice(0, mid);
+            const secondHalf = last30.slice(mid);
+
+            const firstIncome = firstHalf.reduce((s, d) => s + (incomeByDay[d] || 0), 0);
+            const secondIncome = secondHalf.reduce((s, d) => s + (incomeByDay[d] || 0), 0);
+
+            let pctChange = 0;
+            if (firstIncome > 0) pctChange = ((secondIncome - firstIncome) / firstIncome * 100);
+            else if (secondIncome > 0) pctChange = 100;
+
+            const changeEl = document.getElementById('trendChangeText');
+            const iconEl = document.getElementById('trendIcon');
+            const labelEl = document.getElementById('trendChangeLabel');
+
+            if (changeEl) {
+                const up = pctChange >= 0;
+                changeEl.textContent = (up ? 'Trending up' : 'Trending down') + ' by ' + Math.abs(pctChange).toFixed(1) + '% this period';
+                if (iconEl) {
+                    iconEl.setAttribute('data-lucide', up ? 'trending-up' : 'trending-down');
+                    labelEl.style.color = up ? 'hsl(142, 70%, 45%)' : 'hsl(0, 70%, 50%)';
+                }
+            }
+
+            const periodEl = document.getElementById('trendPeriodLabel');
+            if (periodEl && last30.length > 0) {
+                const first = new Date(last30[0]);
+                const last = new Date(last30[last30.length - 1]);
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                periodEl.textContent = months[first.getMonth()] + ' - ' + months[last.getMonth()] + ' ' + last.getFullYear();
+            }
         }
 
         function renderCategoryChart() {
