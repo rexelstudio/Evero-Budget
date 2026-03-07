@@ -116,9 +116,9 @@
         </div>
 
         <!-- Charts Row -->
-        <div class="grid gap-4 mb-6" style="grid-template-columns:1fr 1fr;">
+        <div class="grid gap-4 mb-6" style="grid-template-columns:1fr 1fr 1fr;">
             <!-- Spending Trend Chart -->
-            <div class="card animate-slide-up delay-2">
+            <div class="card animate-slide-up delay-1">
                 <div class="card-header flex justify-between items-center" style="flex-direction:row;">
                     <div>
                         <div class="card-title">Spending Trend</div>
@@ -142,8 +142,9 @@
                     </div>
                 </div>
             </div>
+
             <!-- Category Donut -->
-            <div class="card animate-slide-up delay-3">
+            <div class="card animate-slide-up delay-2">
                 <div class="card-header">
                     <div class="card-title">Category Breakdown</div>
                     <div class="card-description">Where your money goes</div>
@@ -155,47 +156,29 @@
                     <div id="categoryLegend" style="margin-top:16px;"></div>
                 </div>
             </div>
-        </div>
 
-        <!-- Budget Progress + Quick Actions Row -->
-        <div class="grid gap-4 mb-6" style="grid-template-columns: 1fr 1fr;">
-            <!-- Budget Progress -->
+            <!-- Stacked Bar Chart -->
             <div class="card animate-slide-up delay-3">
-                <div class="card-header flex justify-between items-center" style="flex-direction:row;">
-                    <div>
-                        <div class="card-title">Budget Progress</div>
-                        <div class="card-description">Spent vs. Goal by category</div>
+                <div class="card-header">
+                    <div class="card-title">Bar Chart - Stacked + Legend</div>
+                    <div class="card-description" id="barChartPeriod">January - June 2024</div>
+                </div>
+                <div class="card-content" style="padding-top:12px;">
+                    <div style="position:relative; height:120px; width:100%;">
+                        <canvas id="stackedBarChart"></canvas>
                     </div>
                 </div>
-                <div class="card-content" id="budgetProgress">
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📊</div>
-                        <p class="text-muted">Add transactions to see budget progress</p>
+                <div class="card-footer"
+                    style="padding:12px 24px 16px; border-top:1px solid hsl(var(--border)); display:flex; align-items:flex-start; gap:8px; font-size:0.8125rem;">
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div
+                            style="display:flex; align-items:center; gap:6px; font-weight:500; color:hsl(var(--primary));">
+                            <span id="barTrendText">Trending up by 0% this month</span>
+                            <i data-lucide="trending-up" style="width:14px;height:14px;"></i>
+                        </div>
+                        <div class="text-muted" style="font-size:0.75rem;">Showing income vs expenses for the last 6
+                            months</div>
                     </div>
-                </div>
-            </div>
-            <!-- Monthly Goal -->
-            <div class="card animate-slide-up delay-4">
-                <div class="card-header flex justify-between items-center" style="flex-direction:row;">
-                    <div>
-                        <div class="card-title">Monthly Goal</div>
-                        <div class="card-description">Track your spending target</div>
-                    </div>
-                    <div class="flex gap-2 items-center">
-                        <input type="number" id="goalInput" class="input"
-                            style="width:100px;height:32px;padding:4px 8px;font-size:0.8125rem;" placeholder="2000">
-                        <button class="btn btn-secondary btn-sm" onclick="saveGoal()">Set</button>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <div class="flex justify-between items-center text-sm mb-2">
-                        <span class="text-muted" id="goalSpent">$0 spent</span>
-                        <span class="text-muted" id="goalRemaining">$0 remaining</span>
-                    </div>
-                    <div class="progress progress-emerald">
-                        <div class="progress-bar" id="goalProgress" style="width:0%;"></div>
-                    </div>
-                    <p class="text-xs text-muted mt-2" id="goalPercent">0% of goal used</p>
                 </div>
             </div>
         </div>
@@ -316,54 +299,28 @@
                 document.getElementById('statExpenses').textContent = formatCurrency(expenses);
                 document.getElementById('statSavings').textContent = formatCurrency(income - expenses);
 
-                // Goal
-                document.getElementById('goalInput').value = userInfo.monthly_goal || 2000;
-                updateGoalUI(expenses, userInfo.monthly_goal || 2000);
-
                 // Charts
                 updateCharts();
-
-                // Budget progress
-                renderBudgetProgress(thisMonth);
 
                 // Recent transactions
                 renderRecentTx(transactions.slice(0, 8));
 
                 renderIcons();
             } catch (err) {
+                console.error(err);
                 showToast('Failed to load dashboard', 'error');
             }
         }
 
-        function updateGoalUI(spent, goal) {
-            const pct = goal > 0 ? Math.min((spent / goal) * 100, 100) : 0;
-            document.getElementById('goalSpent').textContent = formatCurrency(spent) + ' spent';
-            document.getElementById('goalRemaining').textContent = formatCurrency(Math.max(goal - spent, 0)) + ' remaining';
-            document.getElementById('goalProgress').style.width = pct + '%';
-            document.getElementById('goalPercent').textContent = formatPercent(pct) + ' of goal used';
-            if (pct >= 90) {
-                document.getElementById('goalProgress').style.background = 'hsl(var(--rose))';
-            } else if (pct >= 70) {
-                document.getElementById('goalProgress').style.background = 'hsl(var(--amber))';
-            }
-        }
-
-        async function saveGoal() {
-            const val = parseFloat(document.getElementById('goalInput').value);
-            if (!val || val <= 0) return;
-            try {
-                await apiFetch('/api/goals', { method: 'PUT', body: JSON.stringify({ monthly_goal: val }) });
-                showToast('Goal updated!', 'success');
-            } catch (err) { showToast(err.message, 'error'); }
-        }
-
-        // ---- Charts ----
+        // --- Charts ---
         let trendChartInstance = null;
         let catChartInstance = null;
+        let stackedChartInstance = null;
 
         function updateCharts() {
             renderTrendChart();
             renderCategoryChart();
+            renderStackedBarChart();
         }
 
         function renderTrendChart() {
@@ -556,37 +513,115 @@
             ).join('');
         }
 
-        // ---- Budget Progress ----
-        function renderBudgetProgress(monthTx) {
-            const el = document.getElementById('budgetProgress');
-            const byCategory = {};
-            monthTx.filter(t => t.type === 'expense').forEach(t => {
-                byCategory[t.category] = (byCategory[t.category] || 0) + t.amount;
-            });
+        function renderStackedBarChart() {
+            const canvas = document.getElementById('stackedBarChart');
+            const ctx = canvas.getContext('2d');
+            if (stackedChartInstance) stackedChartInstance.destroy();
 
-            const sorted = Object.entries(byCategory).sort((a, b) => b[1] - a[1]);
-            if (sorted.length === 0) {
-                el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📊</div><p class="text-muted">No expenses yet this month</p></div>';
-                return;
+            const dark = isDarkMode();
+            const months = [];
+            const labels = [];
+            const now = new Date();
+            for (let i = 5; i >= 0; i--) {
+                const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                months.push({ m: d.getMonth(), y: d.getFullYear() });
+                labels.push(d.toLocaleString('default', { month: 'long' }));
             }
 
-            const maxBudget = userData?.monthly_goal || 2000;
-            const progressColors = ['progress-emerald', 'progress-blue', 'progress-violet', 'progress-amber', 'progress-rose'];
+            // Update period label
+            const firstMonth = labels[0];
+            const lastMonth = labels[labels.length - 1];
+            const periodEl = document.getElementById('barChartPeriod');
+            if (periodEl) periodEl.textContent = `${firstMonth} - ${lastMonth} ${now.getFullYear()}`;
 
-            el.innerHTML = sorted.slice(0, 6).map((e, i) => {
-                const budgetShare = maxBudget * (0.3 - i * 0.04);
-                const goal = Math.max(budgetShare, 100);
-                const pct = Math.min((e[1] / goal) * 100, 100);
-                const meta = getCategoryMeta(e[0]);
-                return `
-                    <div style="margin-bottom:14px;">
-                        <div class="flex justify-between items-center mb-1">
-                            <div class="flex items-center gap-2"><span style="font-size:0.875rem;">${meta.icon}</span><span class="text-xs font-medium">${e[0]}</span></div>
-                            <span class="text-xs text-muted">${formatCurrency(e[1])} / ${formatCurrency(goal)}</span>
-                        </div>
-                        <div class="progress ${progressColors[i % progressColors.length]}"><div class="progress-bar" style="width:${pct}%;"></div></div>
-                    </div>`;
-            }).join('');
+            const incomeData = new Array(6).fill(0);
+            const expenseData = new Array(6).fill(0);
+
+            transactions.forEach(t => {
+                const td = new Date(t.date);
+                const tm = td.getMonth();
+                const ty = td.getFullYear();
+                const idx = months.findIndex(m => m.m === tm && m.y === ty);
+                if (idx !== -1) {
+                    if (t.type === 'income') incomeData[idx] += t.amount;
+                    else expenseData[idx] += t.amount;
+                }
+            });
+
+            stackedChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Income',
+                            data: incomeData,
+                            backgroundColor: 'hsl(142, 70%, 45%)',
+                            borderRadius: { topLeft: 0, topRight: 0, bottomLeft: 4, bottomRight: 4 },
+                            stack: 'a'
+                        },
+                        {
+                            label: 'Expenses',
+                            data: expenseData,
+                            backgroundColor: 'hsl(0, 70%, 50%)',
+                            borderRadius: { topLeft: 4, topRight: 4, bottomLeft: 0, bottomRight: 0 },
+                            stack: 'a'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true, position: 'bottom', align: 'center',
+                            labels: {
+                                boxWidth: 12, boxHeight: 12, usePointStyle: true, pointStyle: 'rectRounded',
+                                font: { size: 11, family: 'Inter' },
+                                color: dark ? '#a1a1aa' : '#71717a', padding: 16
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: dark ? '#27272a' : '#fff',
+                            titleColor: dark ? '#fafafa' : '#09090b',
+                            bodyColor: dark ? '#a1a1aa' : '#71717a',
+                            borderColor: dark ? '#3f3f46' : '#e4e4e7',
+                            borderWidth: 1, padding: 12, cornerRadius: 8,
+                            titleFont: { weight: '600', family: 'Inter' },
+                            bodyFont: { family: 'Inter' },
+                            callbacks: {
+                                label: function (context) {
+                                    return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            grid: { display: false },
+                            ticks: { font: { size: 10, family: 'Inter' }, color: dark ? '#71717a' : '#a1a1aa', callback: v => labels[v].slice(0, 3) },
+                            border: { display: false }
+                        },
+                        y: {
+                            stacked: true,
+                            grid: { color: dark ? 'hsla(0,0%,100%,0.06)' : 'hsla(0,0%,0%,0.06)', drawTicks: false },
+                            ticks: { font: { size: 10, family: 'Inter' }, color: dark ? '#71717a' : '#a1a1aa', callback: v => '$' + v.toLocaleString(), padding: 8 },
+                            border: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Update footer trend
+            const firstHalf = incomeData.slice(0, 3).reduce((a, b) => a + b, 0);
+            const secondHalf = incomeData.slice(3, 6).reduce((a, b) => a + b, 0);
+            let pct = 0;
+            if (firstHalf > 0) pct = ((secondHalf - firstHalf) / firstHalf * 100);
+            const trendEl = document.getElementById('barTrendText');
+            if (trendEl) {
+                trendEl.textContent = `Trending ${pct >= 0 ? 'up' : 'down'} by ${Math.abs(pct).toFixed(1)}% this period`;
+            }
         }
 
         // ---- Recent Transactions  ----
