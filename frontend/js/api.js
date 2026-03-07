@@ -130,7 +130,13 @@ function loadSidebar(user) {
     };
     if (els.name) els.name.textContent = user.name || 'User';
     if (els.email) els.email.textContent = user.email;
-    if (els.avatar) els.avatar.textContent = (user.name || 'U')[0].toUpperCase();
+    if (els.avatar) {
+        if (user.image && user.image !== "") {
+            els.avatar.innerHTML = `<img src="${user.image}" style="width:100%;height:100%;border-radius:inherit;object-fit:cover;">`;
+        } else {
+            els.avatar.textContent = (user.name || 'U')[0].toUpperCase();
+        }
+    }
 }
 
 // ---- Lucide Icon helper ----

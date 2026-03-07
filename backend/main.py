@@ -35,6 +35,12 @@ frontend_dir = os.path.join(os.path.dirname(__file__), "..", "frontend")
 app.mount("/css", StaticFiles(directory=os.path.join(frontend_dir, "css")), name="css")
 app.mount("/js", StaticFiles(directory=os.path.join(frontend_dir, "js")), name="js")
 
+# Serve user uploads
+uploads_dir = os.path.join(os.path.dirname(__file__), "uploads")
+if not os.path.exists(uploads_dir):
+    os.makedirs(uploads_dir)
+app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
+
 
 # SPA-style routing: serve HTML files
 @app.get("/")

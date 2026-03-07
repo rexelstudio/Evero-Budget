@@ -1,7 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import Optional
+import os
+import shutil
+import uuid
 
 from database import get_db
 from models import User
@@ -82,3 +85,34 @@ def delete_user(body: DeleteUserRequest, current_user: User = Depends(get_curren
     db.delete(current_user)
     db.commit()
     return {"success": True}
+
+
+@router.post("/upload-image")
+async def upload_image(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    # Validate file type
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="File must be an image")
+
+    # Create uploads directory if it doesn't exist
+    uploads_dir = os.path.join(os.path.dirname(__file__), "..", "uploads")
+    if not os.path.exists(uploads_dir):
+        os.makedirs(uploads_dir)
+
+    # Generate unique filename
+    file_ext = os.path.splitext(file.filename)[1]
+    filename = f"{uuid.uuid4()}{file_ext}"
+    file_path = os.path.join(uploads_dir, filename)
+
+    # Save file
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    # Update user image path in database
+    current_user.image = f"/uploads/{filename}"
+    db.commit()
+
+    return {"success": True, "image_url": current_user.image}
