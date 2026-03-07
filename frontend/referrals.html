@@ -64,33 +64,46 @@
             <p class="page-description">Earn rewards for growing the Evero community</p>
         </div>
 
-        <div class="grid grid-2 gap-6 mb-8">
-            <div class="card animate-fade-in">
+        <div class="grid grid-3 gap-6 mb-8">
+            <!-- Earnings & Bonus -->
+            <div class="card animate-fade-in" style="display: flex; flex-direction: column;">
                 <div class="card-header">
                     <div class="card-title">$2.99 Reward / User</div>
-                    <div class="card-description">Earn $2.99 every month for every active referral</div>
+                    <div class="card-description">Earn recurring rewards every month</div>
                 </div>
-                <div class="card-content flex flex-col gap-4">
+                <div class="card-content flex flex-col gap-4 flex-1">
                     <div class="p-4 rounded-lg bg-emerald-light border border-emerald/20">
-                        <p class="text-sm font-medium" style="color:hsl(var(--emerald))">Your Referral Earnings</p>
+                        <p class="text-sm font-medium" style="color:hsl(var(--emerald))">Current Earnings</p>
                         <h2 id="totalEarnings" style="color:hsl(var(--emerald))">$0.00 <span
                                 class="text-xs font-normal opacity-70">per month</span></h2>
                     </div>
+
+                    <div class="p-4 rounded-lg bg-blue-light border border-blue/20">
+                        <div class="flex items-center gap-2 mb-1">
+                            <i data-lucide="trophy" style="width:14px;height:14px;color:hsl(var(--blue))"></i>
+                            <p class="text-sm font-bold" style="color:hsl(var(--blue))">Milestone Bonus</p>
+                        </div>
+                        <p class="text-xs" style="color:hsl(var(--blue)); opacity: 0.9;">Refer 50 Premium users to get a
+                            <span class="font-bold">$250.00</span> one-time bonus!
+                        </p>
+                    </div>
+
                     <div class="input-group">
                         <label class="label">Your Referral Link</label>
                         <div class="flex gap-2">
                             <input type="text" id="referralLink" class="input flex-1" readonly
                                 value="https://evero-budget.com/signup?ref=U8219K">
-                            <button class="btn btn-default" onclick="copyLink()">Copy</button>
+                            <button class="btn btn-default btn-sm" onclick="copyLink()">Copy</button>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Stats -->
             <div class="card animate-fade-in delay-1">
                 <div class="card-header">
-                    <div class="card-title">Referral Stats</div>
-                    <div class="card-description">Track your impact</div>
+                    <div class="card-title">Program Stats</div>
+                    <div class="card-description">Track your impact & bonuses</div>
                 </div>
                 <div class="card-content grid grid-2 gap-4">
                     <div class="p-4 rounded-lg bg-muted">
@@ -102,8 +115,11 @@
                         <h3 id="statSignups">0</h3>
                     </div>
                     <div class="p-4 rounded-lg bg-muted">
-                        <p class="text-xs text-muted mb-1 uppercase tracking-wider font-bold">Active Users</p>
-                        <h3 id="statActive">0</h3>
+                        <p class="text-xs text-muted mb-1 uppercase tracking-wider font-bold">Premium</p>
+                        <h3 id="statPremium">0 / 50</h3>
+                        <div class="progress mt-2" style="height:4px;">
+                            <div class="progress-bar" style="width:0%"></div>
+                        </div>
                     </div>
                     <div class="p-4 rounded-lg bg-muted">
                         <p class="text-xs text-muted mb-1 uppercase tracking-wider font-bold">Conv. Rate</p>
@@ -111,42 +127,110 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Payouts -->
+            <div class="card animate-fade-in delay-2">
+                <div class="card-header">
+                    <div class="card-title">Payout Method</div>
+                    <div class="card-description">How you receive your funds</div>
+                </div>
+                <div class="card-content flex flex-col gap-4">
+                    <div class="flex flex-col gap-3">
+                        <div class="flex items-center justify-between p-3 border rounded-lg hover:border-foreground cursor-pointer transition-colors"
+                            onclick="setPayout('paypal')">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded bg-muted flex items-center justify-center"><i
+                                        data-lucide="wallet" style="width:16px;height:16px;"></i></div>
+                                <div>
+                                    <p class="text-sm font-medium">PayPal</p>
+                                    <p class="text-xs text-muted">Instant transfer</p>
+                                </div>
+                            </div>
+                            <div class="radio-circle"></div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 border rounded-lg hover:border-foreground cursor-pointer transition-colors"
+                            onclick="setPayout('stripe')">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded bg-muted flex items-center justify-center"><i
+                                        data-lucide="credit-card" style="width:16px;height:16px;"></i></div>
+                                <div>
+                                    <p class="text-sm font-medium">Stripe / Bank</p>
+                                    <p class="text-xs text-muted">2-3 business days</p>
+                                </div>
+                            </div>
+                            <div class="radio-circle"></div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <p class="text-xs text-muted mb-2">Minimum payout: $10.00</p>
+                        <button class="btn btn-outline btn-full btn-sm" disabled id="payoutBtn">Request Payout</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="card animate-fade-in delay-2">
+        <div class="card animate-fade-in delay-3">
             <div class="card-header">
-                <div class="card-title">How it works</div>
-                <div class="card-description">Simple steps to earn your lifetime rewards</div>
+                <div class="card-title">Program Rules</div>
+                <div class="card-description">Everything you need to know about rewards</div>
             </div>
-            <div class="card-content flex flex-col gap-6">
-                <div class="flex gap-4">
-                    <div
-                        class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold">
-                        1</div>
-                    <div>
-                        <p class="font-medium text-sm">Share your link</p>
-                        <p class="text-xs text-muted">Send your unique referral link to friends, family, or your social
-                            network.</p>
+            <div class="card-content">
+                <div class="grid grid-2 gap-8">
+                    <div class="flex flex-col gap-6">
+                        <div class="flex gap-4">
+                            <div
+                                class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold flex-shrink-0">
+                                1</div>
+                            <div>
+                                <p class="font-medium text-sm">Share your link</p>
+                                <p class="text-xs text-muted">Spread your link to friends, family, or your social
+                                    network.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div
+                                class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold flex-shrink-0">
+                                2</div>
+                            <div>
+                                <p class="font-medium text-sm">They subscribe Premium</p>
+                                <p class="text-xs text-muted">When a referred user upgrades to Premium, you start
+                                    earning.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div
+                                class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold flex-shrink-0">
+                                3</div>
+                            <div>
+                                <p class="font-medium text-sm">Monthly Rewards</p>
+                                <p class="text-xs text-muted">Receive $2.99/mo for every active subscriber linked to
+                                    you.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="flex gap-4">
-                    <div
-                        class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold">
-                        2</div>
-                    <div>
-                        <p class="font-medium text-sm">They join Evero</p>
-                        <p class="text-xs text-muted">When they sign up and start managing their budget, they're linked
-                            to your account.</p>
-                    </div>
-                </div>
-                <div class="flex gap-4">
-                    <div
-                        class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold">
-                        3</div>
-                    <div>
-                        <p class="font-medium text-sm">Earn $2.99 Monthly</p>
-                        <p class="text-xs text-muted">For every month they stay active, you receive $2.99 credited to
-                            your account or payout.</p>
+                    <div class="flex flex-col gap-6">
+                        <div class="flex gap-4">
+                            <div
+                                class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald text-white font-bold flex-shrink-0">
+                                <i data-lucide="star" style="width:14px;height:14px;"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-sm text-emerald">Milestone Bonus</p>
+                                <p class="text-xs text-muted">Hit 50 total active Premium referrals and we will credit
+                                    your account with an extra $250.00 immediately.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div
+                                class="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-muted-foreground font-bold flex-shrink-0">
+                                <i data-lucide="clock" style="width:14px;height:14px;"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-sm">Payout Schedule</p>
+                                <p class="text-xs text-muted">Earnings are calculated on the 1st of every month and
+                                    available for withdrawal once you reach $10.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -168,6 +252,21 @@
             input.select();
             document.execCommand('copy');
             showToast('Link copied to clipboard!', 'success');
+        }
+
+        function setPayout(method) {
+            // Remove active style from all radio circles
+            document.querySelectorAll('.radio-circle').forEach(el => {
+                el.style.background = 'transparent';
+                el.style.borderColor = 'hsl(var(--border))';
+            });
+
+            // Set active style on the clicked one
+            const target = event.currentTarget.querySelector('.radio-circle');
+            target.style.background = 'hsl(var(--primary))';
+            target.style.borderColor = 'hsl(var(--primary))';
+
+            showToast(`Payout method set to ${method.toUpperCase()}`, 'success');
         }
 
         loadReferrals();
