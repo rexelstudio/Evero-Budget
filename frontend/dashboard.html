@@ -94,14 +94,15 @@
                     <div class="stat-card-icon" style="background:linear-gradient(135deg,#f43f5e,#ec4899);">📉</div>
                 </div>
             </div>
-            <div class="stat-card animate-slide-up delay-3">
+            <div class="stat-card animate-slide-up delay-3" id="cardBurnRate">
                 <div class="stat-card-glow" style="background:rgba(245,158,11,0.15);"></div>
                 <div class="flex justify-between items-center" style="position:relative;z-index:1;">
                     <div>
                         <div class="stat-card-label">Burn Rate</div>
                         <div class="stat-card-value" id="statBurnRate" style="color:var(--color-amber);">$0</div>
                     </div>
-                    <div class="stat-card-icon" style="background:linear-gradient(135deg,#f59e0b,#f97316);">⚡</div>
+                    <div class="stat-card-icon" id="iconBurnRate"
+                        style="background:linear-gradient(135deg,#f59e0b,#f97316);">⚡</div>
                 </div>
             </div>
         </div>
@@ -242,7 +243,21 @@
                 document.getElementById('statBalance').textContent = formatCurrency(totalIncome - totalExpenses);
                 document.getElementById('statIncome').textContent = formatCurrency(income);
                 document.getElementById('statExpenses').textContent = formatCurrency(expenses);
-                document.getElementById('statBurnRate').textContent = formatCurrency(expenses);
+
+                // Burn Rate (Premium only)
+                if (userInfo.is_premium) {
+                    document.getElementById('statBurnRate').textContent = formatCurrency(expenses);
+                } else {
+                    const burnEl = document.getElementById('statBurnRate');
+                    burnEl.innerHTML = '<span style="font-size:0.875rem;opacity:0.8;display:flex;align-items:center;gap:4px;">🔒 Upgrade</span>';
+                    burnEl.style.cursor = 'pointer';
+                    burnEl.title = 'Upgrade to Premium for Burn Rate analytics';
+                    burnEl.onclick = () => window.location.href = '/pricing.html';
+
+                    document.getElementById('cardBurnRate').style.opacity = '0.9';
+                    document.getElementById('iconBurnRate').textContent = '💎';
+                    document.getElementById('iconBurnRate').style.filter = 'grayscale(1)';
+                }
 
                 // Goal
                 document.getElementById('goalInput').value = userInfo.monthly_goal || 2000;
