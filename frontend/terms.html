@@ -5,123 +5,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evero Budget — Terms of Service</title>
-    <meta name="description"
-        content="Terms of Service for Evero Budget. Read about your rights, responsibilities, and usage guidelines.">
     <link rel="stylesheet" href="/css/globals.css">
     <link rel="stylesheet" href="/css/components.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <style>
         .legal-container {
-            max-width: 800px;
+            max-width: 720px;
             margin: 0 auto;
             padding: 48px 24px 80px;
         }
 
         .legal-hero {
             text-align: center;
-            margin-bottom: 48px;
-            padding: 48px 32px;
-            background: var(--color-bg-card);
-            border: 1px solid var(--color-border);
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .legal-hero::before {
-            content: '';
-            position: absolute;
-            top: -100px;
-            left: -100px;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.1), transparent);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .legal-hero-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 16px;
-            background: var(--color-blue-light);
-            color: var(--color-blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-            margin: 0 auto 16px;
+            margin-bottom: 40px;
         }
 
         .legal-hero h1 {
-            font-size: 2rem;
-            margin-bottom: 8px;
-            position: relative;
-        }
-
-        .legal-hero .effective-date {
-            font-size: 0.8125rem;
-            color: var(--color-text-muted);
-            font-weight: 500;
+            font-size: 1.75rem;
+            margin-bottom: 4px;
         }
 
         .legal-section {
-            background: var(--color-bg-card);
-            border: 1px solid var(--color-border);
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 20px;
-            transition: box-shadow 0.25s ease;
-        }
-
-        .legal-section:hover {
-            box-shadow: var(--shadow-md);
-        }
-
-        .legal-section-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            border-radius: 8px;
-            background: var(--color-blue-light);
-            color: var(--color-blue);
-            font-size: 0.75rem;
-            font-weight: 800;
-            margin-right: 10px;
-            flex-shrink: 0;
+            margin-bottom: 16px;
         }
 
         .legal-section h2 {
+            font-size: 1rem;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            font-size: 1.125rem;
-            margin-bottom: 16px;
+            gap: 8px;
+        }
+
+        .legal-section-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: hsl(var(--muted));
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            flex-shrink: 0;
         }
 
         .legal-section p,
         .legal-section li {
-            font-size: 0.9375rem;
-            line-height: 1.75;
-            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.8;
+            color: hsl(var(--muted-foreground));
         }
 
         .legal-section p {
-            margin-bottom: 12px;
-        }
-
-        .legal-section p:last-child {
-            margin-bottom: 0;
+            margin-bottom: 8px;
         }
 
         .legal-section ul {
             list-style: none;
             padding: 0;
-            margin: 0;
         }
 
         .legal-section ul li {
-            padding: 8px 0 8px 24px;
+            padding: 4px 0 4px 20px;
             position: relative;
         }
 
@@ -129,185 +75,135 @@
             content: '';
             position: absolute;
             left: 0;
-            top: 16px;
-            width: 8px;
-            height: 8px;
+            top: 12px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            background: var(--color-blue);
-            opacity: 0.6;
+            background: hsl(var(--muted-foreground) / 0.4);
         }
 
         .legal-section strong {
-            color: var(--color-text);
+            color: hsl(var(--foreground));
             font-weight: 600;
         }
 
-        .callout-box {
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin: 16px 0;
-            background: var(--color-amber-light);
-            border: 1px solid rgba(245, 158, 11, 0.2);
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
+        .callout {
+            padding: 16px;
+            border-radius: var(--radius);
+            background: hsl(var(--amber-light));
+            border: 1px solid hsl(var(--amber) / 0.2);
+            margin: 12px 0;
         }
 
-        .callout-box p {
-            color: var(--color-text);
+        .callout p {
+            color: hsl(var(--foreground));
             margin: 0;
-            font-size: 0.875rem;
-        }
-
-        .legal-nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 24px;
-            background: var(--color-bg-card);
-            border-bottom: 1px solid var(--color-border);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-
-        .legal-nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: var(--color-text);
-        }
-
-        .legal-nav-logo-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, var(--color-primary), #14b8a6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.875rem;
-        }
-
-        .legal-nav-links {
-            display: flex;
-            gap: 8px;
         }
     </style>
 </head>
 
 <body>
-    <nav class="legal-nav">
-        <a href="/" class="legal-nav-logo">
-            <div class="legal-nav-logo-icon">⚡</div>
-            <span style="font-weight:700;font-size:0.9375rem;">Evero Budget</span>
+    <nav class="topnav">
+        <a href="/" class="topnav-logo">
+            <div class="sidebar-logo" style="width:28px;height:28px;"><svg xmlns="http://www.w3.org/2000/svg" width="14"
+                    height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--primary-foreground));">
+                    <path d="m13 2-2 2.5h3L12 7" />
+                    <path d="M10 14v-3" />
+                    <path d="M14 14v-3" />
+                    <path d="M11 19c-1.7 0-3-1.3-3-3v-2h8v2c0 1.7-1.3 3-3 3Z" />
+                    <path d="M12 22v-3" />
+                </svg></div><span class="font-semibold text-sm">Evero Budget</span>
         </a>
-        <div class="legal-nav-links">
+        <div class="topnav-links">
             <a href="/privacy.html" class="btn btn-ghost btn-sm">Privacy</a>
-            <a href="/terms.html" class="btn btn-ghost btn-sm"
-                style="color:var(--color-blue);font-weight:600;">Terms</a>
+            <a href="/terms.html" class="btn btn-ghost btn-sm font-semibold">Terms</a>
             <a href="/about.html" class="btn btn-ghost btn-sm">About</a>
-            <button class="btn btn-ghost btn-icon btn-sm" onclick="toggleTheme()" style="font-size:1rem;">🌙</button>
+            <button class="btn btn-ghost btn-icon btn-sm" onclick="toggleTheme()"><i data-lucide="moon"
+                    style="width:14px;height:14px;"></i></button>
         </div>
     </nav>
 
     <div class="legal-container">
         <div class="legal-hero animate-fade-in">
-            <div class="legal-hero-icon">📜</div>
-            <h1 class="text-gradient">Terms of Service</h1>
-            <p class="effective-date">Last Updated: March 7, 2026</p>
+            <p class="text-xs text-muted mb-2 font-medium" style="text-transform:uppercase;letter-spacing:0.1em;">Terms
+                of Service</p>
+            <h1 class="tracking-tight">Rules of the Road</h1>
+            <p class="text-sm text-muted mt-2">Last Updated: March 7, 2026</p>
         </div>
 
-        <!-- Section 1 -->
-        <div class="legal-section animate-slide-up">
-            <h2><span class="legal-section-number">1</span> Acceptance of Terms</h2>
-            <p>By accessing or using Evero-Budget, you agree to be bound by these Terms of Service. If you do not agree
-                to all the terms and conditions, you may not access the service.</p>
-        </div>
-
-        <!-- Section 2 -->
-        <div class="legal-section animate-slide-up delay-1">
-            <h2><span class="legal-section-number">2</span> Eligibility</h2>
-            <p>You must be at least 18 years old to use this application. By creating an account, you represent and
-                warrant that you have the legal capacity to enter into a binding agreement.</p>
-        </div>
-
-        <!-- Section 3 -->
-        <div class="legal-section animate-slide-up delay-2">
-            <h2><span class="legal-section-number">3</span> User Accounts and Security</h2>
-            <ul>
-                <li><strong>Accuracy:</strong> You agree to provide accurate, current, and complete information during
-                    the registration process.</li>
-                <li><strong>Confidentiality:</strong> You are responsible for safeguarding your password and for any
-                    activities or actions under your account.</li>
-                <li><strong>Notification:</strong> You must notify us immediately upon becoming aware of any breach of
-                    security or unauthorized use of your account.</li>
-            </ul>
-        </div>
-
-        <!-- Section 4 -->
-        <div class="legal-section animate-slide-up delay-3">
-            <h2><span class="legal-section-number">4</span> Not Financial Advice</h2>
-            <p>Evero-Budget is a tool for informational and educational purposes only.</p>
-            <div class="callout-box">
-                <span style="font-size:1.25rem;">⚠️</span>
-                <p><strong>Important:</strong> Evero-Budget does not provide professional financial, investment, tax, or
-                    legal advice. We are not a financial institution. Your use of the app and any financial decisions
-                    you make are solely at your own risk.</p>
+        <div class="legal-section card animate-slide-up">
+            <div class="card-content">
+                <h2><span class="legal-section-num">1</span> Acceptance of Terms</h2>
+                <p>By accessing or using Evero-Budget, you agree to be bound by these Terms of Service.</p>
             </div>
         </div>
-
-        <!-- Section 5 -->
-        <div class="legal-section animate-slide-up delay-4">
-            <h2><span class="legal-section-number">5</span> Prohibited Conduct</h2>
-            <p>You agree not to:</p>
-            <ul>
-                <li>Use the service for any illegal purposes or to conduct any fraudulent activity.</li>
-                <li>Attempt to gain unauthorized access to our servers, user accounts, or computer systems.</li>
-                <li>Use any automated system (bots, scrapers) to access the service without our written permission.</li>
-                <li>Upload any malicious code, viruses, or "logic bombs."</li>
-            </ul>
+        <div class="legal-section card animate-slide-up delay-1">
+            <div class="card-content">
+                <h2><span class="legal-section-num">2</span> Eligibility</h2>
+                <p>You must be at least 18 years old to use this application.</p>
+            </div>
         </div>
-
-        <!-- Section 6 -->
-        <div class="legal-section animate-slide-up">
-            <h2><span class="legal-section-number">6</span> Intellectual Property</h2>
-            <p>The service, including its original content, features, and functionality (excluding user-provided data),
-                is and will remain the exclusive property of Evero-Budget and its licensors.</p>
+        <div class="legal-section card animate-slide-up delay-2">
+            <div class="card-content">
+                <h2><span class="legal-section-num">3</span> User Accounts and Security</h2>
+                <ul>
+                    <li><strong>Accuracy:</strong> Provide accurate, current, and complete information during
+                        registration.</li>
+                    <li><strong>Confidentiality:</strong> You are responsible for safeguarding your password.</li>
+                    <li><strong>Notification:</strong> Notify us immediately of any security breach.</li>
+                </ul>
+            </div>
         </div>
-
-        <!-- Section 7 -->
-        <div class="legal-section animate-slide-up">
-            <h2><span class="legal-section-number">7</span> Limitation of Liability</h2>
-            <p>To the maximum extent permitted by law, Evero-Budget shall not be liable for any indirect, incidental,
-                special, consequential, or punitive damages, including loss of profits, data, or money, resulting from:
-            </p>
-            <ul>
-                <li>Your access to or use of (or inability to use) the service.</li>
-                <li>Any conduct or content of any third party on the service.</li>
-                <li>Unauthorized access, use, or alteration of your transmissions or data.</li>
-            </ul>
+        <div class="legal-section card animate-slide-up delay-3">
+            <div class="card-content">
+                <h2><span class="legal-section-num">4</span> Not Financial Advice</h2>
+                <p>Evero-Budget is for informational and educational purposes only.</p>
+                <div class="callout flex items-start gap-3"><i data-lucide="alert-triangle"
+                        style="width:16px;height:16px;color:hsl(var(--amber));flex-shrink:0;margin-top:2px;"></i>
+                    <p class="text-sm"><strong>Important:</strong> Evero-Budget does not provide professional financial,
+                        investment, tax, or legal advice. We are not a financial institution.</p>
+                </div>
+            </div>
         </div>
-
-        <!-- Section 8 -->
-        <div class="legal-section animate-slide-up">
-            <h2><span class="legal-section-number">8</span> Termination</h2>
-            <p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason,
-                including if you breach these Terms. Upon termination, your right to use the service will cease
-                immediately.</p>
+        <div class="legal-section card animate-slide-up delay-4">
+            <div class="card-content">
+                <h2><span class="legal-section-num">5</span> Prohibited Conduct</h2>
+                <ul>
+                    <li>Use the service for illegal purposes or fraudulent activity.</li>
+                    <li>Attempt unauthorized access to our servers or accounts.</li>
+                    <li>Use automated systems (bots, scrapers) without written permission.</li>
+                    <li>Upload malicious code, viruses, or "logic bombs."</li>
+                </ul>
+            </div>
         </div>
-
-        <!-- Section 9 -->
-        <div class="legal-section animate-slide-up">
-            <h2><span class="legal-section-number">9</span> Changes to Terms</h2>
-            <p>We reserve the right to modify or replace these Terms at any time. If a revision is material, we will
-                provide at least 30 days' notice prior to any new terms taking effect.</p>
+        <div class="legal-section card animate-slide-up">
+            <div class="card-content">
+                <h2><span class="legal-section-num">6</span> Intellectual Property</h2>
+                <p>The service and its content are exclusive property of Evero-Budget and its licensors.</p>
+            </div>
+        </div>
+        <div class="legal-section card animate-slide-up">
+            <div class="card-content">
+                <h2><span class="legal-section-num">7</span> Limitation of Liability</h2>
+                <p>Evero-Budget shall not be liable for indirect, incidental, special, or consequential damages.</p>
+            </div>
+        </div>
+        <div class="legal-section card animate-slide-up">
+            <div class="card-content">
+                <h2><span class="legal-section-num">8</span> Termination</h2>
+                <p>We may terminate your account without prior notice for breach of these Terms.</p>
+            </div>
+        </div>
+        <div class="legal-section card animate-slide-up">
+            <div class="card-content">
+                <h2><span class="legal-section-num">9</span> Changes to Terms</h2>
+                <p>We reserve the right to modify these Terms with at least 30 days' notice for material changes.</p>
+            </div>
         </div>
     </div>
-
     <script src="/js/api.js"></script>
+    <script>lucide.createIcons();</script>
 </body>
 
 </html>
