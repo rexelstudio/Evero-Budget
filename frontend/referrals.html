@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evero Budget — Referral Program</title>
+    <link rel="stylesheet" href="/css/globals.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m13 2-2 2.5h3L12 7" />
+                    <path d="M10 14v-3" />
+                    <path d="M14 14v-3" />
+                    <path d="M11 19c-1.7 0-3-1.3-3-3v-2h8v2c0 1.7-1.3 3-3 3Z" />
+                    <path d="M12 22v-3" />
+                </svg></div>
+            <div class="sidebar-brand">Evero Budget<span>Pro Finance</span></div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-section-label">Menu</div>
+            <a href="/dashboard.html" class="sidebar-link"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="/transactions.html" class="sidebar-link"><i data-lucide="arrow-left-right"></i> Transactions</a>
+            <a href="/pricing.html" class="sidebar-link"><i data-lucide="gem"></i> Pricing</a>
+            <div class="sidebar-section-label">Account</div>
+            <a href="/profile.html" class="sidebar-link"><i data-lucide="user"></i> Profile</a>
+            <a href="/settings.html" class="sidebar-link"><i data-lucide="settings"></i> Settings</a>
+            <a href="/referrals.html" class="sidebar-link active"><i data-lucide="users"></i> Referrals <span
+                    class="badge badge-emerald ml-auto" style="font-size:10px;padding:2px 6px;">$2.99</span></a>
+            <div class="sidebar-section-label">Legal & Info</div>
+            <a href="/privacy.html" class="sidebar-link"><i data-lucide="shield-alert"></i> Privacy</a>
+            <a href="/terms.html" class="sidebar-link"><i data-lucide="file-text"></i> Terms</a>
+            <a href="/about.html" class="sidebar-link"><i data-lucide="info"></i> About</a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-user" onclick="window.location.href='/profile.html'">
+                <div class="sidebar-avatar" id="sidebarAvatar">U</div>
+                <div style="flex:1;min-width:0;">
+                    <div class="sidebar-user-name" id="sidebarName">User</div>
+                    <div class="sidebar-user-email" id="sidebarEmail">loading...</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="page-content">
+        <div class="page-header">
+            <h1 class="page-title tracking-tight">Referral Program</h1>
+            <p class="page-description">Earn rewards for growing the Evero community</p>
+        </div>
+
+        <div class="grid grid-2 gap-6 mb-8">
+            <div class="card animate-fade-in">
+                <div class="card-header">
+                    <div class="card-title">$2.99 Reward / User</div>
+                    <div class="card-description">Earn $2.99 every month for every active referral</div>
+                </div>
+                <div class="card-content flex flex-col gap-4">
+                    <div class="p-4 rounded-lg bg-emerald-light border border-emerald/20">
+                        <p class="text-sm font-medium" style="color:hsl(var(--emerald))">Your Referral Earnings</p>
+                        <h2 id="totalEarnings" style="color:hsl(var(--emerald))">$0.00 <span
+                                class="text-xs font-normal opacity-70">per month</span></h2>
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Your Referral Link</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="referralLink" class="input flex-1" readonly
+                                value="https://evero-budget.com/signup?ref=U8219K">
+                            <button class="btn btn-default" onclick="copyLink()">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card animate-fade-in delay-1">
+                <div class="card-header">
+                    <div class="card-title">Referral Stats</div>
+                    <div class="card-description">Track your impact</div>
+                </div>
+                <div class="card-content grid grid-2 gap-4">
+                    <div class="p-4 rounded-lg bg-muted">
+                        <p class="text-xs text-muted mb-1 uppercase tracking-wider font-bold">Clicks</p>
+                        <h3 id="statClicks">12</h3>
+                    </div>
+                    <div class="p-4 rounded-lg bg-muted">
+                        <p class="text-xs text-muted mb-1 uppercase tracking-wider font-bold">Signups</p>
+                        <h3 id="statSignups">0</h3>
+                    </div>
+                    <div class="p-4 rounded-lg bg-muted">
+                        <p class="text-xs text-muted mb-1 uppercase tracking-wider font-bold">Active Users</p>
+                        <h3 id="statActive">0</h3>
+                    </div>
+                    <div class="p-4 rounded-lg bg-muted">
+                        <p class="text-xs text-muted mb-1 uppercase tracking-wider font-bold">Conv. Rate</p>
+                        <h3 id="statConv">0%</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card animate-fade-in delay-2">
+            <div class="card-header">
+                <div class="card-title">How it works</div>
+                <div class="card-description">Simple steps to earn your lifetime rewards</div>
+            </div>
+            <div class="card-content flex flex-col gap-6">
+                <div class="flex gap-4">
+                    <div
+                        class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold">
+                        1</div>
+                    <div>
+                        <p class="font-medium text-sm">Share your link</p>
+                        <p class="text-xs text-muted">Send your unique referral link to friends, family, or your social
+                            network.</p>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <div
+                        class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold">
+                        2</div>
+                    <div>
+                        <p class="font-medium text-sm">They join Evero</p>
+                        <p class="text-xs text-muted">When they sign up and start managing their budget, they're linked
+                            to your account.</p>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <div
+                        class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold">
+                        3</div>
+                    <div>
+                        <p class="font-medium text-sm">Earn $2.99 Monthly</p>
+                        <p class="text-xs text-muted">For every month they stay active, you receive $2.99 credited to
+                            your account or payout.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script>
+        async function loadReferrals() {
+            try {
+                const user = await apiFetch('/api/user');
+                loadSidebar(user);
+                document.getElementById('referralLink').value = `https://evero-budget.com/signup?ref=${user.id?.slice(-6)}`;
+            } catch (err) { showToast('Failed to load', 'error'); }
+        }
+
+        function copyLink() {
+            const input = document.getElementById('referralLink');
+            input.select();
+            document.execCommand('copy');
+            showToast('Link copied to clipboard!', 'success');
+        }
+
+        loadReferrals();
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

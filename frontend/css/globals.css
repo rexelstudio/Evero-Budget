@@ -6,58 +6,58 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-    /* === shadcn/ui Color Tokens (HSL) === */
-    --background: 210 20% 98%;
-    --foreground: 222 47% 11%;
+    /* === shadcn/ui Color Tokens (HSL) - Nature === */
+    --background: 80 15% 96%;
+    --foreground: 25 20% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 25 20% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 25 20% 12%;
 
-    --primary: 195 70% 50%;
+    --primary: 142 45% 35%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 10% 94%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 80 15% 90%;
+    --secondary-foreground: 25 20% 12%;
 
-    --muted: 210 10% 94%;
-    --muted-foreground: 215 15% 45%;
+    --muted: 80 15% 90%;
+    --muted-foreground: 25 10% 45%;
 
-    --accent: 195 70% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 142 30% 90%;
+    --accent-foreground: 142 45% 35%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 195 70% 50%;
+    --border: 80 15% 85%;
+    --input: 80 15% 85%;
+    --ring: 142 45% 35%;
 
     /* Radius */
     --radius: 0.5rem;
 
-    /* Semantic Colors (Updated for Ocean Breeze) */
-    --emerald: 174 63% 40%;
-    /* Seafoam success */
-    --emerald-light: 174 63% 40% / 0.1;
-    --rose: 350 80% 60%;
-    /* Coral reef destructive */
-    --rose-light: 350 80% 60% / 0.1;
-    --blue: 195 70% 50%;
-    /* Ocean blue */
-    --blue-light: 195 70% 50% / 0.1;
-    --amber: 35 70% 55%;
-    /* Sandy amber */
-    --amber-light: 35 70% 55% / 0.1;
-    --violet: 240 60% 65%;
-    /* Misty lavender */
-    --violet-light: 240 60% 65% / 0.1;
-    --cyan: 185 80% 45%;
-    /* Tropical teal */
-    --cyan-light: 185 80% 45% / 0.1;
-    --orange: 25 90% 60%;
+    /* Semantic Colors (Updated for Nature) */
+    --emerald: 142 70% 45%;
+    /* Forest success */
+    --emerald-light: 142 70% 45% / 0.1;
+    --rose: 0 70% 50%;
+    /* Earth red destructive */
+    --rose-light: 0 70% 50% / 0.1;
+    --blue: 210 50% 50%;
+    /* Sky blue */
+    --blue-light: 210 50% 50% / 0.1;
+    --amber: 35 70% 45%;
+    /* Soil amber */
+    --amber-light: 35 70% 45% / 0.1;
+    --violet: 260 40% 60%;
+    /* Wildflower */
+    --violet-light: 260 40% 60% / 0.1;
+    --cyan: 170 50% 40%;
+    /* Lake teal */
+    --cyan-light: 170 50% 40% / 0.1;
+    --orange: 25 80% 50%;
     /* Sunset orange */
     --orange-light: 25 90% 60% / 0.1;
 
@@ -78,35 +78,35 @@
     --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
 }
 
-/* === DARK MODE === */
+/* === DARK MODE - Nature === */
 [data-theme="dark"] {
-    --background: 222 47% 6%;
-    --foreground: 210 20% 98%;
+    --background: 142 20% 5%;
+    --foreground: 80 10% 95%;
 
-    --card: 222 47% 8%;
-    --card-foreground: 210 20% 98%;
+    --card: 142 20% 7%;
+    --card-foreground: 80 10% 95%;
 
-    --popover: 222 47% 8%;
-    --popover-foreground: 210 20% 98%;
+    --popover: 142 20% 7%;
+    --popover-foreground: 80 10% 95%;
 
-    --primary: 195 70% 50%;
+    --primary: 142 45% 45%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 217 10% 15%;
-    --secondary-foreground: 210 20% 98%;
+    --secondary: 142 20% 12%;
+    --secondary-foreground: 80 10% 95%;
 
-    --muted: 217 10% 15%;
-    --muted-foreground: 215 15% 65%;
+    --muted: 142 20% 12%;
+    --muted-foreground: 80 10% 65%;
 
-    --accent: 195 70% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 142 20% 15%;
+    --accent-foreground: 142 45% 45%;
 
-    --destructive: 0 63% 31%;
+    --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 217 10% 15%;
-    --input: 217 10% 15%;
-    --ring: 195 70% 50%;
+    --border: 142 20% 15%;
+    --input: 142 20% 15%;
+    --ring: 142 45% 45%;
 
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
