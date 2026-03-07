@@ -77,6 +77,75 @@
         .feature-list li.locked i {
             opacity: 0.3;
         }
+
+        /* Toggle Switch Styles */
+        .pricing-toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .switch-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 200ms;
+        }
+
+        .switch-label.active {
+            color: hsl(var(--foreground));
+        }
+
+        .switch-label.inactive {
+            color: hsl(var(--muted-foreground));
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: hsl(var(--muted));
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        input:checked+.slider {
+            background-color: hsl(var(--foreground));
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
     </style>
 </head>
 
@@ -123,6 +192,16 @@
             <p class="page-description mt-2">Choose the plan that's right for your financial journey</p>
         </div>
 
+        <div class="pricing-toggle-container animate-fade-in">
+            <span class="switch-label active" id="monthlyLabel">Monthly</span>
+            <label class="switch">
+                <input type="checkbox" id="billingToggle" onchange="updatePricing()">
+                <span class="slider"></span>
+            </label>
+            <span class="switch-label inactive" id="yearlyLabel">Yearly <span class="badge badge-emerald"
+                    style="margin-left: 4px; font-size: 0.625rem; padding: 1px 6px;">SAVE 17%</span></span>
+        </div>
+
         <div class="grid grid-2 gap-6" style="max-width:740px;margin:0 auto;">
             <!-- Starter -->
             <div class="card pricing-card animate-slide-up">
@@ -130,8 +209,10 @@
                     <h3>Starter</h3>
                     <p class="text-sm text-muted mt-1">Perfect for getting started</p>
                 </div>
-                <div class="pricing-price">$0<span class="pricing-period">/mo</span></div>
-                <p class="text-xs text-muted mt-1">Free forever</p>
+                <div class="pricing-price" id="starterPrice">$0<span class="pricing-period"
+                        id="starterPeriod">/mo</span>
+                </div>
+                <p class="text-xs text-muted mt-1" id="starterSubtext">Free forever</p>
                 <button class="btn btn-outline btn-full mt-4" disabled>Current Plan</button>
                 <ul class="feature-list">
                     <li><i data-lucide="check" style="width:14px;height:14px;color:hsl(var(--emerald));"></i> 12
@@ -157,8 +238,9 @@
                     <h3>Premium</h3>
                     <p class="text-sm text-muted mt-1">For serious budgeters</p>
                 </div>
-                <div class="pricing-price">$9.99<span class="pricing-period">/mo</span></div>
-                <p class="text-xs text-muted mt-1">or $99/year (save 17%)</p>
+                <div class="pricing-price" id="premiumPrice">$9.99<span class="pricing-period" id="premiumPeriod">/mo
+                    </span></div>
+                <p class="text-xs text-muted mt-1" id="premiumSubtext">or $99/year (save 17%)</p>
                 <button class="btn btn-default btn-full mt-4"
                     onclick="showToast('Stripe checkout coming soon!', 'info')"><i data-lucide="zap"
                         style="width:14px;height:14px;"></i> Upgrade Now</button>
@@ -194,6 +276,42 @@
         }
         load();
         lucide.createIcons();
+
+        function updatePricing() {
+            const isYearly = document.getElementById('billingToggle').checked;
+            const monthlyLabel = document.getElementById('monthlyLabel');
+            const yearlyLabel = document.getElementById('yearlyLabel');
+
+            const starterPrice = document.getElementById('starterPrice');
+            const starterPeriod = document.getElementById('starterPeriod');
+            const starterSubtext = document.getElementById('starterSubtext');
+
+            const premiumPrice = document.getElementById('premiumPrice');
+            const premiumPeriod = document.getElementById('premiumPeriod');
+            const premiumSubtext = document.getElementById('premiumSubtext');
+
+            if (isYearly) {
+                monthlyLabel.className = 'switch-label inactive';
+                yearlyLabel.className = 'switch-label active';
+
+                starterPrice.childNodes[0].nodeValue = '$0';
+                starterPeriod.textContent = '/yr';
+
+                premiumPrice.childNodes[0].nodeValue = '$99';
+                premiumPeriod.textContent = '/yr';
+                premiumSubtext.textContent = 'Billed annually (save 17%)';
+            } else {
+                monthlyLabel.className = 'switch-label active';
+                yearlyLabel.className = 'switch-label inactive';
+
+                starterPrice.childNodes[0].nodeValue = '$0';
+                starterPeriod.textContent = '/mo';
+
+                premiumPrice.childNodes[0].nodeValue = '$9.99';
+                premiumPeriod.textContent = '/mo';
+                premiumSubtext.textContent = 'or $99/year (save 17%)';
+            }
+        }
     </script>
 </body>
 
