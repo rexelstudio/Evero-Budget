@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evero Budget — Sign In</title>
+    <link rel="stylesheet" href="/css/globals.css">
+    <link rel="stylesheet" href="/css/components.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card animate-fade-in">
+            <div class="auth-logo">
+                <div class="sidebar-logo-icon" style="width:56px;height:56px;font-size:1.5rem;">⚡</div>
+                <div style="text-align:center;">
+                    <h1 style="font-size:1.75rem;">Evero Budget</h1>
+                    <span class="text-xs text-muted" style="text-transform:uppercase;letter-spacing:0.15em;font-weight:700;">Pro Finance</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body" style="padding:32px;">
+                    <h2 style="margin-bottom:4px;">Welcome back</h2>
+                    <p class="text-sm text-muted" style="margin-bottom:24px;">Sign in to your account to continue</p>
+
+                    <form id="loginForm" class="flex flex-col gap-md">
+                        <div class="input-group">
+                            <label class="input-label">Email</label>
+                            <input type="email" id="email" class="input" placeholder="you@example.com" required>
+                        </div>
+                        <div class="input-group">
+                            <div class="flex justify-between items-center">
+                                <label class="input-label">Password</label>
+                            </div>
+                            <input type="password" id="password" class="input" placeholder="••••••••" required minlength="8">
+                        </div>
+                        <button type="submit" id="submitBtn" class="btn btn-primary btn-full btn-lg" style="margin-top:8px;">
+                            Sign In
+                        </button>
+                    </form>
+
+                    <p class="text-sm text-muted text-center" style="margin-top:24px;">
+                        Don't have an account? <a href="/signup.html" style="font-weight:600;">Sign up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script>
+        requireGuest();
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Signing in...';
+
+            try {
+                const data = await apiFetch('/api/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        email: document.getElementById('email').value,
+                        password: document.getElementById('password').value,
+                    }),
+                });
+                setToken(data.token);
+                setUser(data.user);
+                window.location.href = '/dashboard.html';
+            } catch (err) {
+                showToast(err.message, 'error');
+                btn.disabled = false;
+                btn.textContent = 'Sign In';
+            }
+        });
+    </script>
+</body>
+</html>

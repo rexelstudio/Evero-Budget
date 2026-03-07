@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evero Budget — Dashboard</title>
+    <link rel="stylesheet" href="/css/globals.css">
+    <link rel="stylesheet" href="/css/components.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">⚡</div>
+            <div class="sidebar-logo-text">
+                <h2>Evero Budget</h2>
+                <span>Pro Finance</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-nav-title">Menu</div>
+            <a href="/dashboard.html" class="sidebar-link active"><span class="sidebar-link-icon">📊</span>
+                Dashboard</a>
+            <a href="/transactions.html" class="sidebar-link"><span class="sidebar-link-icon">💳</span> Transactions</a>
+            <a href="/pricing.html" class="sidebar-link"><span class="sidebar-link-icon">💎</span> Pricing</a>
+            <div class="sidebar-nav-title" style="margin-top:12px;">Account</div>
+            <a href="/profile.html" class="sidebar-link"><span class="sidebar-link-icon">👤</span> Profile</a>
+            <a href="/settings.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span> Settings</a>
+        </nav>
+        <div id="upgradeBanner" class="hidden" style="padding:16px;">
+            <a href="/pricing.html" class="upgrade-banner" style="display:block;text-decoration:none;color:inherit;">
+                <div class="flex justify-between items-center" style="margin-bottom:8px;">
+                    <div
+                        style="padding:4px 8px;border-radius:8px;background:var(--color-primary);color:white;font-size:0.75rem;">
+                        ⚡</div>
+                    <span class="badge badge-primary" style="font-size:0.625rem;">UPGRADE</span>
+                </div>
+                <p style="font-size:0.8125rem;font-weight:700;margin-bottom:4px;">Unlock Premium</p>
+                <p style="font-size:0.6875rem;color:var(--color-text-muted);">Get unlimited categories and imports.</p>
+            </a>
+        </div>
+        <div class="sidebar-user" onclick="window.location.href='/profile.html'">
+            <div class="sidebar-avatar" id="sidebarAvatar">U</div>
+            <div class="sidebar-user-info">
+                <div class="sidebar-user-name" id="sidebarName">User</div>
+                <div class="sidebar-user-email" id="sidebarEmail">loading...</div>
+            </div>
+            <button class="btn-ghost btn-icon" onclick="event.stopPropagation(); logout();" title="Log out"
+                style="color:var(--color-text-muted);font-size:1rem;">🚪</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="page-content">
+        <div class="page-header flex justify-between items-center">
+            <div>
+                <h1 class="page-title text-gradient">Dashboard</h1>
+                <p class="text-sm text-muted">Your financial overview at a glance</p>
+            </div>
+            <button class="btn btn-ghost btn-icon" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="grid grid-4 gap-md" style="margin-bottom:24px;" id="statsGrid">
+            <div class="stat-card animate-slide-up">
+                <div class="stat-card-glow" style="background:rgba(59,130,246,0.15);"></div>
+                <div class="flex justify-between items-center" style="position:relative;z-index:1;">
+                    <div>
+                        <div class="stat-card-label">Total Balance</div>
+                        <div class="stat-card-value" id="statBalance" style="color:var(--color-blue);">$0</div>
+                    </div>
+                    <div class="stat-card-icon" style="background:linear-gradient(135deg,#3b82f6,#6366f1);">💰</div>
+                </div>
+            </div>
+            <div class="stat-card animate-slide-up delay-1">
+                <div class="stat-card-glow" style="background:rgba(16,185,129,0.15);"></div>
+                <div class="flex justify-between items-center" style="position:relative;z-index:1;">
+                    <div>
+                        <div class="stat-card-label">Monthly Income</div>
+                        <div class="stat-card-value" id="statIncome" style="color:var(--color-primary);">$0</div>
+                    </div>
+                    <div class="stat-card-icon" style="background:linear-gradient(135deg,#10b981,#14b8a6);">📈</div>
+                </div>
+            </div>
+            <div class="stat-card animate-slide-up delay-2">
+                <div class="stat-card-glow" style="background:rgba(244,63,94,0.15);"></div>
+                <div class="flex justify-between items-center" style="position:relative;z-index:1;">
+                    <div>
+                        <div class="stat-card-label">Monthly Expenses</div>
+                        <div class="stat-card-value" id="statExpenses" style="color:var(--color-rose);">$0</div>
+                    </div>
+                    <div class="stat-card-icon" style="background:linear-gradient(135deg,#f43f5e,#ec4899);">📉</div>
+                </div>
+            </div>
+            <div class="stat-card animate-slide-up delay-3">
+                <div class="stat-card-glow" style="background:rgba(245,158,11,0.15);"></div>
+                <div class="flex justify-between items-center" style="position:relative;z-index:1;">
+                    <div>
+                        <div class="stat-card-label">Burn Rate</div>
+                        <div class="stat-card-value" id="statBurnRate" style="color:var(--color-amber);">$0</div>
+                    </div>
+                    <div class="stat-card-icon" style="background:linear-gradient(135deg,#f59e0b,#f97316);">⚡</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Transaction + Recent -->
+        <div class="grid grid-2 gap-lg" style="grid-template-columns:1fr 2fr;">
+            <!-- Add Transaction Form -->
+            <div class="card animate-slide-up delay-2">
+                <div class="card-body">
+                    <h3 style="margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+                        <span style="color:var(--color-primary);">➕</span> Add Transaction
+                    </h3>
+                    <form id="txForm" class="flex flex-col gap-md">
+                        <div class="type-toggle">
+                            <button type="button" id="typeExpense" class="type-toggle-btn active-expense"
+                                onclick="setTxType('expense')">Expense</button>
+                            <button type="button" id="typeIncome" class="type-toggle-btn"
+                                onclick="setTxType('income')">Income</button>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Amount</label>
+                            <input type="number" id="txAmount" class="input" placeholder="0.00" step="0.01" min="0"
+                                required>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Description</label>
+                            <input type="text" id="txDesc" class="input" placeholder="What was this for?" required>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Category</label>
+                            <select id="txCategory" class="input">
+                                <option value="">Auto-detect</option>
+                                <option>Food & Dining</option>
+                                <option>Transportation</option>
+                                <option>Shopping</option>
+                                <option>Entertainment</option>
+                                <option>Bills & Utilities</option>
+                                <option>Health</option>
+                                <option>Income</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Date</label>
+                            <input type="date" id="txDate" class="input" required>
+                        </div>
+                        <button type="submit" id="txSubmit" class="btn btn-primary btn-full">Add Transaction</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="card animate-slide-up delay-3">
+                <div class="card-header">
+                    <div class="flex justify-between items-center">
+                        <span class="card-title">Recent Transactions</span>
+                        <a href="/transactions.html" class="text-xs" style="font-weight:600;">View All →</a>
+                    </div>
+                </div>
+                <div class="card-body" id="recentTx" style="padding-top:0;">
+                    <div class="text-center text-muted" style="padding:32px 0;">
+                        <div class="spinner" style="margin:0 auto 12px;"></div>
+                        Loading...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Goal -->
+        <div class="card animate-slide-up delay-4" style="margin-top:24px;">
+            <div class="card-body">
+                <div class="flex justify-between items-center" style="margin-bottom:12px;">
+                    <h3 style="display:flex;align-items:center;gap:8px;">
+                        <span style="color:var(--color-primary);">🎯</span> Monthly Goal
+                    </h3>
+                    <div class="flex gap-sm items-center">
+                        <input type="number" id="goalInput" class="input"
+                            style="width:120px;padding:6px 10px;font-size:0.8125rem;" placeholder="2000">
+                        <button class="btn btn-sm btn-secondary" onclick="saveGoal()">Save</button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center text-sm" style="margin-bottom:8px;">
+                    <span class="text-muted" id="goalSpent">$0 spent</span>
+                    <span class="text-muted" id="goalRemaining">$0 remaining</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="goalProgress" style="width:0%;"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script>
+        requireAuth();
+
+        let txType = 'expense';
+        let transactions = [];
+        let userData = null;
+
+        // Set default date to today
+        document.getElementById('txDate').valueAsDate = new Date();
+
+        function setTxType(type) {
+            txType = type;
+            document.getElementById('typeExpense').className = 'type-toggle-btn' + (type === 'expense' ? ' active-expense' : '');
+            document.getElementById('typeIncome').className = 'type-toggle-btn' + (type === 'income' ? ' active-income' : '');
+        }
+
+        async function loadDashboard() {
+            try {
+                const [txData, userInfo] = await Promise.all([
+                    apiFetch('/api/transactions'),
+                    apiFetch('/api/user'),
+                ]);
+
+                transactions = txData.transactions;
+                userData = userInfo;
+
+                // Update sidebar
+                document.getElementById('sidebarName').textContent = userInfo.name || 'User';
+                document.getElementById('sidebarEmail').textContent = userInfo.email;
+                document.getElementById('sidebarAvatar').textContent = (userInfo.name || 'U')[0].toUpperCase();
+                if (!userInfo.is_premium) document.getElementById('upgradeBanner').classList.remove('hidden');
+
+                // Stats
+                const now = new Date();
+                const thisMonth = transactions.filter(t => {
+                    const d = new Date(t.date);
+                    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+                });
+
+                const income = thisMonth.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+                const expenses = thisMonth.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+                const totalIncome = transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+                const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+
+                document.getElementById('statBalance').textContent = formatCurrency(totalIncome - totalExpenses);
+                document.getElementById('statIncome').textContent = formatCurrency(income);
+                document.getElementById('statExpenses').textContent = formatCurrency(expenses);
+                document.getElementById('statBurnRate').textContent = formatCurrency(expenses);
+
+                // Goal
+                document.getElementById('goalInput').value = userInfo.monthly_goal || 2000;
+                updateGoalUI(expenses, userInfo.monthly_goal || 2000);
+
+                // Recent transactions (last 8)
+                renderRecentTx(transactions.slice(0, 8));
+            } catch (err) {
+                showToast('Failed to load dashboard', 'error');
+            }
+        }
+
+        function updateGoalUI(spent, goal) {
+            const pct = goal > 0 ? Math.min((spent / goal) * 100, 100) : 0;
+            document.getElementById('goalSpent').textContent = formatCurrency(spent) + ' spent';
+            document.getElementById('goalRemaining').textContent = formatCurrency(Math.max(goal - spent, 0)) + ' remaining';
+            document.getElementById('goalProgress').style.width = pct + '%';
+            if (pct >= 90) document.getElementById('goalProgress').style.background = 'linear-gradient(90deg, #f43f5e, #ec4899)';
+            else if (pct >= 70) document.getElementById('goalProgress').style.background = 'linear-gradient(90deg, #f59e0b, #f97316)';
+        }
+
+        async function saveGoal() {
+            const val = parseFloat(document.getElementById('goalInput').value);
+            if (!val || val <= 0) return;
+            try {
+                await apiFetch('/api/goals', { method: 'PUT', body: JSON.stringify({ monthly_goal: val }) });
+                showToast('Goal updated!', 'success');
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        function renderRecentTx(txs) {
+            const el = document.getElementById('recentTx');
+            if (txs.length === 0) {
+                el.innerHTML = '<div class="text-center text-muted" style="padding:32px 0;"><p style="font-size:2rem;margin-bottom:8px;">📋</p><p>No transactions yet</p><p class="text-xs">Add your first one above!</p></div>';
+                return;
+            }
+            el.innerHTML = txs.map(t => `
+                <div class="tx-row">
+                    <div class="tx-info">
+                        <div class="tx-desc">${t.description}</div>
+                        <div class="tx-meta">${t.category} · ${formatDate(t.date)}</div>
+                    </div>
+                    <span class="tx-amount ${t.type}">${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}</span>
+                </div>
+            `).join('');
+        }
+
+        // Add transaction
+        document.getElementById('txForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('txSubmit');
+            btn.disabled = true;
+            btn.textContent = 'Adding...';
+
+            try {
+                await apiFetch('/api/transactions', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        amount: parseFloat(document.getElementById('txAmount').value),
+                        description: document.getElementById('txDesc').value,
+                        category: document.getElementById('txCategory').value || null,
+                        type: txType,
+                        date: document.getElementById('txDate').value,
+                    }),
+                });
+                showToast('Transaction added!', 'success');
+                document.getElementById('txAmount').value = '';
+                document.getElementById('txDesc').value = '';
+                document.getElementById('txCategory').value = '';
+                loadDashboard();
+            } catch (err) {
+                showToast(err.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Add Transaction';
+            }
+        });
+
+        loadDashboard();
+    </script>
+</body>
+
+</html>

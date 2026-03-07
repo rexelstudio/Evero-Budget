@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evero Budget — Profile</title>
+    <link rel="stylesheet" href="/css/globals.css">
+    <link rel="stylesheet" href="/css/components.css">
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">⚡</div>
+            <div class="sidebar-logo-text">
+                <h2>Evero Budget</h2><span>Pro Finance</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-nav-title">Menu</div>
+            <a href="/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span> Dashboard</a>
+            <a href="/transactions.html" class="sidebar-link"><span class="sidebar-link-icon">💳</span> Transactions</a>
+            <a href="/pricing.html" class="sidebar-link"><span class="sidebar-link-icon">💎</span> Pricing</a>
+            <div class="sidebar-nav-title" style="margin-top:12px;">Account</div>
+            <a href="/profile.html" class="sidebar-link active"><span class="sidebar-link-icon">👤</span> Profile</a>
+            <a href="/settings.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span> Settings</a>
+        </nav>
+        <div class="sidebar-user" onclick="window.location.href='/profile.html'">
+            <div class="sidebar-avatar" id="sidebarAvatar">U</div>
+            <div class="sidebar-user-info">
+                <div class="sidebar-user-name" id="sidebarName">User</div>
+                <div class="sidebar-user-email" id="sidebarEmail">loading...</div>
+            </div>
+            <button class="btn-ghost btn-icon" onclick="event.stopPropagation(); logout();"
+                style="color:var(--color-text-muted);font-size:1rem;">🚪</button>
+        </div>
+    </aside>
+
+    <main class="page-content"
+        style="max-width:800px;margin-left:auto;margin-right:auto;padding-left:calc(260px + 32px);">
+        <!-- Profile Hero -->
+        <div class="card animate-fade-in" style="margin-bottom:32px;">
+            <div class="card-body" style="padding:32px;display:flex;align-items:center;gap:24px;">
+                <div class="sidebar-avatar" id="profileAvatar"
+                    style="width:80px;height:80px;border-radius:16px;font-size:2rem;">U</div>
+                <div style="flex:1;">
+                    <h1 id="profileName" style="font-size:1.5rem;font-weight:700;">User</h1>
+                    <p class="text-sm text-muted" id="profileEmail">loading...</p>
+                    <div id="premiumBadge" class="hidden" style="margin-top:8px;">
+                        <span class="badge badge-primary" style="font-size:0.625rem;">⚡ PREMIUM MEMBER</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Cards -->
+        <div class="grid grid-2 gap-lg animate-slide-up">
+            <div class="card">
+                <div class="card-header"><span class="card-title"><span style="color:var(--color-blue);">🛡️</span>
+                        Account Security</span></div>
+                <div class="card-body" style="display:flex;flex-direction:column;gap:16px;">
+                    <div
+                        style="padding:16px;border-radius:12px;background:var(--color-bg-muted);border:1px solid var(--color-border-light);">
+                        <div class="text-xs text-muted"
+                            style="margin-bottom:4px;text-transform:uppercase;letter-spacing:0.1em;font-weight:500;">
+                            Account Type</div>
+                        <div class="flex justify-between items-center">
+                            <span style="font-size:1rem;font-weight:600;" id="planName">Starter Plan</span>
+                            <span class="badge badge-primary" id="planBadge">FREE</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-danger btn-full" style="border-radius:12px;" onclick="logout()">🚪 Log
+                        out</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><span class="card-title"><span style="color:var(--color-purple);">👤</span>
+                        Personal Profile</span></div>
+                <div class="card-body" style="display:flex;flex-direction:column;gap:12px;">
+                    <div
+                        style="padding:16px;border-radius:12px;background:var(--color-bg-muted);border:1px solid var(--color-border-light);">
+                        <div class="text-xs text-muted"
+                            style="margin-bottom:4px;text-transform:uppercase;letter-spacing:0.1em;font-weight:500;">
+                            Name</div>
+                        <span style="font-weight:600;" id="infoName">User</span>
+                    </div>
+                    <div
+                        style="padding:16px;border-radius:12px;background:var(--color-bg-muted);border:1px solid var(--color-border-light);">
+                        <div class="text-xs text-muted"
+                            style="margin-bottom:4px;text-transform:uppercase;letter-spacing:0.1em;font-weight:500;">
+                            Email</div>
+                        <span style="font-weight:500;font-size:0.875rem;" id="infoEmail">loading...</span>
+                    </div>
+                    <div class="grid grid-2 gap-sm">
+                        <div
+                            style="padding:12px;border-radius:12px;background:var(--color-bg-muted);border:1px solid var(--color-border-light);">
+                            <div class="text-xs text-muted"
+                                style="font-size:0.625rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:500;">
+                                Member Since</div>
+                            <span style="font-weight:500;font-size:0.75rem;" id="infoJoined">...</span>
+                        </div>
+                        <div
+                            style="padding:12px;border-radius:12px;background:var(--color-bg-muted);border:1px solid var(--color-border-light);">
+                            <div class="text-xs text-muted"
+                                style="font-size:0.625rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:500;">
+                                ID Reference</div>
+                            <span class="font-mono"
+                                style="font-size:0.625rem;color:var(--color-text-muted);text-transform:uppercase;"
+                                id="infoId">...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script>
+        requireAuth();
+
+        async function loadProfile() {
+            try {
+                const user = await apiFetch('/api/user');
+                const initial = (user.name || 'U')[0].toUpperCase();
+                document.getElementById('sidebarName').textContent = user.name || 'User';
+                document.getElementById('sidebarEmail').textContent = user.email;
+                document.getElementById('sidebarAvatar').textContent = initial;
+                document.getElementById('profileAvatar').textContent = initial;
+                document.getElementById('profileName').textContent = user.name || 'User';
+                document.getElementById('profileEmail').textContent = user.email;
+                document.getElementById('infoName').textContent = user.name || 'User';
+                document.getElementById('infoEmail').textContent = user.email;
+                document.getElementById('infoId').textContent = user.id?.slice(-12) || '...';
+                document.getElementById('infoJoined').textContent = user.created_at ? formatDate(user.created_at) : '...';
+
+                if (user.is_premium) {
+                    document.getElementById('premiumBadge').classList.remove('hidden');
+                    document.getElementById('planName').textContent = 'Premium Pro';
+                    document.getElementById('planBadge').textContent = 'PREMIUM';
+                }
+            } catch (err) {
+                showToast('Failed to load profile', 'error');
+            }
+        }
+        loadProfile();
+    </script>
+</body>
+
+</html>

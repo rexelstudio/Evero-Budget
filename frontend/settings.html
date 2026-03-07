@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evero Budget — Settings</title>
+    <link rel="stylesheet" href="/css/globals.css">
+    <link rel="stylesheet" href="/css/components.css">
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">⚡</div>
+            <div class="sidebar-logo-text">
+                <h2>Evero Budget</h2><span>Pro Finance</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-nav-title">Menu</div>
+            <a href="/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span> Dashboard</a>
+            <a href="/transactions.html" class="sidebar-link"><span class="sidebar-link-icon">💳</span> Transactions</a>
+            <a href="/pricing.html" class="sidebar-link"><span class="sidebar-link-icon">💎</span> Pricing</a>
+            <div class="sidebar-nav-title" style="margin-top:12px;">Account</div>
+            <a href="/profile.html" class="sidebar-link"><span class="sidebar-link-icon">👤</span> Profile</a>
+            <a href="/settings.html" class="sidebar-link active"><span class="sidebar-link-icon">⚙️</span> Settings</a>
+        </nav>
+        <div class="sidebar-user" onclick="window.location.href='/profile.html'">
+            <div class="sidebar-avatar" id="sidebarAvatar">U</div>
+            <div class="sidebar-user-info">
+                <div class="sidebar-user-name" id="sidebarName">User</div>
+                <div class="sidebar-user-email" id="sidebarEmail">loading...</div>
+            </div>
+            <button class="btn-ghost btn-icon" onclick="event.stopPropagation(); logout();"
+                style="color:var(--color-text-muted);font-size:1rem;">🚪</button>
+        </div>
+    </aside>
+
+    <main class="page-content"
+        style="max-width:700px;margin-left:auto;margin-right:auto;padding-left:calc(260px + 32px);">
+        <div class="page-header">
+            <h1 class="page-title text-gradient">Settings</h1>
+            <p class="text-sm text-muted">Manage your account preferences</p>
+        </div>
+
+        <!-- Change Name -->
+        <div class="card animate-fade-in" style="margin-bottom:24px;">
+            <div class="card-header"><span class="card-title">👤 Personal Information</span></div>
+            <div class="card-body">
+                <div class="input-group" style="margin-bottom:16px;">
+                    <label class="input-label">Display Name</label>
+                    <input type="text" id="nameInput" class="input" placeholder="Your name">
+                </div>
+                <button class="btn btn-primary" onclick="saveName()">Save Changes</button>
+            </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="card animate-fade-in delay-1" style="margin-bottom:24px;">
+            <div class="card-header"><span class="card-title">🔒 Change Password</span></div>
+            <div class="card-body">
+                <div class="flex flex-col gap-md">
+                    <div class="input-group">
+                        <label class="input-label">Current Password</label>
+                        <input type="password" id="currentPassword" class="input" placeholder="••••••••">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">New Password</label>
+                        <input type="password" id="newPassword" class="input" placeholder="Min 8 characters"
+                            minlength="8">
+                    </div>
+                    <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme -->
+        <div class="card animate-fade-in delay-2" style="margin-bottom:24px;">
+            <div class="card-header"><span class="card-title">🎨 Appearance</span></div>
+            <div class="card-body">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p style="font-weight:600;font-size:0.875rem;">Dark Mode</p>
+                        <p class="text-xs text-muted">Switch between light and dark themes</p>
+                    </div>
+                    <button id="themeBtn" class="btn btn-secondary btn-sm" onclick="toggleTheme(); updateThemeBtn();">🌙
+                        Dark</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="card animate-fade-in delay-3"
+            style="border-color:var(--color-rose);border-color:rgba(244,63,94,0.3);">
+            <div class="card-header"><span class="card-title" style="color:var(--color-rose);">⚠️ Danger Zone</span>
+            </div>
+            <div class="card-body">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p style="font-weight:600;font-size:0.875rem;color:var(--color-rose);">Delete Account</p>
+                        <p class="text-xs text-muted">Permanently delete your account and all data</p>
+                    </div>
+                    <button class="btn btn-danger btn-sm" onclick="showDeleteModal()">Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Delete Modal -->
+    <div id="deleteModal" class="hidden"
+        style="position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:100;">
+        <div class="card animate-slide-up" style="width:100%;max-width:420px;margin:16px;">
+            <div class="card-body" style="padding:32px;">
+                <h2 style="color:var(--color-rose);margin-bottom:8px;">⚠️ Delete Account</h2>
+                <p class="text-sm text-muted" style="margin-bottom:24px;">This action cannot be undone. All your data
+                    will be permanently deleted.</p>
+                <div class="flex flex-col gap-md">
+                    <div class="input-group">
+                        <label class="input-label">Type <strong>DELETE</strong> to confirm</label>
+                        <input type="text" id="deleteConfirm" class="input" placeholder="DELETE">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Enter your password</label>
+                        <input type="password" id="deletePassword" class="input" placeholder="••••••••">
+                    </div>
+                    <div class="flex gap-sm">
+                        <button class="btn btn-secondary btn-full" onclick="closeDeleteModal()">Cancel</button>
+                        <button class="btn btn-danger btn-full" id="deleteBtn" onclick="deleteAccount()">Delete
+                            Forever</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script>
+        requireAuth();
+
+        async function loadSettings() {
+            try {
+                const user = await apiFetch('/api/user');
+                document.getElementById('sidebarName').textContent = user.name || 'User';
+                document.getElementById('sidebarEmail').textContent = user.email;
+                document.getElementById('sidebarAvatar').textContent = (user.name || 'U')[0].toUpperCase();
+                document.getElementById('nameInput').value = user.name || '';
+                updateThemeBtn();
+            } catch (err) {
+                showToast('Failed to load settings', 'error');
+            }
+        }
+
+        function updateThemeBtn() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            document.getElementById('themeBtn').textContent = isDark ? '☀️ Light' : '🌙 Dark';
+        }
+
+        async function saveName() {
+            const name = document.getElementById('nameInput').value.trim();
+            if (!name) return showToast('Name cannot be empty', 'error');
+            try {
+                await apiFetch('/api/user', { method: 'PUT', body: JSON.stringify({ name }) });
+                showToast('Name updated!', 'success');
+                const user = getUser();
+                if (user) { user.name = name; setUser(user); }
+                document.getElementById('sidebarName').textContent = name;
+            } catch (err) { showToast(err.message, 'error'); }
+        }
+
+        async function changePassword() {
+            const current = document.getElementById('currentPassword').value;
+            const newPwd = document.getElementById('newPassword').value;
+            if (!current || !newPwd) return showToast('Fill in both fields', 'error');
+            if (newPwd.length < 8) return showToast('Password must be at least 8 characters', 'error');
+            try {
+                await apiFetch('/api/user', { method: 'PUT', body: JSON.stringify({ current_password: current, new_password: newPwd }) });
+                showToast('Password updated!', 'success');
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+            } catch (err) { showToast(err.message, 'error'); }
+        }
+
+        function showDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('hidden');
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        async function deleteAccount() {
+            if (document.getElementById('deleteConfirm').value !== 'DELETE') return showToast('Type DELETE to confirm', 'error');
+            const pwd = document.getElementById('deletePassword').value;
+            if (!pwd) return showToast('Enter your password', 'error');
+            const btn = document.getElementById('deleteBtn');
+            btn.disabled = true;
+            btn.textContent = 'Deleting...';
+            try {
+                await apiFetch('/api/user', { method: 'DELETE', body: JSON.stringify({ password: pwd }) });
+                clearToken();
+                window.location.href = '/login.html';
+            } catch (err) {
+                showToast(err.message, 'error');
+                btn.disabled = false;
+                btn.textContent = 'Delete Forever';
+            }
+        }
+
+        loadSettings();
+    </script>
+</body>
+
+</html>

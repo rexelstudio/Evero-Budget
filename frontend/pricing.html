@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evero Budget — Pricing</title>
+    <link rel="stylesheet" href="/css/globals.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <style>
+        .pricing-card {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .pricing-card.popular {
+            border-color: var(--color-primary);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.15);
+        }
+
+        .pricing-card.popular::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--color-primary), #14b8a6);
+            color: white;
+            font-size: 0.625rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            padding: 4px 16px;
+            border-radius: 20px;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .pricing-period {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            font-weight: 400;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--color-text-secondary);
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--color-primary);
+            font-weight: 800;
+        }
+
+        .feature-list li.locked::before {
+            content: '✗';
+            color: var(--color-text-muted);
+        }
+
+        .feature-list li.locked {
+            color: var(--color-text-muted);
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">⚡</div>
+            <div class="sidebar-logo-text">
+                <h2>Evero Budget</h2><span>Pro Finance</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-nav-title">Menu</div>
+            <a href="/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span> Dashboard</a>
+            <a href="/transactions.html" class="sidebar-link"><span class="sidebar-link-icon">💳</span> Transactions</a>
+            <a href="/pricing.html" class="sidebar-link active"><span class="sidebar-link-icon">💎</span> Pricing</a>
+            <div class="sidebar-nav-title" style="margin-top:12px;">Account</div>
+            <a href="/profile.html" class="sidebar-link"><span class="sidebar-link-icon">👤</span> Profile</a>
+            <a href="/settings.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span> Settings</a>
+        </nav>
+        <div class="sidebar-user" onclick="window.location.href='/profile.html'">
+            <div class="sidebar-avatar" id="sidebarAvatar">U</div>
+            <div class="sidebar-user-info">
+                <div class="sidebar-user-name" id="sidebarName">User</div>
+                <div class="sidebar-user-email" id="sidebarEmail">loading...</div>
+            </div>
+            <button class="btn-ghost btn-icon" onclick="event.stopPropagation(); logout();"
+                style="color:var(--color-text-muted);font-size:1rem;">🚪</button>
+        </div>
+    </aside>
+
+    <main class="page-content">
+        <div class="page-header text-center" style="margin-bottom:48px;">
+            <h1 style="font-size:2rem;" class="text-gradient">Choose Your Plan</h1>
+            <p class="text-sm text-muted" style="margin-top:8px;">Unlock the full power of Evero Budget</p>
+        </div>
+
+        <div class="grid grid-2 gap-xl" style="max-width:800px;margin:0 auto;" id="planGrid">
+            <!-- Starter -->
+            <div class="pricing-card animate-slide-up">
+                <h3 style="margin-bottom:4px;">Starter</h3>
+                <p class="text-xs text-muted" style="margin-bottom:24px;">Perfect for getting started</p>
+                <div class="pricing-price">$0<span class="pricing-period">/month</span></div>
+                <p class="text-xs text-muted" style="margin-bottom:24px;">Free forever</p>
+                <button class="btn btn-secondary btn-full btn-lg" disabled style="margin-bottom:24px;">Current
+                    Plan</button>
+                <ul class="feature-list">
+                    <li>12 transactions / month</li>
+                    <li>2 custom categories</li>
+                    <li>Basic spending insights</li>
+                    <li>Monthly goal tracking</li>
+                    <li class="locked">CSV & Bank import</li>
+                    <li class="locked">Unlimited transactions</li>
+                    <li class="locked">Advanced burn rate</li>
+                    <li class="locked">Priority support</li>
+                </ul>
+            </div>
+
+            <!-- Premium -->
+            <div class="pricing-card popular animate-slide-up delay-1">
+                <h3 style="margin-bottom:4px;">Premium</h3>
+                <p class="text-xs text-muted" style="margin-bottom:24px;">For serious budgeters</p>
+                <div class="pricing-price">$9.99<span class="pricing-period">/month</span></div>
+                <p class="text-xs text-muted" style="margin-bottom:24px;">or $99/year (save 17%)</p>
+                <button class="btn btn-primary btn-full btn-lg" style="margin-bottom:24px;"
+                    onclick="showToast('Stripe checkout coming soon!', 'info')">⚡ Upgrade Now</button>
+                <ul class="feature-list">
+                    <li>Unlimited transactions</li>
+                    <li>Unlimited categories</li>
+                    <li>Advanced spending insights</li>
+                    <li>Monthly goal tracking</li>
+                    <li>CSV & Bank import</li>
+                    <li>Export all data</li>
+                    <li>Burn rate analytics</li>
+                    <li>Priority support</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script>
+        requireAuth();
+        async function loadPricing() {
+            try {
+                const user = await apiFetch('/api/user');
+                document.getElementById('sidebarName').textContent = user.name || 'User';
+                document.getElementById('sidebarEmail').textContent = user.email;
+                document.getElementById('sidebarAvatar').textContent = (user.name || 'U')[0].toUpperCase();
+            } catch (err) { }
+        }
+        loadPricing();
+    </script>
+</body>
+
+</html>
