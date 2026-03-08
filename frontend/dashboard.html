@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evero Budget — Dashboard</title>
     <meta name="description"
-        content="Your personal finance dashboard. Track spending, income, and savings in real time.">
+        content="Your personal finance dashboard. Track spending, income, and burn rate in real time.">
     <link rel="stylesheet" href="/css/globals.css">
     <link rel="stylesheet" href="/css/components.css">
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
@@ -31,6 +31,7 @@
             <div class="sidebar-section-label">Menu</div>
             <a href="/dashboard.html" class="sidebar-link active"><i data-lucide="layout-dashboard"></i> Dashboard</a>
             <a href="/transactions.html" class="sidebar-link"><i data-lucide="arrow-left-right"></i> Transactions</a>
+            <a href="/recurring.html" class="sidebar-link"><i data-lucide="repeat"></i> Recurring</a>
             <a href="/pricing.html" class="sidebar-link"><i data-lucide="gem"></i> Pricing</a>
             <a href="/calendar.html" class="sidebar-link"><i data-lucide="calendar"></i> Calendar</a>
             <div class="sidebar-section-label">Account</div>
@@ -107,84 +108,21 @@
                         style="width:12px;height:12px;"></i> <span>+0%</span></div>
             </div>
             <div class="card stat-card animate-slide-up delay-3" id="cardNetSavings">
-                <div class="stat-label"><i data-lucide="piggy-bank" style="width:14px;height:14px;"></i> Net Savings
+                <div class="stat-label"><i data-lucide="flame" style="width:14px;height:14px;"></i> Burn Rate
                 </div>
                 <div class="stat-value" style="color:var(--blue);" id="statSavings">$0.00</div>
                 <div class="stat-change positive" id="statSavingsChange"><i data-lucide="trending-up"
                         style="width:12px;height:12px;"></i> <span>+0%</span></div>
-            </div>
-        </div>
-
-        <!-- Charts Row -->
-        <div class="grid gap-4 mb-6" style="grid-template-columns:1fr 1fr 1fr;">
-            <!-- Spending Trend Chart -->
-            <div class="card animate-slide-up delay-1">
-                <div class="card-header flex justify-between items-center" style="flex-direction:row;">
-                    <div>
-                        <div class="card-title">Spending Trend</div>
-                        <div class="card-description">Last 30 days activity</div>
-                    </div>
-                </div>
-                <div class="card-content" style="padding-top:12px;">
-                    <div style="position:relative; height:120px; width:100%;">
-                        <canvas id="trendChart"></canvas>
-                    </div>
-                </div>
-                <div class="card-footer" id="trendFooter"
-                    style="padding:12px 24px 16px; border-top:1px solid var(--border); display:flex; align-items:flex-start; gap:8px; font-size:0.8125rem;">
-                    <div style="display:flex; flex-direction:column; gap:4px;">
-                        <div style="display:flex; align-items:center; gap:6px; font-weight:500;" id="trendChangeLabel">
-                            <span id="trendChangeText">Calculating...</span>
-                            <i data-lucide="trending-up" style="width:14px;height:14px;" id="trendIcon"></i>
-                        </div>
-                        <div class="text-muted" style="font-size:0.75rem;" id="trendPeriodLabel">Income &amp; Expenses
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Category Donut -->
-            <div class="card animate-slide-up delay-2">
-                <div class="card-header">
-                    <div class="card-title">Category Breakdown</div>
-                    <div class="card-description">Where your money goes</div>
-                </div>
-                <div class="card-content" style="padding-top:12px;">
-                    <div style="position:relative; height:120px; width:100%;">
-                        <canvas id="categoryChart"></canvas>
-                    </div>
-                    <div id="categoryLegend" style="margin-top:16px;"></div>
-                </div>
-            </div>
-
-            <!-- Stacked Bar Chart -->
-            <div class="card animate-slide-up delay-3">
-                <div class="card-header">
-                    <div class="card-title">Bar Chart - Stacked + Legend</div>
-                    <div class="card-description" id="barChartPeriod">January - June 2024</div>
-                </div>
-                <div class="card-content" style="padding-top:12px;">
-                    <div style="position:relative; height:120px; width:100%;">
-                        <canvas id="stackedBarChart"></canvas>
-                    </div>
-                </div>
-                <div class="card-footer"
-                    style="padding:12px 24px 16px; border-top:1px solid var(--border); display:flex; align-items:flex-start; gap:8px; font-size:0.8125rem;">
-                    <div style="display:flex; flex-direction:column; gap:4px;">
-                        <div style="display:flex; align-items:center; gap:6px; font-weight:500; color:var(--primary);">
-                            <span id="barTrendText">Trending up by 0% this month</span>
-                            <i data-lucide="trending-up" style="width:14px;height:14px;"></i>
-                        </div>
-                        <div class="text-muted" style="font-size:0.75rem;">Showing income vs expenses for the last 6
-                            months</div>
-                    </div>
+                <div id="burnRateLock" class="stat-card-lock" onclick="window.location.href='/pricing.html'">
+                    <i data-lucide="lock"></i>
+                    <span>Premium Only</span>
                 </div>
             </div>
         </div>
 
-        <!-- Add Transaction + Recent Transactions -->
-        <div class="grid gap-4" style="grid-template-columns:1fr 2fr;">
-            <!-- Add Transaction -->
+        <!-- Main Dashboard Content -->
+        <div class="grid gap-4 mb-6" style="grid-template-columns: 0.6fr 0.9fr 1.1fr 0.6fr;">
+            <!-- Column 1: Quick Add -->
             <div class="card animate-slide-up delay-4">
                 <div class="card-header">
                     <div class="card-title">Quick Add</div>
@@ -206,15 +144,24 @@
                             <label class="label">Category</label>
                             <select id="txCategory" class="input">
                                 <option value="">Auto-detect</option>
-                                <option>Food & Dining</option>
-                                <option>Transportation</option>
-                                <option>Shopping</option>
-                                <option>Entertainment</option>
-                                <option>Bills & Utilities</option>
-                                <option>Health</option>
-                                <option>Housing</option>
-                                <option>Income</option>
-                                <option>Other</option>
+                                <option>Food & Dining 🍽️</option>
+                                <option>Groceries 🛒</option>
+                                <option>Transportation 🚗</option>
+                                <option>Gas ⛽️</option>
+                                <option>Shopping 🛍️</option>
+                                <option>Entertainment 🎬</option>
+                                <option>Bills & Utilities 📄</option>
+                                <option>Health 💊</option>
+                                <option>Housing 🏠</option>
+                                <option>Personal Care ✨</option>
+                                <option>Education 🎓</option>
+                                <option>Travel ✈️</option>
+                                <option>Pets 🐾</option>
+                                <option>Gifts & Donations 🎁</option>
+                                <option>Investments 📈</option>
+                                <option>Insurance 🛡️</option>
+                                <option>Income 💰</option>
+                                <option>Other 📦</option>
                             </select>
                         </div>
                         <div class="input-group"><label class="label">Date</label><input type="date" id="txDate"
@@ -224,12 +171,12 @@
                 </div>
             </div>
 
-            <!-- Recent Transactions -->
+            <!-- Column 2: Recent Transactions -->
             <div class="card animate-slide-up delay-5">
                 <div class="card-header flex justify-between items-center" style="flex-direction:row;">
                     <div>
                         <div class="card-title">Recent Transactions</div>
-                        <div class="card-description">Your latest financial activity</div>
+                        <div class="card-description">Latest activity</div>
                     </div>
                     <a href="/transactions.html" class="btn btn-ghost btn-sm" style="font-size:0.75rem;">View all <i
                             data-lucide="arrow-right" style="width:12px;height:12px;"></i></a>
@@ -239,6 +186,40 @@
                         <div class="spinner" style="margin:0 auto 12px;"></div>
                         <p class="text-muted">Loading...</p>
                     </div>
+                </div>
+            </div>
+
+            <!-- Column 3: Area Chart - Gradient -->
+            <div class="card animate-slide-up delay-1">
+                <div class="card-header flex justify-between items-center"
+                    style="flex-direction:row; padding-bottom: 8px;">
+                    <div>
+                        <div class="card-title">Area Chart - Gradient</div>
+                        <div class="card-description">Showing total visitors</div>
+                    </div>
+                    <button class="btn btn-ghost btn-icon btn-sm" onclick="this.closest('.card').remove()"
+                        title="Remove chart">
+                        <i data-lucide="x" style="width:14px;height:14px;opacity:0.5;"></i>
+                    </button>
+                </div>
+                <div class="card-content" style="padding-top:12px;">
+                    <div style="position:relative; height:300px; width:100%;">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 4: Category Breakdown -->
+            <div class="card animate-slide-up delay-2">
+                <div class="card-header">
+                    <div class="card-title">Category Breakdown</div>
+                    <div class="card-description">Where your money goes</div>
+                </div>
+                <div class="card-content" style="padding-top:12px;">
+                    <div style="position:relative; height:300px; width:100%;">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                    <div id="categoryLegend" style="margin-top:16px;"></div>
                 </div>
             </div>
         </div>
@@ -292,9 +273,10 @@
 
         async function loadDashboard() {
             try {
-                const [txData, userInfo] = await Promise.all([
+                const [txData, userInfo, subData] = await Promise.all([
                     apiFetch('/api/transactions'),
                     apiFetch('/api/user'),
+                    apiFetch('/api/subscriptions'),
                 ]);
 
                 transactions = txData.transactions;
@@ -319,6 +301,21 @@
                 document.getElementById('statExpenses').textContent = formatCurrency(expenses);
                 document.getElementById('statSavings').textContent = formatCurrency(income - expenses);
 
+                // Recurring Subscriptions (Removed)
+                // document.getElementById('statRecurring').textContent = formatCurrency(subData.total_monthly);
+                // document.getElementById('statRecurringCount').textContent = `${subData.count} active platforms`;
+
+                // Handle Burn Rate locking (Premium only)
+                const burnRateCard = document.getElementById('cardNetSavings');
+                const burnRateLock = document.getElementById('burnRateLock');
+                if (userInfo.is_premium) {
+                    burnRateCard.classList.remove('locked');
+                    burnRateLock.classList.add('hidden');
+                } else {
+                    burnRateCard.classList.add('locked');
+                    burnRateLock.classList.remove('hidden');
+                }
+
                 // Charts
                 updateCharts();
 
@@ -335,12 +332,10 @@
         // --- Charts ---
         let trendChartInstance = null;
         let catChartInstance = null;
-        let stackedChartInstance = null;
 
         function updateCharts() {
             renderTrendChart();
             renderCategoryChart();
-            renderStackedBarChart();
         }
 
         function renderTrendChart() {
@@ -349,68 +344,68 @@
             if (trendChartInstance) trendChartInstance.destroy();
 
             const dark = isDarkMode();
-            const last30 = [];
-            for (let i = 29; i >= 0; i--) {
-                const d = new Date(); d.setDate(d.getDate() - i);
-                last30.push(d.toISOString().split('T')[0]);
+
+            // 6 Months view for "Area Chart - Gradient" style
+            const months = [];
+            const now = new Date();
+            for (let i = 5; i >= 0; i--) {
+                const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                months.push(d.toLocaleString('default', { month: 'short' }));
             }
 
-            const expensesByDay = {};
-            const incomeByDay = {};
-            transactions.forEach(t => {
-                const d = t.date?.split('T')[0];
-                if (t.type === 'expense') expensesByDay[d] = (expensesByDay[d] || 0) + t.amount;
-                else incomeByDay[d] = (incomeByDay[d] || 0) + t.amount;
-            });
+            const incomeData = [186, 305, 237, 73, 209, 214]; // Mock data matching ref image vibe
+            const expenseData = [80, 200, 120, 190, 130, 140];
 
             // Gradient for Income (primary violet)
-            const incomeGradient = ctx.createLinearGradient(0, 0, 0, canvas.parentElement.offsetHeight);
+            const incomeGradient = ctx.createLinearGradient(0, 0, 0, 300);
             incomeGradient.addColorStop(0, CHART_COLORS.primaryLight);
             incomeGradient.addColorStop(1, CHART_COLORS.primaryFaded);
 
             // Gradient for Expenses (coral/destructive)
-            const expenseGradient = ctx.createLinearGradient(0, 0, 0, canvas.parentElement.offsetHeight);
+            const expenseGradient = ctx.createLinearGradient(0, 0, 0, 300);
             expenseGradient.addColorStop(0, CHART_COLORS.destructiveLight);
             expenseGradient.addColorStop(1, CHART_COLORS.destructiveFaded);
 
             trendChartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: last30.map(d => formatDateShort(d)),
+                    labels: months,
                     datasets: [
                         {
                             label: 'Income',
-                            data: last30.map(d => incomeByDay[d] || 0),
+                            data: incomeData,
                             borderColor: CHART_COLORS.primary,
                             backgroundColor: incomeGradient,
                             fill: true,
                             tension: 0.4,
                             borderWidth: 2,
-                            pointRadius: 0,
-                            pointHoverRadius: 5,
-                            pointHoverBackgroundColor: CHART_COLORS.primary,
-                            pointHoverBorderColor: '#fff',
-                            pointHoverBorderWidth: 2,
+                            pointRadius: 2,
+                            pointHoverRadius: 6,
                         },
                         {
                             label: 'Expenses',
-                            data: last30.map(d => expensesByDay[d] || 0),
+                            data: expenseData,
                             borderColor: CHART_COLORS.destructive,
                             backgroundColor: expenseGradient,
                             fill: true,
                             tension: 0.4,
                             borderWidth: 2,
-                            pointRadius: 0,
-                            pointHoverRadius: 5,
-                            pointHoverBackgroundColor: CHART_COLORS.destructive,
-                            pointHoverBorderColor: '#fff',
-                            pointHoverBorderWidth: 2,
+                            pointRadius: 2,
+                            pointHoverRadius: 6,
                         }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            left: 0,
+                            right: 0,
+                            top: 10,
+                            bottom: 0
+                        }
+                    },
                     interaction: { intersect: false, mode: 'index' },
                     plugins: {
                         legend: {
@@ -419,7 +414,6 @@
                                 boxWidth: 8, boxHeight: 8, usePointStyle: true, pointStyle: 'circle',
                                 font: { size: 11, family: 'Inter' },
                                 color: dark ? 'oklch(0.7137 0.0192 261.3246)' : 'oklch(0.5510 0.0234 264.3637)',
-                                padding: 16
                             }
                         },
                         tooltip: {
@@ -428,67 +422,35 @@
                             bodyColor: dark ? 'oklch(0.7137 0.0192 261.3246)' : 'oklch(0.5510 0.0234 264.3637)',
                             borderColor: dark ? 'oklch(0.3416 0.0444 308.8496)' : 'oklch(0.9073 0.0530 306.0902)',
                             borderWidth: 1, padding: 12, cornerRadius: 8,
-                            titleFont: { weight: '600', family: 'Inter' },
-                            bodyFont: { family: 'Inter' },
-                            callbacks: {
-                                label: function (context) {
-                                    return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
-                                }
-                            }
                         }
                     },
                     scales: {
                         x: {
                             grid: { display: false },
-                            ticks: { font: { size: 10, family: 'Inter' }, color: dark ? 'oklch(0.7137 0.0192 261.3246)' : 'oklch(0.5510 0.0234 264.3637)', maxTicksLimit: 6 },
+                            ticks: {
+                                font: { size: 11, family: 'Inter' },
+                                color: dark ? 'oklch(0.7137 0.0192 261.3246)' : 'oklch(0.5510 0.0234 264.3637)',
+                                padding: 10
+                            },
                             border: { display: false }
                         },
                         y: {
-                            grid: { color: dark ? 'oklch(0.3416 0.0444 308.8496 / 0.3)' : 'oklch(0.9073 0.0530 306.0902 / 0.5)', drawTicks: false },
-                            ticks: { font: { size: 10, family: 'Inter' }, color: dark ? 'oklch(0.7137 0.0192 261.3246)' : 'oklch(0.5510 0.0234 264.3637)', callback: v => '$' + v.toLocaleString(), padding: 8 },
+                            display: true,
+                            grid: { color: dark ? 'oklch(0.3416 0.0444 308.8496 / 0.1)' : 'oklch(0.9073 0.0530 306.0902 / 0.1)', drawTicks: false },
+                            ticks: {
+                                display: true,
+                                font: { size: 10, family: 'Inter' },
+                                color: dark ? 'oklch(0.7137 0.0192 261.3246)' : 'oklch(0.5510 0.0234 264.3637)',
+                                padding: 8
+                            },
                             border: { display: false }
                         }
                     }
                 }
             });
-
-            // Update footer with trend info
-            updateTrendFooter(last30, incomeByDay, expensesByDay);
         }
 
-        function updateTrendFooter(last30, incomeByDay, expensesByDay) {
-            const mid = Math.floor(last30.length / 2);
-            const firstHalf = last30.slice(0, mid);
-            const secondHalf = last30.slice(mid);
 
-            const firstIncome = firstHalf.reduce((s, d) => s + (incomeByDay[d] || 0), 0);
-            const secondIncome = secondHalf.reduce((s, d) => s + (incomeByDay[d] || 0), 0);
-
-            let pctChange = 0;
-            if (firstIncome > 0) pctChange = ((secondIncome - firstIncome) / firstIncome * 100);
-            else if (secondIncome > 0) pctChange = 100;
-
-            const changeEl = document.getElementById('trendChangeText');
-            const iconEl = document.getElementById('trendIcon');
-            const labelEl = document.getElementById('trendChangeLabel');
-
-            if (changeEl) {
-                const up = pctChange >= 0;
-                changeEl.textContent = (up ? 'Trending up' : 'Trending down') + ' by ' + Math.abs(pctChange).toFixed(1) + '% this period';
-                if (iconEl) {
-                    iconEl.setAttribute('data-lucide', up ? 'trending-up' : 'trending-down');
-                    labelEl.style.color = up ? CHART_COLORS.primary : CHART_COLORS.destructive;
-                }
-            }
-
-            const periodEl = document.getElementById('trendPeriodLabel');
-            if (periodEl && last30.length > 0) {
-                const first = new Date(last30[0]);
-                const last = new Date(last30[last30.length - 1]);
-                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                periodEl.textContent = months[first.getMonth()] + ' - ' + months[last.getMonth()] + ' ' + last.getFullYear();
-            }
-        }
 
         function renderCategoryChart() {
             const ctx = document.getElementById('categoryChart').getContext('2d');
@@ -550,117 +512,7 @@
             ).join('');
         }
 
-        function renderStackedBarChart() {
-            const canvas = document.getElementById('stackedBarChart');
-            const ctx = canvas.getContext('2d');
-            if (stackedChartInstance) stackedChartInstance.destroy();
 
-            const dark = isDarkMode();
-            const months = [];
-            const labels = [];
-            const now = new Date();
-            for (let i = 5; i >= 0; i--) {
-                const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-                months.push({ m: d.getMonth(), y: d.getFullYear() });
-                labels.push(d.toLocaleString('default', { month: 'long' }));
-            }
-
-            // Update period label
-            const firstMonth = labels[0];
-            const lastMonth = labels[labels.length - 1];
-            const periodEl = document.getElementById('barChartPeriod');
-            if (periodEl) periodEl.textContent = `${firstMonth} - ${lastMonth} ${now.getFullYear()}`;
-
-            const incomeData = new Array(6).fill(0);
-            const expenseData = new Array(6).fill(0);
-
-            transactions.forEach(t => {
-                const td = new Date(t.date);
-                const tm = td.getMonth();
-                const ty = td.getFullYear();
-                const idx = months.findIndex(m => m.m === tm && m.y === ty);
-                if (idx !== -1) {
-                    if (t.type === 'income') incomeData[idx] += t.amount;
-                    else expenseData[idx] += t.amount;
-                }
-            });
-
-            stackedChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Income',
-                            data: incomeData,
-                            backgroundColor: CHART_COLORS.primary,
-                            borderRadius: { topLeft: 0, topRight: 0, bottomLeft: 4, bottomRight: 4 },
-                            stack: 'a'
-                        },
-                        {
-                            label: 'Expenses',
-                            data: expenseData,
-                            backgroundColor: CHART_COLORS.destructive,
-                            borderRadius: { topLeft: 4, topRight: 4, bottomLeft: 0, bottomRight: 0 },
-                            stack: 'a'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true, position: 'bottom', align: 'center',
-                            labels: {
-                                boxWidth: 12, boxHeight: 12, usePointStyle: true, pointStyle: 'rectRounded',
-                                font: { size: 11, family: 'Inter' },
-                                color: dark ? 'oklch(0.7137 0.0192 261.3246)' : 'oklch(0.5510 0.0234 264.3637)',
-                                padding: 16
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: dark ? 'oklch(0.2805 0.0309 307.2326)' : 'oklch(1.0000 0 0)',
-                            titleColor: dark ? 'oklch(0.9299 0.0334 272.7879)' : 'oklch(0.3729 0.0306 259.7328)',
-                            bodyColor: dark ? 'oklch(0.7137 0.0192 261.3246)' : 'oklch(0.5510 0.0234 264.3637)',
-                            borderColor: dark ? 'oklch(0.3416 0.0444 308.8496)' : 'oklch(0.9073 0.0530 306.0902)',
-                            borderWidth: 1, padding: 12, cornerRadius: 8,
-                            titleFont: { weight: '600', family: 'Inter' },
-                            bodyFont: { family: 'Inter' },
-                            callbacks: {
-                                label: function (context) {
-                                    return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            stacked: true,
-                            grid: { display: false },
-                            ticks: { font: { size: 10, family: 'Inter' }, color: dark ? 'oklch(0.7137 0.0192 261.3246)' : 'oklch(0.5510 0.0234 264.3637)', callback: v => labels[v].slice(0, 3) },
-                            border: { display: false }
-                        },
-                        y: {
-                            stacked: true,
-                            grid: { color: dark ? 'oklch(0.3416 0.0444 308.8496 / 0.3)' : 'oklch(0.9073 0.0530 306.0902 / 0.5)', drawTicks: false },
-                            ticks: { font: { size: 10, family: 'Inter' }, color: dark ? 'oklch(0.7137 0.0192 261.3246)' : 'oklch(0.5510 0.0234 264.3637)', callback: v => '$' + v.toLocaleString(), padding: 8 },
-                            border: { display: false }
-                        }
-                    }
-                }
-            });
-
-            // Update footer trend
-            const firstHalf = incomeData.slice(0, 3).reduce((a, b) => a + b, 0);
-            const secondHalf = incomeData.slice(3, 6).reduce((a, b) => a + b, 0);
-            let pct = 0;
-            if (firstHalf > 0) pct = ((secondHalf - firstHalf) / firstHalf * 100);
-            const trendEl = document.getElementById('barTrendText');
-            if (trendEl) {
-                trendEl.textContent = `Trending ${pct >= 0 ? 'up' : 'down'} by ${Math.abs(pct).toFixed(1)}% this period`;
-            }
-        }
 
         // ---- Recent Transactions  ----
         function renderRecentTx(txs) {
@@ -672,15 +524,21 @@
             el.innerHTML = txs.map(t => {
                 const meta = getCategoryMeta(t.category);
                 return `
-                <div class="tx-row">
+                <div class="tx-row" style="padding: 10px 0;">
                     <div class="tx-icon" style="background:var(--accent);">${meta.icon}</div>
                     <div class="tx-info">
                         <div class="tx-desc">${t.description}</div>
                         <div class="tx-meta">${t.category} · ${formatDateShort(t.date)}</div>
                     </div>
-                    <span class="tx-amount ${t.type}">${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}</span>
+                    <div class="flex items-center gap-3">
+                        <span class="tx-amount ${t.type}">${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}</span>
+                        <button class="tx-delete" onclick="deleteTx('${t.id}')">
+                            <i data-lucide="trash-2" style="width:14px;height:14px;color:var(--rose);"></i>
+                        </button>
+                    </div>
                 </div>`;
             }).join('');
+            renderIcons();
         }
 
         // ---- Add Transaction ----
@@ -708,6 +566,17 @@
                 showToast(err.message, 'error');
             } finally { btn.disabled = false; btn.textContent = 'Add Transaction'; }
         });
+
+        async function deleteTx(id) {
+            if (!confirm('Are you sure you want to delete this transaction?')) return;
+            try {
+                await apiFetch(`/api/transactions/${id}`, { method: 'DELETE' });
+                showToast('Transaction deleted', 'success');
+                loadDashboard();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
 
         loadDashboard();
     </script>

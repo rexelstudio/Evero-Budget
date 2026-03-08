@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evero Budget — Recurring Subscriptions</title>
+    <meta name="description" content="Track and manage your recurring subscriptions and monthly services.">
+    <link rel="stylesheet" href="/css/globals.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        .sub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .sub-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: calc(var(--radius) + 4px);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 200ms ease;
+            position: relative;
+        }
+
+        .sub-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .sub-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            background: var(--accent);
+        }
+
+        .sub-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .sub-name {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--foreground);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sub-meta {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            margin-top: 2px;
+        }
+
+        .sub-price {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        .sub-price span {
+            font-size: 0.6875rem;
+            font-weight: 400;
+            color: var(--muted-foreground);
+        }
+
+        .sub-actions {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 150ms;
+        }
+
+        .sub-card:hover .sub-actions {
+            opacity: 1;
+        }
+
+        .sub-action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: none;
+            background: var(--muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 150ms;
+        }
+
+        .sub-action-btn:hover {
+            background: var(--accent);
+        }
+
+        .sub-action-btn.danger:hover {
+            background: var(--destructive);
+            color: white;
+        }
+
+        .summary-bar {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            padding: 20px 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: calc(var(--radius) + 4px);
+            margin-bottom: 24px;
+        }
+
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .summary-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--foreground);
+        }
+
+        .summary-value.highlight {
+            color: var(--primary);
+        }
+
+        .add-sub-card {
+            background: var(--card);
+            border: 2px dashed var(--border);
+            border-radius: calc(var(--radius) + 4px);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 200ms ease;
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            font-weight: 500;
+            min-height: 88px;
+        }
+
+        .add-sub-card:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: color-mix(in oklch, var(--primary), transparent 95%);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m13 2-2 2.5h3L12 7" />
+                    <path d="M10 14v-3" />
+                    <path d="M14 14v-3" />
+                    <path d="M11 19c-1.7 0-3-1.3-3-3v-2h8v2c0 1.7-1.3 3-3 3Z" />
+                    <path d="M12 22v-3" />
+                </svg></div>
+            <div class="sidebar-brand">Evero Budget<span>Premium Finance</span></div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-section-label">Menu</div>
+            <a href="/dashboard.html" class="sidebar-link"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="/transactions.html" class="sidebar-link"><i data-lucide="arrow-left-right"></i> Transactions</a>
+            <a href="/recurring.html" class="sidebar-link active"><i data-lucide="repeat"></i> Recurring</a>
+            <a href="/pricing.html" class="sidebar-link"><i data-lucide="gem"></i> Pricing</a>
+            <a href="/calendar.html" class="sidebar-link"><i data-lucide="calendar"></i> Calendar</a>
+            <div class="sidebar-section-label">Account</div>
+            <a href="/profile.html" class="sidebar-link"><i data-lucide="user"></i> Profile</a>
+            <a href="/settings.html" class="sidebar-link"><i data-lucide="settings"></i> Settings</a>
+            <a href="/referrals.html" class="sidebar-link"><i data-lucide="users"></i> Referral <span
+                    class="badge badge-emerald ml-auto" style="font-size:10px;padding:2px 6px;">Program</span></a>
+            <div class="sidebar-section-label">Legal & Info</div>
+            <a href="/privacy.html" class="sidebar-link"><i data-lucide="shield-alert"></i> Privacy</a>
+            <a href="/terms.html" class="sidebar-link"><i data-lucide="file-text"></i> Terms</a>
+            <a href="/about.html" class="sidebar-link"><i data-lucide="info"></i> About</a>
+        </nav>
+        <div class="sidebar-footer">
+            <div id="upgradeBanner" class="hidden">
+                <a href="/pricing.html" class="upgrade-banner">
+                    <i data-lucide="zap" style="width:16px;height:16px;color:var(--emerald);flex-shrink:0;"></i>
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-size:0.8125rem;font-weight:600;">Upgrade to Premium</div>
+                        <div style="font-size:0.6875rem;color:var(--muted-foreground);">Unlimited features</div>
+                    </div>
+                </a>
+            </div>
+            <div class="sidebar-user" onclick="window.location.href='/profile.html'">
+                <div class="sidebar-avatar" id="sidebarAvatar">U</div>
+                <div style="flex:1;min-width:0;">
+                    <div class="sidebar-user-name" id="sidebarName">User</div>
+                    <div class="sidebar-user-email" id="sidebarEmail">loading...</div>
+                </div>
+                <button class="btn btn-ghost btn-icon btn-sm" onclick="event.stopPropagation(); logout();"
+                    title="Log out"><i data-lucide="log-out" style="width:14px;height:14px;"></i></button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="page-content">
+        <div class="page-header flex justify-between items-center">
+            <div>
+                <h1 class="page-title tracking-tight">Recurring Subscriptions</h1>
+                <p class="page-description">Track your monthly platform subscriptions</p>
+            </div>
+            <div class="flex gap-2 items-center">
+                <button class="btn btn-ghost btn-icon" onclick="toggleTheme()" title="Toggle theme">
+                    <i data-lucide="moon" style="width:16px;height:16px;"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Summary Bar -->
+        <div class="summary-bar animate-slide-up">
+            <div class="summary-item">
+                <span class="summary-label">Active Subscriptions</span>
+                <span class="summary-value" id="subCount">0</span>
+            </div>
+            <div class="separator-v" style="height: 36px;"></div>
+            <div class="summary-item">
+                <span class="summary-label">Monthly Total</span>
+                <span class="summary-value highlight" id="subTotal">$0.00</span>
+            </div>
+            <div class="separator-v" style="height: 36px;"></div>
+            <div class="summary-item">
+                <span class="summary-label">Yearly Estimate</span>
+                <span class="summary-value" id="subYearly">$0.00</span>
+            </div>
+        </div>
+
+        <!-- Subscriptions Grid -->
+        <div class="sub-grid" id="subsGrid">
+            <div class="empty-state" style="grid-column: 1 / -1;">
+                <div class="spinner" style="margin:0 auto 12px;"></div>
+                <p class="text-muted">Loading subscriptions...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Modal -->
+    <div id="subOverlay" class="overlay hidden" onclick="closeModal()"></div>
+    <div id="subModal" class="dialog hidden" style="padding:24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h3 style="font-size:1rem; font-weight:600;" id="modalTitle">Add Subscription</h3>
+            <button class="btn btn-ghost btn-icon btn-sm" onclick="closeModal()">
+                <i data-lucide="x" style="width:16px;height:16px;"></i>
+            </button>
+        </div>
+        <form id="subForm" class="flex flex-col gap-4">
+            <input type="hidden" id="subEditId" value="">
+            <div class="input-group">
+                <label class="label">Platform Name</label>
+                <input type="text" id="subPlatform" class="input" placeholder="e.g. Netflix, Spotify, Amazon Prime..."
+                    required>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label class="label">Monthly Price ($)</label>
+                    <input type="number" id="subPrice" class="input" placeholder="9.99" step="0.01" min="0" required>
+                </div>
+                <div class="input-group">
+                    <label class="label">Start Date</label>
+                    <input type="date" id="subStartDate" class="input" required>
+                </div>
+            </div>
+            <button type="submit" id="subSubmitBtn" class="btn btn-default btn-full">Add Subscription</button>
+        </form>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script>
+        requireAuth();
+
+        const PLATFORM_ICONS = {
+            'netflix': '🎬', 'spotify': '🎵', 'amazon': '📦', 'amazon prime': '📦',
+            'disney': '🏰', 'disney+': '🏰', 'hulu': '📺', 'youtube': '▶️',
+            'apple': '🍎', 'apple music': '🍎', 'apple tv': '🍎',
+            'hbo': '🎭', 'hbo max': '🎭', 'paramount': '⛰️',
+            'adobe': '🎨', 'figma': '🎨', 'notion': '📝', 'slack': '💬',
+            'github': '🐙', 'chatgpt': '🤖', 'openai': '🤖',
+            'dropbox': '📁', 'google': '🔍', 'icloud': '☁️',
+            'xbox': '🎮', 'playstation': '🎮', 'steam': '🎮', 'nintendo': '🎮',
+            'gym': '💪', 'fitbit': '💪', 'peloton': '🚴',
+            'audible': '📚', 'kindle': '📚',
+            'doordash': '🍕', 'uber eats': '🍔', 'grubhub': '🥡',
+            'vpn': '🔒', 'nordvpn': '🔒', 'expressvpn': '🔒',
+            'microsoft': '💻', 'office': '💻', 'zoom': '📹',
+        };
+
+        function getPlatformIcon(name) {
+            const lower = name.toLowerCase();
+            for (const [key, icon] of Object.entries(PLATFORM_ICONS)) {
+                if (lower.includes(key)) return icon;
+            }
+            return '🔄';
+        }
+
+        function getPlatformColor(name) {
+            const colors = [
+                'var(--rose)', 'var(--emerald)', 'var(--blue)', 'var(--violet)',
+                'var(--amber)', 'var(--cyan)', 'var(--orange)'
+            ];
+            let hash = 0;
+            for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+            return colors[Math.abs(hash) % colors.length];
+        }
+
+        function daysSince(dateStr) {
+            if (!dateStr) return 0;
+            const diff = Date.now() - new Date(dateStr).getTime();
+            return Math.floor(diff / (1000 * 60 * 60 * 24));
+        }
+
+        async function loadSubscriptions() {
+            try {
+                const userInfo = await apiFetch('/api/user');
+                loadSidebar(userInfo);
+
+                const data = await apiFetch('/api/subscriptions');
+                const subs = data.subscriptions;
+
+                document.getElementById('subCount').textContent = data.count;
+                document.getElementById('subTotal').textContent = formatCurrency(data.total_monthly);
+                document.getElementById('subYearly').textContent = formatCurrency(data.total_monthly * 12);
+
+                const grid = document.getElementById('subsGrid');
+
+                if (subs.length === 0) {
+                    grid.innerHTML = `
+                        <div class="add-sub-card" onclick="openAddModal()" style="grid-column: 1 / -1; min-height: 200px; flex-direction: column;">
+                            <i data-lucide="plus-circle" style="width:40px;height:40px;"></i>
+                            <div>
+                                <div style="font-size:1rem;font-weight:600;margin-bottom:4px;">No subscriptions yet</div>
+                                <div style="font-size:0.8125rem;">Click here to add your first subscription</div>
+                            </div>
+                        </div>`;
+                    renderIcons();
+                    return;
+                }
+
+                grid.innerHTML = subs.map(s => `
+                    <div class="sub-card animate-slide-up">
+                        <div class="sub-actions">
+                            <button class="sub-action-btn" onclick="openEditModal('${s.id}', '${s.platform.replace(/'/g, "\\'")}', ${s.price}, '${s.start_date ? s.start_date.split('T')[0] : ''}')" title="Edit">
+                                <i data-lucide="pencil" style="width:14px;height:14px;"></i>
+                            </button>
+                            <button class="sub-action-btn danger" onclick="deleteSub('${s.id}')" title="Delete">
+                                <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+                            </button>
+                        </div>
+                        <div class="sub-icon">${getPlatformIcon(s.platform)}</div>
+                        <div class="sub-details">
+                            <div class="sub-name">${s.platform}</div>
+                            <div class="sub-meta">Active for ${daysSince(s.start_date)} days</div>
+                        </div>
+                        <div class="sub-price">
+                            ${formatCurrency(s.price)}<span>/mo</span>
+                        </div>
+                    </div>
+                `).join('') + `
+                    <div class="add-sub-card" onclick="openAddModal()">
+                        <i data-lucide="plus" style="width:20px;height:20px;"></i> Add Subscription
+                    </div>`;
+
+                renderIcons();
+            } catch (err) {
+                console.error(err);
+                showToast('Failed to load subscriptions', 'error');
+            }
+        }
+
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = 'Add Subscription';
+            document.getElementById('subSubmitBtn').textContent = 'Add Subscription';
+            document.getElementById('subEditId').value = '';
+            document.getElementById('subPlatform').value = '';
+            document.getElementById('subPrice').value = '';
+            document.getElementById('subStartDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('subOverlay').classList.remove('hidden');
+            document.getElementById('subModal').classList.remove('hidden');
+            document.getElementById('subPlatform').focus();
+        }
+
+        function openEditModal(id, platform, price, startDate) {
+            document.getElementById('modalTitle').textContent = 'Edit Subscription';
+            document.getElementById('subSubmitBtn').textContent = 'Save Changes';
+            document.getElementById('subEditId').value = id;
+            document.getElementById('subPlatform').value = platform;
+            document.getElementById('subPrice').value = price;
+            document.getElementById('subStartDate').value = startDate;
+            document.getElementById('subOverlay').classList.remove('hidden');
+            document.getElementById('subModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('subOverlay').classList.add('hidden');
+            document.getElementById('subModal').classList.add('hidden');
+        }
+
+        document.getElementById('subForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('subSubmitBtn');
+            const editId = document.getElementById('subEditId').value;
+            btn.disabled = true;
+            btn.textContent = editId ? 'Saving...' : 'Adding...';
+
+            try {
+                const body = {
+                    platform: document.getElementById('subPlatform').value,
+                    price: parseFloat(document.getElementById('subPrice').value),
+                    start_date: document.getElementById('subStartDate').value,
+                };
+
+                if (editId) {
+                    await apiFetch(`/api/subscriptions/${editId}`, { method: 'PUT', body: JSON.stringify(body) });
+                    showToast('Subscription updated!', 'success');
+                } else {
+                    await apiFetch('/api/subscriptions', { method: 'POST', body: JSON.stringify(body) });
+                    showToast('Subscription added!', 'success');
+                }
+
+                closeModal();
+                loadSubscriptions();
+            } catch (err) {
+                showToast(err.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = editId ? 'Save Changes' : 'Add Subscription';
+            }
+        });
+
+        async function deleteSub(id) {
+            if (!confirm('Remove this subscription?')) return;
+            try {
+                await apiFetch(`/api/subscriptions/${id}`, { method: 'DELETE' });
+                showToast('Subscription removed', 'success');
+                loadSubscriptions();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        loadSubscriptions();
+    </script>
+</body>
+
+</html>

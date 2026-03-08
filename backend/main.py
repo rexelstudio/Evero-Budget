@@ -9,6 +9,7 @@ from routes.auth_routes import router as auth_router
 from routes.user_routes import router as user_router
 from routes.transaction_routes import router as transaction_router
 from routes.goal_routes import router as goal_router
+from routes.subscription_routes import router as subscription_router
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -29,6 +30,7 @@ app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(transaction_router)
 app.include_router(goal_router)
+app.include_router(subscription_router)
 
 # Serve frontend static files
 frontend_dir = os.path.join(os.path.dirname(__file__), "..", "frontend")

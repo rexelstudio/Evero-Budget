@@ -1098,6 +1098,55 @@ select.input {
     border-radius: var(--radius);
 }
 
+
+/* ==========================================
+   Locked State (Premium)
+   ========================================== */
+
+.stat-card.locked {
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card.locked .stat-value,
+.stat-card.locked .stat-change {
+    filter: blur(5px);
+    opacity: 0.5;
+    user-select: none;
+}
+
+.stat-card-lock {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in oklch, var(--card), transparent 40%);
+    z-index: 5;
+    cursor: pointer;
+    transition: background 200ms;
+    gap: 8px;
+}
+
+.stat-card-lock:hover {
+    background: color-mix(in oklch, var(--card), transparent 20%);
+}
+
+.stat-card-lock i {
+    width: 20px;
+    height: 20px;
+    color: var(--primary);
+}
+
+.stat-card-lock span {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--primary);
+}
+
 /* ==========================================
    Responsive
    ========================================== */

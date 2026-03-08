@@ -68,15 +68,24 @@ function relativeTime(d) {
 
 // ---- Category Colors ----
 const CATEGORY_COLORS = {
-    'Food & Dining': { badge: 'badge-orange', icon: '🍽️', color: 'var(--orange)' },
-    'Transportation': { badge: 'badge-blue', icon: '🚗', color: 'var(--blue)' },
-    'Shopping': { badge: 'badge-violet', icon: '🛍️', color: 'var(--violet)' },
-    'Entertainment': { badge: 'badge-cyan', icon: '🎬', color: 'var(--cyan)' },
-    'Bills & Utilities': { badge: 'badge-amber', icon: '📄', color: 'var(--amber)' },
-    'Health': { badge: 'badge-emerald', icon: '💊', color: 'var(--emerald)' },
-    'Income': { badge: 'badge-emerald', icon: '💰', color: 'var(--emerald)' },
-    'Housing': { badge: 'badge-blue', icon: '🏠', color: 'var(--blue)' },
-    'Other': { badge: 'badge-secondary', icon: '📦', color: 'var(--muted-foreground)' },
+    'Food & Dining 🍽️': { badge: 'badge-orange', icon: '🍽️', color: 'var(--orange)' },
+    'Groceries 🛒': { badge: 'badge-emerald', icon: '🛒', color: 'var(--emerald)' },
+    'Transportation 🚗': { badge: 'badge-blue', icon: '🚗', color: 'var(--blue)' },
+    'Gas ⛽️': { badge: 'badge-amber', icon: '⛽️', color: 'var(--amber)' },
+    'Shopping 🛍️': { badge: 'badge-violet', icon: '🛍️', color: 'var(--violet)' },
+    'Entertainment 🎬': { badge: 'badge-cyan', icon: '🎬', color: 'var(--cyan)' },
+    'Bills & Utilities 📄': { badge: 'badge-amber', icon: '📄', color: 'var(--amber)' },
+    'Health 💊': { badge: 'badge-emerald', icon: '💊', color: 'var(--emerald)' },
+    'Housing 🏠': { badge: 'badge-blue', icon: '🏠', color: 'var(--blue)' },
+    'Personal Care ✨': { badge: 'badge-rose', icon: '✨', color: 'var(--rose)' },
+    'Education 🎓': { badge: 'badge-violet', icon: '🎓', color: 'var(--violet)' },
+    'Travel ✈️': { badge: 'badge-cyan', icon: '✈️', color: 'var(--cyan)' },
+    'Pets 🐾': { badge: 'badge-orange', icon: '🐾', color: 'var(--orange)' },
+    'Gifts & Donations 🎁': { badge: 'badge-rose', icon: '🎁', color: 'var(--rose)' },
+    'Investments 📈': { badge: 'badge-emerald', icon: '📈', color: 'var(--emerald)' },
+    'Insurance 🛡️': { badge: 'badge-blue', icon: '🛡️', color: 'var(--blue)' },
+    'Income 💰': { badge: 'badge-emerald', icon: '💰', color: 'var(--emerald)' },
+    'Other 📦': { badge: 'badge-secondary', icon: '📦', color: 'var(--muted-foreground)' },
 };
 
 function getCategoryMeta(cat) {

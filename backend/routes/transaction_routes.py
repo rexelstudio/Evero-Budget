@@ -13,13 +13,23 @@ from auth import get_current_user
 router = APIRouter(prefix="/api/transactions", tags=["transactions"])
 
 CATEGORIES_KEYWORDS = {
-    "Food & Dining": ["grocery", "restaurant", "food", "uber eats", "doordash", "grubhub", "mcdonald", "starbucks", "coffee", "lunch", "dinner", "breakfast"],
-    "Transportation": ["gas", "fuel", "uber", "lyft", "taxi", "parking", "transit", "bus", "subway", "train"],
-    "Shopping": ["amazon", "walmart", "target", "ebay", "clothes", "shoes", "mall", "store", "purchase"],
-    "Entertainment": ["netflix", "spotify", "hulu", "movie", "theater", "concert", "game", "subscription"],
-    "Bills & Utilities": ["electric", "water", "internet", "phone", "rent", "mortgage", "insurance", "bill", "utility"],
-    "Health": ["pharmacy", "doctor", "hospital", "gym", "fitness", "medical", "dentist", "health"],
-    "Income": ["salary", "paycheck", "deposit", "freelance", "payment", "wage", "income", "bonus"],
+    "Food & Dining 🍽️": ["restaurant", "food", "uber eats", "doordash", "grubhub", "mcdonald", "starbucks", "coffee", "lunch", "dinner", "breakfast", "cafe", "pizza"],
+    "Groceries 🛒": ["grocery", "supermarket", "walmart", "target", "tesco", "kroger", "whole foods", "aldi", "asda", "costco"],
+    "Transportation 🚗": ["uber", "lyft", "taxi", "parking", "transit", "bus", "subway", "train"],
+    "Gas ⛽️": ["gas", "fuel", "shell", "chevron", "bp", "exxon", "mobil", "costco gas"],
+    "Shopping 🛍️": ["amazon", "ebay", "clothes", "shoes", "mall", "store", "purchase", "nike", "adidas", "zara", "h&m"],
+    "Entertainment 🎬": ["movie", "theater", "concert", "game", "book", "museum", "cinema", "ticket"],
+    "Bills & Utilities 📄": ["electric", "water", "internet", "phone", "rent", "mortgage", "insurance", "bill", "utility", "gas bill", "council tax"],
+    "Health 💊": ["pharmacy", "doctor", "hospital", "dentist", "medical", "drugstore", "cvs", "walgreens"],
+    "Housing 🏠": ["rent", "mortgage", "housing", "apartment", "maintenance", "repairs"],
+    "Personal Care ✨": ["barber", "salon", "haircut", "spa", "makeup", "skincare", "cosmetics"],
+    "Education 🎓": ["tuition", "school", "college", "university", "bookstore", "course"],
+    "Travel ✈️": ["flight", "hotel", "airbnb", "vacation", "booking", "airline"],
+    "Pets 🐾": ["vet", "pet food", "grooming", "chewy", "petsmart", "dog", "cat"],
+    "Gifts & Donations 🎁": ["charity", "donation", "gift", "present", "birthday"],
+    "Investments 📈": ["stock", "crypto", "bitcoin", "dividend", "brokerage"],
+    "Insurance 🛡️": ["insurance", "geico", "progressive", "allstate", "state farm", "premium", "health insurance", "car insurance"],
+    "Income 💰": ["salary", "payroll", "dividend", "interest", "bonus", "transfer", "deposit", "venmo"],
 }
 
 
@@ -128,7 +138,7 @@ def create_transaction(
     }
 
 
-@router.delete("")
+@router.delete("/{id}")
 def delete_transaction(id: str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     transaction = db.query(Transaction).filter(Transaction.id == id, Transaction.user_id == current_user.id).first()
     if not transaction:
