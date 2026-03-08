@@ -152,27 +152,13 @@ function loadSidebar(user) {
         }
     }
 
-    // Show upgrade banner and lock premium features for free users
+    // Show upgrade banner and handle locked features for free users
     if (!user.is_premium) {
         if (els.upgradeBanner) els.upgradeBanner.classList.remove('hidden');
 
-        // Add lock indicators to sidebar links
-        document.querySelectorAll('.sidebar-link').forEach(link => {
-            const text = link.textContent.toLowerCase();
-            if (text.includes('calendar')) {
-                link.classList.add('locked-feature');
-                if (!link.querySelector('.lock-icon')) {
-                    const lock = document.createElement('i');
-                    lock.setAttribute('data-lucide', 'lock');
-                    lock.className = 'lock-icon';
-                    lock.style.width = '12px';
-                    lock.style.height = '12px';
-                    lock.style.marginLeft = 'auto';
-                    lock.style.opacity = '0.5';
-                    link.appendChild(lock);
-                }
-            }
-        });
+        // No features are currently locked in the sidebar
+        document.querySelectorAll('.locked-feature').forEach(el => el.classList.remove('locked-feature'));
+        document.querySelectorAll('.lock-icon').forEach(el => el.remove());
     } else {
         if (els.upgradeBanner) els.upgradeBanner.classList.add('hidden');
         document.querySelectorAll('.locked-feature').forEach(el => el.classList.remove('locked-feature'));
