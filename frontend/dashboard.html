@@ -125,8 +125,19 @@
             <!-- Column 1: Quick Add -->
             <div class="card animate-slide-up delay-4">
                 <div class="card-header">
-                    <div class="card-title">Quick Add</div>
-                    <div class="card-description">Record a new transaction</div>
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div>
+                            <div class="card-title">Quick Add</div>
+                            <div class="card-description">Record a new transaction</div>
+                        </div>
+                        <div id="txLimitContainer" class="hidden text-right" style="min-width: 80px;">
+                            <div class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider"
+                                id="txLimitLabel">0/12 TX</div>
+                            <div class="limit-progress-bg">
+                                <div id="txLimitProgress" class="limit-progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-content">
                     <form id="txForm" class="flex flex-col gap-4">
@@ -312,6 +323,22 @@
                 document.getElementById('statExpenses').textContent = formatCurrency(expenses);
                 document.getElementById('statSavings').textContent = formatCurrency(income - expenses);
 
+                // Handle Transaction Limit display
+                const txLimitContainer = document.getElementById('txLimitContainer');
+                if (!userInfo.is_premium) {
+                    txLimitContainer.classList.remove('hidden');
+                    const count = txData.monthly_count || 0;
+                    const percent = Math.min((count / 12) * 100, 100);
+                    document.getElementById('txLimitLabel').textContent = `${count}/12 TX`;
+                    const bar = document.getElementById('txLimitProgress');
+                    bar.style.width = percent + '%';
+                    if (percent >= 100) bar.classList.add('danger');
+                    else if (percent >= 75) bar.classList.add('warning');
+                    else bar.classList.remove('danger', 'warning');
+                } else {
+                    txLimitContainer.classList.add('hidden');
+                }
+
                 // Recurring Subscriptions (Removed)
                 // document.getElementById('statRecurring').textContent = formatCurrency(subData.total_monthly);
                 // document.getElementById('statRecurringCount').textContent = `${subData.count} active platforms`;
@@ -449,7 +476,6 @@
                             display: true,
                             grid: { color: dark ? 'oklch(0.3416 0.0444 308.8496 / 0.1)' : 'oklch(0.9073 0.0530 306.0902 / 0.1)', drawTicks: false },
                             ticks: {
-                                display: true,
                                 font: { size: 10, family: 'Inter' },
                                 color: dark ? 'oklch(0.7137 0.0192 261.3246)' : 'oklch(0.5510 0.0234 264.3637)',
                                 padding: 8

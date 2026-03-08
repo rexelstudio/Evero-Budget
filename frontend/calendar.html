@@ -92,8 +92,22 @@
         }
 
         .fc-item.income {
-            background: color-mix(in oklch, var(--emerald), transparent 88%);
+            background: color-mix(in oklch, var(--emerald), transparent 90%);
             color: var(--emerald);
+        }
+
+        .premium-lock-overlay {
+            position: absolute;
+            inset: 0;
+            background: color-mix(in oklch, var(--background), transparent 20%);
+            backdrop-filter: blur(8px);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            border-radius: var(--radius);
         }
 
         .fc-item.expense {
@@ -260,9 +274,32 @@
 
         async function loadCalendar() {
             try {
-                const [txData, user] = await Promise.all([apiFetch('/api/transactions'), apiFetch('/api/user')]);
-                transactions = txData.transactions;
+                const user = await apiFetch('/api/user');
                 loadSidebar(user);
+
+                if (!user.is_premium) {
+                    const mainContent = document.querySelector('.page-content');
+                    const lockOverlay = document.createElement('div');
+                    lockOverlay.className = 'premium-lock-overlay animate-fade-in';
+                    lockOverlay.innerHTML = `
+                        <div class="card p-8 flex flex-col items-center gap-4 text-center shadow-xl border-2 border-primary" style="max-width:400px;background:var(--card);">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2">
+                                <i data-lucide="calendar" style="width:24px;height:24px;"></i>
+                            </div>
+                            <h2 class="text-xl font-bold">Interactive Calendar is Premium</h2>
+                            <p class="text-muted text-sm px-4">Visualize your spending patterns and future projections with our high-fidelity premium calendar.</p>
+                            <a href="/pricing.html" class="btn btn-default btn-full mt-2">Upgrade to Premium</a>
+                            <a href="/dashboard.html" class="text-xs text-muted hover:underline mt-2">Back to Dashboard</a>
+                        </div>
+                    `;
+                    mainContent.style.position = 'relative';
+                    mainContent.appendChild(lockOverlay);
+                    renderIcons();
+                    return;
+                }
+
+                const txData = await apiFetch('/api/transactions');
+                transactions = txData.transactions;
                 render();
                 renderIcons();
             } catch (err) {
