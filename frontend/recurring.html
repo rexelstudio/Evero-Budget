@@ -379,14 +379,18 @@
                     const lockOverlay = document.createElement('div');
                     lockOverlay.className = 'premium-lock-overlay animate-fade-in';
                     lockOverlay.innerHTML = `
-                        <div class="card p-8 flex flex-col items-center gap-4 text-center shadow-xl border-2 border-primary" style="max-width:400px;background:var(--card);">
-                            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2">
-                                <i data-lucide="zap" style="width:24px;height:24px;"></i>
+                        <div class="card p-10 flex flex-col items-center gap-6 text-center shadow-2xl border-2 border-primary" style="max-width:500px;background:var(--card);border-radius:24px;">
+                            <div class="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-2">
+                                <i data-lucide="zap" style="width:40px;height:40px;"></i>
                             </div>
-                            <h2 class="text-xl font-bold">Subscription Tracking is Premium</h2>
-                            <p class="text-muted text-sm px-4">Keep all your streaming and service bills in one place with our Premium subscription tracking.</p>
-                            <a href="/pricing.html" class="btn btn-default btn-full mt-2">Upgrade to Premium</a>
-                            <a href="/dashboard.html" class="text-xs text-muted hover:underline mt-2">Back to Dashboard</a>
+                            <div>
+                                <h2 class="text-2xl font-extrabold tracking-tight mb-3">Subscription Tracking is Premium</h2>
+                                <p class="text-muted text-base px-6 leading-relaxed">Keep all your streaming and service bills in one place with our high-fidelity premium subscription tracking.</p>
+                            </div>
+                            <div class="flex flex-col gap-3 w-full px-6">
+                                <a href="/pricing.html" class="btn btn-default btn-full py-4 text-base font-semibold shadow-lg shadow-primary/25">Upgrade to Premium</a>
+                                <a href="/dashboard.html" class="btn btn-ghost btn-full text-sm font-medium">Back to Dashboard</a>
+                            </div>
                         </div>
                     `;
                     mainContent.style.position = 'relative';
