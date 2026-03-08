@@ -56,6 +56,12 @@ def create_subscription(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    is_premium = current_user.subscription and current_user.subscription.status == "active"
+    if not is_premium:
+        count = db.query(FixedSubscription).filter(FixedSubscription.user_id == current_user.id).count()
+        if count >= 2:
+            raise HTTPException(status_code=403, detail="Starter plan limit reached (2/2 subscriptions)")
+
     sub_date = datetime.fromisoformat(body.start_date) if body.start_date else datetime.utcnow()
 
     sub = FixedSubscription(

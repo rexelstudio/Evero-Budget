@@ -159,7 +159,7 @@ function loadSidebar(user) {
         // Add lock indicators to sidebar links
         document.querySelectorAll('.sidebar-link').forEach(link => {
             const text = link.textContent.toLowerCase();
-            if (text.includes('recurring') || text.includes('calendar')) {
+            if (text.includes('calendar')) {
                 link.classList.add('locked-feature');
                 if (!link.querySelector('.lock-icon')) {
                     const lock = document.createElement('i');

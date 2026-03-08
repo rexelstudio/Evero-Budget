@@ -180,6 +180,8 @@
         }
 
         .premium-lock-overlay {
+            display: none;
+            /* Only used on Calendar now */
             position: absolute;
             inset: 0;
             background: color-mix(in oklch, var(--background), transparent 20%);
@@ -191,6 +193,49 @@
             justify-content: center;
             gap: 16px;
             border-radius: var(--radius);
+        }
+
+        .limit-indicator {
+            padding: 8px 16px;
+            background: color-mix(in oklch, var(--primary), transparent 94%);
+            border: 1px solid color-mix(in oklch, var(--primary), transparent 80%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .limit-label {
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--muted-foreground);
+        }
+
+        .limit-progress-bg {
+            height: 4px;
+            width: 60px;
+            background: var(--muted);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .limit-progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .limit-progress-fill.danger {
+            background: var(--rose);
+        }
+
+        .add-sub-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
         }
 
         @media (max-width: 640px) {
@@ -281,9 +326,24 @@
             </div>
             <div class="separator-v" style="height: 36px;"></div>
             <div class="summary-item">
-                <span class="summary-label">Yearly Estimate</span>
+                <span class="summary-label">Estimated Yearly</span>
                 <span class="summary-value" id="subYearly">$0.00</span>
             </div>
+            <div class="separator-v" style="height: 36px; display:none;" id="limitSeparator"></div>
+            <div class="summary-item" id="limitItem" style="display:none;">
+                <div class="limit-indicator">
+                    <div style="text-align: left;">
+                        <span class="limit-label" id="limitLabel" style="font-size: 0.5625rem;">0/2 Subscriptions</span>
+                        <div class="limit-progress-bg" style="width: 50px;">
+                            <div id="limitProgress" class="limit-progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-default shadow-sm" id="headerAddBtn" onclick="openAddModal()"
+                style="margin-left:auto;">
+                <i data-lucide="plus" style="width:16px;height:16px;"></i> Add Subscription
+            </button>
         </div>
 
         <!-- Subscriptions Grid -->
@@ -329,6 +389,9 @@
     <script>
         requireAuth();
 
+        let currentSubCount = 0;
+        let isUserPremium = false;
+
         const PLATFORM_ICONS = {
             'netflix': '🎬', 'spotify': '🎵', 'amazon': '📦', 'amazon prime': '📦',
             'disney': '🏰', 'disney+': '🏰', 'hulu': '📺', 'youtube': '▶️',
@@ -373,44 +436,48 @@
             try {
                 const userInfo = await apiFetch('/api/user');
                 loadSidebar(userInfo);
-
-                if (!userInfo.is_premium) {
-                    const mainContent = document.querySelector('.page-content');
-                    const lockOverlay = document.createElement('div');
-                    lockOverlay.className = 'premium-lock-overlay animate-fade-in';
-                    lockOverlay.innerHTML = `
-                        <div class="card flex flex-col items-center text-center shadow-2xl border-none" style="max-width:480px; width:90%; background:var(--card); border-radius:32px; padding:48px 32px; gap:32px;">
-                            <div class="w-24 h-24 rounded-3xl bg-primary/10 flex items-center justify-center text-primary" style="background: color-mix(in oklch, var(--primary), transparent 92%); border: 1px solid color-mix(in oklch, var(--primary), transparent 80%);">
-                                <i data-lucide="zap" style="width:48px;height:48px;"></i>
-                            </div>
-                            <div style="display:flex; flex-direction:column; gap:12px;">
-                                <h2 style="font-size:1.75rem; font-weight:800; tracking-tight; color:var(--foreground);">Service Tracking</h2>
-                                <p style="color:var(--muted-foreground); font-size:1rem; line-height:1.6; max-width:320px; margin:0 auto;">Keep all your streaming and monthly service bills in one place with our premium automated tracking.</p>
-                            </div>
-                            <div style="display:flex; flex-direction:column; gap:12px; width:100%;">
-                                <a href="/pricing.html" class="btn btn-primary" style="height:56px; width:100%; border-radius:16px; font-size:1rem; font-weight:700; box-shadow: 0 10px 20px -5px color-mix(in oklch, var(--primary), transparent 70%);">Upgrade to Premium</a>
-                                <a href="/dashboard.html" class="btn btn-outline" style="height:52px; width:100%; border-radius:16px; font-size:0.9375rem; color:var(--muted-foreground); border-color:var(--border);">Back to Dashboard</a>
-                            </div>
-                        </div>
-                    `;
-                    mainContent.style.position = 'relative';
-                    mainContent.appendChild(lockOverlay);
-                    renderIcons();
-                    return;
-                }
+                isUserPremium = userInfo.is_premium;
 
                 const data = await apiFetch('/api/subscriptions');
                 const subs = data.subscriptions;
+                currentSubCount = subs.length;
+
+                // Handle limit display
+                const limitItem = document.getElementById('limitItem');
+                const limitSeparator = document.getElementById('limitSeparator');
+                if (!isUserPremium) {
+                    limitItem.style.display = 'flex';
+                    limitSeparator.style.display = 'block';
+                    const percent = (currentSubCount / 2) * 100;
+                    document.getElementById('limitLabel').textContent = `${currentSubCount}/2 Subscriptions`;
+                    const bar = document.getElementById('limitProgress');
+                    bar.style.width = Math.min(percent, 100) + '%';
+                    if (percent >= 100) bar.classList.add('danger');
+                    else bar.classList.remove('danger');
+                } else {
+                    limitItem.style.display = 'none';
+                    limitSeparator.style.display = 'none';
+                }
 
                 document.getElementById('subCount').textContent = data.count;
                 document.getElementById('subTotal').textContent = formatCurrency(data.total_monthly);
                 document.getElementById('subYearly').textContent = formatCurrency(data.total_monthly * 12);
 
+                const isAtLimit = !isUserPremium && currentSubCount >= 2;
+                const headerBtn = document.getElementById('headerAddBtn');
+                if (isAtLimit) {
+                    headerBtn.disabled = true;
+                    headerBtn.title = "Starter plan limit reached (2/2)";
+                } else {
+                    headerBtn.disabled = false;
+                    headerBtn.title = "";
+                }
+
                 const grid = document.getElementById('subsGrid');
 
                 if (subs.length === 0) {
                     grid.innerHTML = `
-                        <div class="add-sub-card" onclick="openAddModal()" style="grid-column: 1 / -1; min-height: 200px; flex-direction: column;">
+                        <div class="add-sub-card ${isAtLimit ? 'disabled' : ''}" onclick="${isAtLimit ? '' : 'openAddModal()'}" style="grid-column: 1 / -1; min-height: 200px; flex-direction: column;">
                             <i data-lucide="plus-circle" style="width:40px;height:40px;"></i>
                             <div>
                                 <div style="font-size:1rem;font-weight:600;margin-bottom:4px;">No subscriptions yet</div>
@@ -431,7 +498,9 @@
                                 <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
                             </button>
                         </div>
-                        <div class="sub-icon">${getPlatformIcon(s.platform)}</div>
+                        <div class="sub-icon" style="background:${getPlatformColor(s.platform)}15; color:${getPlatformColor(s.platform)};">
+                            ${getPlatformIcon(s.platform)}
+                        </div>
                         <div class="sub-details">
                             <div class="sub-name">${s.platform}</div>
                             <div class="sub-meta">Active for ${daysSince(s.start_date)} days</div>
@@ -441,8 +510,8 @@
                         </div>
                     </div>
                 `).join('') + `
-                    <div class="add-sub-card" onclick="openAddModal()">
-                        <i data-lucide="plus" style="width:20px;height:20px;"></i> Add Subscription
+                    <div class="add-sub-card ${isAtLimit ? 'disabled' : ''}" onclick="${isAtLimit ? '' : 'openAddModal()'}">
+                        <i data-lucide="plus" style="width:20px;height:20px;"></i> ${isAtLimit ? 'Limit Reached' : 'Add Subscription'}
                     </div>`;
 
                 renderIcons();
