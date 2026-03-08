@@ -379,17 +379,17 @@
                     const lockOverlay = document.createElement('div');
                     lockOverlay.className = 'premium-lock-overlay animate-fade-in';
                     lockOverlay.innerHTML = `
-                        <div class="card p-10 flex flex-col items-center gap-6 text-center shadow-2xl border-2 border-primary" style="max-width:500px;background:var(--card);border-radius:24px;">
-                            <div class="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-2">
-                                <i data-lucide="zap" style="width:40px;height:40px;"></i>
+                        <div class="card flex flex-col items-center text-center shadow-2xl border-none" style="max-width:480px; width:90%; background:var(--card); border-radius:32px; padding:48px 32px; gap:32px;">
+                            <div class="w-24 h-24 rounded-3xl bg-primary/10 flex items-center justify-center text-primary" style="background: color-mix(in oklch, var(--primary), transparent 92%); border: 1px solid color-mix(in oklch, var(--primary), transparent 80%);">
+                                <i data-lucide="zap" style="width:48px;height:48px;"></i>
                             </div>
-                            <div>
-                                <h2 class="text-2xl font-extrabold tracking-tight mb-3">Subscription Tracking is Premium</h2>
-                                <p class="text-muted text-base px-6 leading-relaxed">Keep all your streaming and service bills in one place with our high-fidelity premium subscription tracking.</p>
+                            <div style="display:flex; flex-direction:column; gap:12px;">
+                                <h2 style="font-size:1.75rem; font-weight:800; tracking-tight; color:var(--foreground);">Service Tracking</h2>
+                                <p style="color:var(--muted-foreground); font-size:1rem; line-height:1.6; max-width:320px; margin:0 auto;">Keep all your streaming and monthly service bills in one place with our premium automated tracking.</p>
                             </div>
-                            <div class="flex flex-col gap-3 w-full px-6">
-                                <a href="/pricing.html" class="btn btn-default btn-full py-4 text-base font-semibold shadow-lg shadow-primary/25">Upgrade to Premium</a>
-                                <a href="/dashboard.html" class="btn btn-ghost btn-full text-sm font-medium">Back to Dashboard</a>
+                            <div style="display:flex; flex-direction:column; gap:12px; width:100%;">
+                                <a href="/pricing.html" class="btn btn-primary" style="height:56px; width:100%; border-radius:16px; font-size:1rem; font-weight:700; box-shadow: 0 10px 20px -5px color-mix(in oklch, var(--primary), transparent 70%);">Upgrade to Premium</a>
+                                <a href="/dashboard.html" class="btn btn-outline" style="height:52px; width:100%; border-radius:16px; font-size:0.9375rem; color:var(--muted-foreground); border-color:var(--border);">Back to Dashboard</a>
                             </div>
                         </div>
                     `;
