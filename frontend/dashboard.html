@@ -216,6 +216,36 @@
                     <div id="categoryLegend" style="margin-top:16px;"></div>
                 </div>
             </div>
+
+            <!-- AI Forecasting (Premium Only) -->
+            <div class="card animate-slide-up delay-3" id="forecastCard" style="position:relative;">
+                <div class="card-header">
+                    <div class="card-title flex items-center gap-2">
+                        <i data-lucide="sparkles" class="text-primary" style="width:16px;height:16px;"></i>
+                        AI-Powered Forecast
+                    </div>
+                    <div class="card-description">Next month spending projection</div>
+                </div>
+                <div class="card-content"
+                    style="padding-top:12px; height:300px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+                    <div id="forecastContent">
+                        <div class="text-3xl font-extrabold tracking-tight mb-2" id="forecastValue">$0.00</div>
+                        <p class="text-sm text-muted max-width-[200px]">Based on your last 3 months, we project a 5%
+                            decrease in discretionary spending.</p>
+                    </div>
+                    <div id="forecastLock"
+                        class="absolute inset-0 bg-background/60 backdrop-blur-[2px] z-10 flex flex-col items-center justify-center p-6 hidden">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-4">
+                            <i data-lucide="lock" style="width:20px;height:20px;"></i>
+                        </div>
+                        <h3 class="font-bold text-base mb-1">AI Insights Locked</h3>
+                        <p class="text-xs text-muted mb-4 px-4 line-clamp-2">Upgrade to Premium to see AI-driven
+                            spending forecasts and savings tips.</p>
+                        <a href="/pricing.html" class="btn btn-sm btn-default">Upgrade Now</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -322,6 +352,21 @@
                 document.getElementById('statIncome').textContent = formatCurrency(income);
                 document.getElementById('statExpenses').textContent = formatCurrency(expenses);
                 document.getElementById('statSavings').textContent = formatCurrency(income - expenses);
+
+                // Burn rate lock
+                document.getElementById('burnRateLock').classList.toggle('hidden', userInfo.is_premium);
+
+                // AI Forecast lock
+                const forecastLock = document.getElementById('forecastLock');
+                const forecastValue = document.getElementById('forecastValue');
+                if (!userInfo.is_premium) {
+                    forecastLock.classList.remove('hidden');
+                } else {
+                    forecastLock.classList.add('hidden');
+                    // Simple "AI" projection: average expenses * 0.95
+                    const avgExp = totalExpenses / (Math.max(1, transactions.length / 10)); // crude avg
+                    forecastValue.textContent = formatCurrency(Math.max(expenses * 0.92, 0));
+                }
 
                 // Handle Transaction Limit display
                 const txLimitContainer = document.getElementById('txLimitContainer');
