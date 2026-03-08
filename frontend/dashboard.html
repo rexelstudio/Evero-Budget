@@ -144,28 +144,7 @@
                             <label class="label">Category</label>
                             <select id="txCategory" class="input">
                                 <option value="">Auto-detect</option>
-                                <option>Food & Dining 🍽️</option>
-                                <option>Groceries 🛒</option>
-                                <option>Transportation 🚗</option>
-                                <option>Gas ⛽️</option>
-                                <option>Shopping 🛍️</option>
-                                <option>Entertainment 🎬</option>
-                                <option>Bills & Utilities 📄</option>
-                                <option>Health 💊</option>
-                                <option>Housing 🏠</option>
-                                <option>Personal Care ✨</option>
-                                <option>Education 🎓</option>
-                                <option>Travel ✈️</option>
-                                <option>Pets 🐾</option>
-                                <option>Gifts & Donations 🎁</option>
-                                <option>Investments 📈</option>
-                                <option>Insurance 🛡️</option>
-                                <option>Salary 💼</option>
-                                <option>Freelance 💻</option>
-                                <option>Investment Income 🏦</option>
-                                <option>Rental Income 🏘️</option>
-                                <option>Bonuses 🎊</option>
-                                <option>Other 📦</option>
+                                <!-- Categories will be populated dynamically -->
                             </select>
                         </div>
                         <div class="input-group"><label class="label">Date</label><input type="date" id="txDate"
@@ -261,11 +240,39 @@
 
         document.getElementById('txDate').valueAsDate = new Date();
 
+        const EXPENSE_CATEGORIES = [
+            'Food & Dining 🍽️', 'Groceries 🛒', 'Transportation 🚗', 'Gas ⛽️', 'Shopping 🛍️',
+            'Entertainment 🎬', 'Bills & Utilities 📄', 'Health 💊', 'Housing 🏠', 'Personal Care ✨',
+            'Education 🎓', 'Travel ✈️', 'Pets 🐾', 'Gifts & Donations 🎁', 'Investments 📈', 'Insurance 🛡️', 'Other 📦'
+        ];
+
+        const INCOME_CATEGORIES = [
+            'Salary 💼', 'Freelance 💻', 'Investment Income 🏦', 'Rental Income 🏘️', 'Bonuses 🎊', 'Other 📦'
+        ];
+
+        function updateCategoryDropdown() {
+            const select = document.getElementById('txCategory');
+            const categories = txType === 'expense' ? EXPENSE_CATEGORIES : INCOME_CATEGORIES;
+
+            // Keep Auto-detect
+            select.innerHTML = '<option value="">Auto-detect</option>';
+
+            categories.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.textContent = cat;
+                select.appendChild(opt);
+            });
+        }
+
         function setTxType(type) {
             txType = type;
             document.getElementById('typeExpense').className = 'type-toggle-btn' + (type === 'expense' ? ' active-expense' : '');
             document.getElementById('typeIncome').className = 'type-toggle-btn' + (type === 'income' ? ' active-income' : '');
+            updateCategoryDropdown();
         }
+
+        // Initialize dropdown
+        updateCategoryDropdown();
 
         function setTimeframe(tf) {
             currentTimeframe = tf;
