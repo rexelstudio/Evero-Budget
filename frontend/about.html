@@ -46,7 +46,7 @@
 
         .about-feature p {
             font-size: 0.8125rem;
-            color: hsl(var(--muted-foreground));
+            color: var(--muted-foreground);
             line-height: 1.6;
         }
     </style>
@@ -57,7 +57,7 @@
         <a href="/" class="topnav-logo">
             <div class="sidebar-logo" style="width:28px;height:28px;"><svg xmlns="http://www.w3.org/2000/svg" width="14"
                     height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--primary-foreground));">
+                    stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary-foreground);">
                     <path d="m13 2-2 2.5h3L12 7" />
                     <path d="M10 14v-3" />
                     <path d="M14 14v-3" />
@@ -79,7 +79,7 @@
             <div class="sidebar-logo mb-4" style="width:48px;height:48px;border-radius:12px;margin:0 auto;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    style="color:hsl(var(--primary-foreground));">
+                    style="color:var(--primary-foreground);">
                     <path d="m13 2-2 2.5h3L12 7" />
                     <path d="M10 14v-3" />
                     <path d="M14 14v-3" />
@@ -107,8 +107,8 @@
         <div class="grid grid-3 gap-4 mb-6">
             <div class="card about-feature animate-slide-up">
                 <div class="card-content">
-                    <div class="about-feature-icon" style="background:hsl(var(--emerald-light));"><i
-                            data-lucide="bar-chart-3" style="width:20px;height:20px;color:hsl(var(--emerald));"></i>
+                    <div class="about-feature-icon" style="background:var(--emerald-light);"><i
+                            data-lucide="bar-chart-3" style="width:20px;height:20px;color:var(--emerald);"></i>
                     </div>
                     <h3>Smart Insights</h3>
                     <p>Real-time analysis with intelligent categorization</p>
@@ -116,16 +116,16 @@
             </div>
             <div class="card about-feature animate-slide-up delay-1">
                 <div class="card-content">
-                    <div class="about-feature-icon" style="background:hsl(var(--blue-light));"><i data-lucide="shield"
-                            style="width:20px;height:20px;color:hsl(var(--blue));"></i></div>
+                    <div class="about-feature-icon" style="background:var(--blue-light);"><i data-lucide="shield"
+                            style="width:20px;height:20px;color:var(--blue);"></i></div>
                     <h3>Bank-Grade Security</h3>
                     <p>Encrypted at rest and in transit</p>
                 </div>
             </div>
             <div class="card about-feature animate-slide-up delay-2">
                 <div class="card-content">
-                    <div class="about-feature-icon" style="background:hsl(var(--violet-light));"><i data-lucide="target"
-                            style="width:20px;height:20px;color:hsl(var(--violet));"></i></div>
+                    <div class="about-feature-icon" style="background:var(--violet-light);"><i data-lucide="target"
+                            style="width:20px;height:20px;color:var(--violet);"></i></div>
                     <h3>Goal Tracking</h3>
                     <p>Set budgets and track progress visually</p>
                 </div>
@@ -138,25 +138,25 @@
                 <div class="card-title text-center" style="width:100%;">What We Stand For</div>
             </div>
             <div class="card-content grid grid-2 gap-3">
-                <div class="p-4 rounded-md" style="background:hsl(var(--muted));">
+                <div class="p-4 rounded-md" style="background:var(--muted);">
                     <h4 class="flex items-center gap-2 mb-1"><i data-lucide="shield-check"
                             style="width:14px;height:14px;"></i> Privacy First</h4>
                     <p class="text-xs text-muted" style="line-height:1.6;">Your financial data belongs to you. We never
                         sell or trade it.</p>
                 </div>
-                <div class="p-4 rounded-md" style="background:hsl(var(--muted));">
+                <div class="p-4 rounded-md" style="background:var(--muted);">
                     <h4 class="flex items-center gap-2 mb-1"><i data-lucide="sparkles"
                             style="width:14px;height:14px;"></i> Simplicity</h4>
                     <p class="text-xs text-muted" style="line-height:1.6;">No jargon, no clutter. Just clean, effortless
                         management.</p>
                 </div>
-                <div class="p-4 rounded-md" style="background:hsl(var(--muted));">
+                <div class="p-4 rounded-md" style="background:var(--muted);">
                     <h4 class="flex items-center gap-2 mb-1"><i data-lucide="rocket"
                             style="width:14px;height:14px;"></i> Innovation</h4>
                     <p class="text-xs text-muted" style="line-height:1.6;">Continuous improvement based on user
                         feedback.</p>
                 </div>
-                <div class="p-4 rounded-md" style="background:hsl(var(--muted));">
+                <div class="p-4 rounded-md" style="background:var(--muted);">
                     <h4 class="flex items-center gap-2 mb-1"><i data-lucide="heart" style="width:14px;height:14px;"></i>
                         Transparency</h4>
                     <p class="text-xs text-muted" style="line-height:1.6;">Clear pricing, honest communication. No
@@ -166,7 +166,7 @@
         </div>
 
         <!-- CTA -->
-        <div class="card animate-slide-up delay-4" style="border-color:hsl(var(--foreground) / 0.15);">
+        <div class="card animate-slide-up delay-4" style="border-color:color-mix(in oklch, var(--foreground), transparent 85%);">
             <div class="card-content text-center" style="padding:32px;">
                 <h2 style="font-size:1.125rem;margin-bottom:4px;">Ready to Take Control?</h2>
                 <p class="text-sm text-muted mb-4">Join thousands who trust Evero Budget.</p>

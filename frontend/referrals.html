@@ -42,10 +42,10 @@
         <div class="sidebar-footer">
             <div id="upgradeBanner" class="hidden">
                 <a href="/pricing.html" class="upgrade-banner">
-                    <i data-lucide="zap" style="width:16px;height:16px;color:hsl(var(--emerald));flex-shrink:0;"></i>
+                    <i data-lucide="zap" style="width:16px;height:16px;color:var(--emerald);flex-shrink:0;"></i>
                     <div style="flex:1;min-width:0;">
                         <div style="font-size:0.8125rem;font-weight:600;">Upgrade to Premium</div>
-                        <div style="font-size:0.6875rem;color:hsl(var(--muted-foreground));">Unlimited features</div>
+                        <div style="font-size:0.6875rem;color:var(--muted-foreground);">Unlimited features</div>
                     </div>
                 </a>
             </div>
@@ -74,17 +74,17 @@
                 </div>
                 <div class="card-content flex flex-col gap-4 flex-1">
                     <div class="p-4 rounded-lg bg-emerald-light border border-emerald/20">
-                        <p class="text-sm font-medium" style="color:hsl(var(--emerald))">Current Earnings</p>
-                        <h2 id="totalEarnings" style="color:hsl(var(--emerald))">$0.00 <span
+                        <p class="text-sm font-medium" style="color:var(--emerald)">Current Earnings</p>
+                        <h2 id="totalEarnings" style="color:var(--emerald)">$0.00 <span
                                 class="text-xs font-normal opacity-70">per month</span></h2>
                     </div>
 
                     <div class="p-4 rounded-lg bg-blue-light border border-blue/20">
                         <div class="flex items-center gap-2 mb-1">
-                            <i data-lucide="trophy" style="width:14px;height:14px;color:hsl(var(--blue))"></i>
-                            <p class="text-sm font-bold" style="color:hsl(var(--blue))">Milestone Bonus</p>
+                            <i data-lucide="trophy" style="width:14px;height:14px;color:var(--blue)"></i>
+                            <p class="text-sm font-bold" style="color:var(--blue)">Milestone Bonus</p>
                         </div>
-                        <p class="text-xs" style="color:hsl(var(--blue)); opacity: 0.9;">Refer 50 Premium users to get a
+                        <p class="text-xs" style="color:var(--blue); opacity: 0.9;">Refer 50 Premium users to get a
                             <span class="font-bold">$250.00</span> one-time bonus!
                         </p>
                     </div>
@@ -259,13 +259,13 @@
             // Remove active style from all radio circles
             document.querySelectorAll('.radio-circle').forEach(el => {
                 el.style.background = 'transparent';
-                el.style.borderColor = 'hsl(var(--border))';
+                el.style.borderColor = 'var(--border)';
             });
 
             // Set active style on the clicked one
             const target = event.currentTarget.querySelector('.radio-circle');
-            target.style.background = 'hsl(var(--primary))';
-            target.style.borderColor = 'hsl(var(--primary))';
+            target.style.background = 'var(--primary)';
+            target.style.borderColor = 'var(--primary)';
 
             showToast(`Payout method set to ${method.toUpperCase()}`, 'success');
         }

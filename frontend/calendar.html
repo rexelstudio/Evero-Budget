@@ -23,13 +23,13 @@
             font-size: 0.6875rem;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            color: hsl(var(--muted-foreground));
+            color: var(--muted-foreground);
             padding: 10px 0;
         }
 
         .full-calendar .fc-day {
             min-height: 90px;
-            border: 1px solid hsl(var(--border));
+            border: 1px solid var(--border);
             border-radius: 8px;
             padding: 6px 8px;
             cursor: pointer;
@@ -39,23 +39,23 @@
         }
 
         .full-calendar .fc-day:hover {
-            border-color: hsl(var(--ring));
+            border-color: var(--ring);
             box-shadow: var(--shadow-sm);
         }
 
         .full-calendar .fc-day.today {
-            border-color: hsl(var(--primary));
-            background: hsl(var(--accent));
+            border-color: var(--primary);
+            background: var(--accent);
         }
 
         .full-calendar .fc-day.selected {
-            border-color: hsl(var(--ring));
-            box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
+            border-color: var(--ring);
+            box-shadow: 0 0 0 2px color-mix(in oklch, var(--ring), transparent 80%);
         }
 
         .full-calendar .fc-day.other-month {
             opacity: 0.35;
-            background: hsl(var(--muted) / 0.3);
+            background: color-mix(in oklch, var(--muted), transparent 70%);
         }
 
         .fc-day-num {
@@ -65,8 +65,8 @@
         }
 
         .fc-day.today .fc-day-num {
-            background: hsl(var(--primary));
-            color: hsl(var(--primary-foreground));
+            background: var(--primary);
+            color: var(--primary-foreground);
             width: 22px;
             height: 22px;
             display: inline-flex;
@@ -92,18 +92,18 @@
         }
 
         .fc-item.income {
-            background: hsl(var(--emerald) / 0.12);
-            color: hsl(var(--emerald));
+            background: color-mix(in oklch, var(--emerald), transparent 88%);
+            color: var(--emerald);
         }
 
         .fc-item.expense {
-            background: hsl(var(--rose) / 0.12);
-            color: hsl(var(--rose));
+            background: color-mix(in oklch, var(--rose), transparent 88%);
+            color: var(--rose);
         }
 
         .fc-more {
             font-size: 0.5625rem;
-            color: hsl(var(--muted-foreground));
+            color: var(--muted-foreground);
             font-weight: 600;
             padding: 1px 4px;
         }
@@ -118,8 +118,8 @@
         .fc-summary-card {
             padding: 16px;
             border-radius: 10px;
-            background: hsl(var(--card));
-            border: 1px solid hsl(var(--border));
+            background: var(--card);
+            border: 1px solid var(--border);
         }
 
         .day-detail-list {
@@ -161,10 +161,10 @@
         <div class="sidebar-footer">
             <div id="upgradeBanner" class="hidden">
                 <a href="/pricing.html" class="upgrade-banner">
-                    <i data-lucide="zap" style="width:16px;height:16px;color:hsl(var(--emerald));flex-shrink:0;"></i>
+                    <i data-lucide="zap" style="width:16px;height:16px;color:var(--emerald);flex-shrink:0;"></i>
                     <div style="flex:1;min-width:0;">
                         <div style="font-size:0.8125rem;font-weight:600;">Upgrade to Premium</div>
-                        <div style="font-size:0.6875rem;color:hsl(var(--muted-foreground));">Unlimited features</div>
+                        <div style="font-size:0.6875rem;color:var(--muted-foreground);">Unlimited features</div>
                     </div>
                 </a>
             </div>
@@ -205,11 +205,11 @@
         <div class="fc-summary animate-fade-in" id="calSummary">
             <div class="fc-summary-card">
                 <p class="text-xs text-muted font-bold uppercase tracking-wider mb-1">Monthly Income</p>
-                <h3 id="calIncome" style="color:hsl(var(--emerald))">$0.00</h3>
+                <h3 id="calIncome" style="color:var(--emerald)">$0.00</h3>
             </div>
             <div class="fc-summary-card">
                 <p class="text-xs text-muted font-bold uppercase tracking-wider mb-1">Monthly Expenses</p>
-                <h3 id="calExpenses" style="color:hsl(var(--rose))">$0.00</h3>
+                <h3 id="calExpenses" style="color:var(--rose)">$0.00</h3>
             </div>
             <div class="fc-summary-card">
                 <p class="text-xs text-muted font-bold uppercase tracking-wider mb-1">Net Flow</p>
@@ -286,7 +286,7 @@
             const net = income - expenses;
             const netEl = document.getElementById('calNet');
             netEl.textContent = (net >= 0 ? '+' : '') + formatCurrency(net);
-            netEl.style.color = net >= 0 ? 'hsl(var(--emerald))' : 'hsl(var(--rose))';
+            netEl.style.color = net >= 0 ? 'var(--emerald)' : 'var(--rose)';
         }
 
         function renderFullCalendar() {

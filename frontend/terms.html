@@ -41,7 +41,7 @@
             width: 24px;
             height: 24px;
             border-radius: 6px;
-            background: hsl(var(--muted));
+            background: var(--muted);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -54,7 +54,7 @@
         .legal-section li {
             font-size: 0.875rem;
             line-height: 1.8;
-            color: hsl(var(--muted-foreground));
+            color: var(--muted-foreground);
         }
 
         .legal-section p {
@@ -79,24 +79,24 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: hsl(var(--muted-foreground) / 0.4);
+            background: color-mix(in oklch, var(--muted-foreground), transparent 60%);
         }
 
         .legal-section strong {
-            color: hsl(var(--foreground));
+            color: var(--foreground);
             font-weight: 600;
         }
 
         .callout {
             padding: 16px;
             border-radius: var(--radius);
-            background: hsl(var(--amber-light));
-            border: 1px solid hsl(var(--amber) / 0.2);
+            background: var(--amber-light);
+            border: 1px solid color-mix(in oklch, var(--amber), transparent 80%);
             margin: 12px 0;
         }
 
         .callout p {
-            color: hsl(var(--foreground));
+            color: var(--foreground);
             margin: 0;
         }
     </style>
@@ -107,7 +107,7 @@
         <a href="/" class="topnav-logo">
             <div class="sidebar-logo" style="width:28px;height:28px;"><svg xmlns="http://www.w3.org/2000/svg" width="14"
                     height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--primary-foreground));">
+                    stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary-foreground);">
                     <path d="m13 2-2 2.5h3L12 7" />
                     <path d="M10 14v-3" />
                     <path d="M14 14v-3" />
@@ -160,7 +160,7 @@
                 <h2><span class="legal-section-num">4</span> Not Financial Advice</h2>
                 <p>Evero-Budget is for informational and educational purposes only.</p>
                 <div class="callout flex items-start gap-3"><i data-lucide="alert-triangle"
-                        style="width:16px;height:16px;color:hsl(var(--amber));flex-shrink:0;margin-top:2px;"></i>
+                        style="width:16px;height:16px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i>
                     <p class="text-sm"><strong>Important:</strong> Evero-Budget does not provide professional financial,
                         investment, tax, or legal advice. We are not a financial institution.</p>
                 </div>

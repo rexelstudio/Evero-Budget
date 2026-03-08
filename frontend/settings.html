@@ -42,10 +42,10 @@
         <div class="sidebar-footer">
             <div id="upgradeBanner" class="hidden">
                 <a href="/pricing.html" class="upgrade-banner">
-                    <i data-lucide="zap" style="width:16px;height:16px;color:hsl(var(--emerald));flex-shrink:0;"></i>
+                    <i data-lucide="zap" style="width:16px;height:16px;color:var(--emerald);flex-shrink:0;"></i>
                     <div style="flex:1;min-width:0;">
                         <div style="font-size:0.8125rem;font-weight:600;">Upgrade to Premium</div>
-                        <div style="font-size:0.6875rem;color:hsl(var(--muted-foreground));">Unlimited features</div>
+                        <div style="font-size:0.6875rem;color:var(--muted-foreground);">Unlimited features</div>
                     </div>
                 </a>
             </div>
@@ -115,7 +115,7 @@
                 </div>
                 <div class="card-content">
                     <div class="flex justify-between items-center p-4 rounded-md mb-4"
-                        style="background:hsl(var(--muted));">
+                        style="background:var(--muted);">
                         <div>
                             <p class="text-sm font-medium">Authenticator App</p>
                             <p class="text-xs text-muted">Use an app like Google Authenticator or Authy</p>
@@ -127,14 +127,14 @@
                     </div>
                 </div>
             </div>
-            <div class="card animate-fade-in" style="border-color:hsl(var(--destructive) / 0.3);">
+            <div class="card animate-fade-in" style="border-color:color-mix(in oklch, var(--destructive), transparent 70%);">
                 <div class="card-header">
-                    <div class="card-title flex items-center gap-2" style="color:hsl(var(--destructive));"><i
+                    <div class="card-title flex items-center gap-2" style="color:var(--destructive);"><i
                             data-lucide="alert-triangle" style="width:14px;height:14px;"></i> Danger Zone</div>
                 </div>
                 <div class="card-content flex justify-between items-center">
                     <div>
-                        <p class="text-sm font-medium" style="color:hsl(var(--destructive));">Delete Account</p>
+                        <p class="text-sm font-medium" style="color:var(--destructive);">Delete Account</p>
                         <p class="text-xs text-muted">Permanently remove your data</p>
                     </div>
                     <button class="btn btn-destructive btn-sm" onclick="showDeleteModal()">Delete Account</button>
@@ -181,21 +181,21 @@
                     <div class="card-description">Manage your alert preferences</div>
                 </div>
                 <div class="card-content flex flex-col gap-4">
-                    <div class="flex justify-between items-center p-4 rounded-md" style="background:hsl(var(--muted));">
+                    <div class="flex justify-between items-center p-4 rounded-md" style="background:var(--muted);">
                         <div>
                             <p class="text-sm font-medium">Budget Alerts</p>
                             <p class="text-xs text-muted">Notify when exceeding category budget</p>
                         </div>
                         <span class="badge badge-emerald">On</span>
                     </div>
-                    <div class="flex justify-between items-center p-4 rounded-md" style="background:hsl(var(--muted));">
+                    <div class="flex justify-between items-center p-4 rounded-md" style="background:var(--muted);">
                         <div>
                             <p class="text-sm font-medium">Weekly Summary</p>
                             <p class="text-xs text-muted">Weekly spending summary email</p>
                         </div>
                         <span class="badge badge-secondary">Off</span>
                     </div>
-                    <div class="flex justify-between items-center p-4 rounded-md" style="background:hsl(var(--muted));">
+                    <div class="flex justify-between items-center p-4 rounded-md" style="background:var(--muted);">
                         <div>
                             <p class="text-sm font-medium">Security Alerts</p>
                             <p class="text-xs text-muted">Login from new device/location</p>
@@ -211,7 +211,7 @@
     <div id="deleteOverlay" class="hidden"></div>
     <div id="deleteModal" class="hidden">
         <div class="dialog-header">
-            <div class="dialog-title" style="color:hsl(var(--destructive));">Delete Account</div>
+            <div class="dialog-title" style="color:var(--destructive);">Delete Account</div>
             <div class="dialog-description">This action cannot be undone. All data will be permanently deleted.</div>
             <button class="dialog-close" onclick="closeDeleteModal()"><i data-lucide="x"
                     style="width:16px;height:16px;"></i></button>
@@ -239,13 +239,13 @@
         </div>
         <div class="dialog-content flex flex-col items-center gap-4 text-center">
             <div id="qrContainer" class="p-4 rounded-lg bg-white"
-                style="border: 1px solid hsl(var(--border)); min-height: 200px; min-width: 200px; display: flex; align-items: center; justify-content: center;">
+                style="border: 1px solid var(--border); min-height: 200px; min-width: 200px; display: flex; align-items: center; justify-content: center;">
                 <p class="text-xs text-muted">Generating QR code...</p>
             </div>
             <div class="w-full">
                 <p class="text-xs text-muted mb-2">Can't scan? Use this code instead:</p>
                 <code id="tfSecret" class="p-2 bg-muted rounded font-mono text-xs block truncate"
-                    style="background: hsl(var(--muted));">...</code>
+                    style="background: var(--muted);">...</code>
             </div>
             <div class="input-group w-full text-left">
                 <label class="label">Verification Code</label>
@@ -284,7 +284,7 @@
             const area = document.getElementById('2faActionArea');
             if (enabled) {
                 badge.innerHTML = '<span class="badge badge-emerald">Enabled</span>';
-                area.innerHTML = '<button class="btn btn-outline btn-full" onclick="disable2FA()" style="color:hsl(var(--destructive)); border-color:hsl(var(--destructive)/0.3);">Disable 2FA</button>';
+                area.innerHTML = '<button class="btn btn-outline btn-full" onclick="disable2FA()" style="color:var(--destructive); border-color:color-mix(in oklch, var(--destructive), transparent 70%);">Disable 2FA</button>';
             } else {
                 badge.innerHTML = '<span class="badge badge-secondary">Disabled</span>';
                 area.innerHTML = '<button class="btn btn-outline btn-full" onclick="show2FASetup()">Enable 2FA</button>';

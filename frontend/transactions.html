@@ -43,10 +43,10 @@
         <div class="sidebar-footer">
             <div id="upgradeBanner" class="hidden">
                 <a href="/pricing.html" class="upgrade-banner">
-                    <i data-lucide="zap" style="width:16px;height:16px;color:hsl(var(--emerald));flex-shrink:0;"></i>
+                    <i data-lucide="zap" style="width:16px;height:16px;color:var(--emerald);flex-shrink:0;"></i>
                     <div style="flex:1;min-width:0;">
                         <div style="font-size:0.8125rem;font-weight:600;">Upgrade to Premium</div>
-                        <div style="font-size:0.6875rem;color:hsl(var(--muted-foreground));">Unlimited features</div>
+                        <div style="font-size:0.6875rem;color:var(--muted-foreground);">Unlimited features</div>
                     </div>
                 </a>
             </div>
@@ -80,12 +80,12 @@
         </div>
 
         <!-- Limit Warning -->
-        <div id="limitWarning" class="hidden card mb-4" style="border-color:hsl(var(--amber) / 0.3);">
+        <div id="limitWarning" class="hidden card mb-4" style="border-color:color-mix(in oklch, var(--amber), transparent 70%);">
             <div class="card-content flex justify-between items-center" style="padding:14px 20px;">
                 <div class="flex items-center gap-3">
                     <div
-                        style="width:36px;height:36px;border-radius:var(--radius);background:hsl(var(--amber-light));display:flex;align-items:center;justify-content:center;">
-                        <i data-lucide="lock" style="width:16px;height:16px;color:hsl(var(--amber));"></i>
+                        style="width:36px;height:36px;border-radius:var(--radius);background:var(--amber-light);display:flex;align-items:center;justify-content:center;">
+                        <i data-lucide="lock" style="width:16px;height:16px;color:var(--amber);"></i>
                     </div>
                     <div>
                         <p class="text-sm font-semibold" id="limitText">Monthly limit reached</p>
@@ -127,7 +127,7 @@
                 <div class="flex gap-3 items-center" style="flex-wrap:wrap;">
                     <div class="flex items-center gap-2 flex-1" style="min-width:200px;position:relative;">
                         <i data-lucide="search"
-                            style="width:14px;height:14px;color:hsl(var(--muted-foreground));position:absolute;left:10px;"></i>
+                            style="width:14px;height:14px;color:var(--muted-foreground);position:absolute;left:10px;"></i>
                         <input type="text" id="searchInput" class="input" placeholder="Search transactions..."
                             style="padding-left:32px;">
                     </div>
