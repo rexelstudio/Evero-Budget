@@ -22,7 +22,7 @@
                     <path d="m13 2-2 2.5h3L12 7" />
                     <path d="M10 14v-3" />
                     <path d="M14 14v-3" />
-                    <path d="M11 19c-1.7 0-3-1.3-3-3v-2h8v2c0 1.7-1.3 3-3 3Z" />
+                    <path d="M11 19c-1.7 0-3-3-3v-2h8v2c0 1.7-1.3 3-3 3Z" />
                     <path d="M12 22v-3" />
                 </svg></div>
             <div class="sidebar-brand">Evero Budget<span>Premium Finance</span></div>
@@ -46,9 +46,9 @@
         <div class="sidebar-footer">
             <div id="upgradeBanner" class="hidden">
                 <a href="/pricing.html" class="upgrade-banner">
-                    <i data-lucide="zap" style="width:16px;height:16px;color:hsl(var(--emerald));flex-shrink:0;"></i>
+                    <i data-lucide="zap" style="width:16px;height:16px;color:hsl(38 80% 52%);flex-shrink:0;"></i>
                     <div style="flex:1;min-width:0;">
-                        <div style="font-size:0.8125rem;font-weight:600;">Upgrade to Premium</div>
+                        <div style="font-size:0.8125rem;font-weight:600;color:hsl(38 80% 42%);">Upgrade to Premium</div>
                         <div style="font-size:0.6875rem;color:hsl(var(--muted-foreground));">Unlimited features</div>
                     </div>
                 </a>
@@ -92,21 +92,21 @@
                 <div class="stat-change positive" id="statBalanceChange"><i data-lucide="trending-up"
                         style="width:12px;height:12px;"></i> <span>+0% from last month</span></div>
             </div>
-            <div class="card stat-card animate-slide-up delay-1">
+            <div class="card stat-card glow-green animate-slide-up delay-1">
                 <div class="stat-label"><i data-lucide="trending-up" style="width:14px;height:14px;"></i> Monthly Income
                 </div>
                 <div class="stat-value" style="color:hsl(var(--emerald));" id="statIncome">$0.00</div>
                 <div class="stat-change positive" id="statIncomeChange"><i data-lucide="trending-up"
                         style="width:12px;height:12px;"></i> <span>+0%</span></div>
             </div>
-            <div class="card stat-card animate-slide-up delay-2">
+            <div class="card stat-card glow-coral animate-slide-up delay-2">
                 <div class="stat-label"><i data-lucide="trending-down" style="width:14px;height:14px;"></i> Monthly
                     Expenses</div>
                 <div class="stat-value" style="color:hsl(var(--rose));" id="statExpenses">$0.00</div>
                 <div class="stat-change negative" id="statExpChange"><i data-lucide="trending-down"
                         style="width:12px;height:12px;"></i> <span>+0%</span></div>
             </div>
-            <div class="card stat-card animate-slide-up delay-3" id="cardNetSavings">
+            <div class="card stat-card glow-blue animate-slide-up delay-3" id="cardNetSavings">
                 <div class="stat-label"><i data-lucide="piggy-bank" style="width:14px;height:14px;"></i> Net Savings
                 </div>
                 <div class="stat-value" style="color:hsl(var(--blue));" id="statSavings">$0.00</div>
@@ -126,12 +126,12 @@
                     </div>
                 </div>
                 <div class="card-content" style="padding-top:12px;">
-                    <div style="position:relative; height:120px; width:100%;">
+                    <div style="position:relative; height:140px; width:100%;">
                         <canvas id="trendChart"></canvas>
                     </div>
                 </div>
                 <div class="card-footer" id="trendFooter"
-                    style="padding:12px 24px 16px; border-top:1px solid hsl(var(--border)); display:flex; align-items:flex-start; gap:8px; font-size:0.8125rem;">
+                    style="padding:12px 24px 16px; border-top:1px solid hsl(var(--border) / 0.5); display:flex; align-items:flex-start; gap:8px; font-size:0.8125rem;">
                     <div style="display:flex; flex-direction:column; gap:4px;">
                         <div style="display:flex; align-items:center; gap:6px; font-weight:500;" id="trendChangeLabel">
                             <span id="trendChangeText">Calculating...</span>
@@ -150,7 +150,7 @@
                     <div class="card-description">Where your money goes</div>
                 </div>
                 <div class="card-content" style="padding-top:12px;">
-                    <div style="position:relative; height:120px; width:100%;">
+                    <div style="position:relative; height:140px; width:100%;">
                         <canvas id="categoryChart"></canvas>
                     </div>
                     <div id="categoryLegend" style="margin-top:16px;"></div>
@@ -164,12 +164,12 @@
                     <div class="card-description" id="barChartPeriod">January - June 2024</div>
                 </div>
                 <div class="card-content" style="padding-top:12px;">
-                    <div style="position:relative; height:120px; width:100%;">
+                    <div style="position:relative; height:140px; width:100%;">
                         <canvas id="stackedBarChart"></canvas>
                     </div>
                 </div>
                 <div class="card-footer"
-                    style="padding:12px 24px 16px; border-top:1px solid hsl(var(--border)); display:flex; align-items:flex-start; gap:8px; font-size:0.8125rem;">
+                    style="padding:12px 24px 16px; border-top:1px solid hsl(var(--border) / 0.5); display:flex; align-items:flex-start; gap:8px; font-size:0.8125rem;">
                     <div style="display:flex; flex-direction:column; gap:4px;">
                         <div
                             style="display:flex; align-items:center; gap:6px; font-weight:500; color:hsl(var(--primary));">
@@ -343,15 +343,15 @@
                 else incomeByDay[d] = (incomeByDay[d] || 0) + t.amount;
             });
 
-            // Gradient for Income
+            // Gradient for Income (vibrant green)
             const incomeGradient = ctx.createLinearGradient(0, 0, 0, canvas.parentElement.offsetHeight);
-            incomeGradient.addColorStop(0, 'hsla(142, 70%, 45%, 0.5)');
-            incomeGradient.addColorStop(1, 'hsla(142, 70%, 45%, 0.02)');
+            incomeGradient.addColorStop(0, 'hsla(152, 55%, 42%, 0.45)');
+            incomeGradient.addColorStop(1, 'hsla(152, 55%, 42%, 0.02)');
 
-            // Gradient for Expenses
+            // Gradient for Expenses (warm coral)
             const expenseGradient = ctx.createLinearGradient(0, 0, 0, canvas.parentElement.offsetHeight);
-            expenseGradient.addColorStop(0, 'hsla(0, 70%, 50%, 0.5)');
-            expenseGradient.addColorStop(1, 'hsla(0, 70%, 50%, 0.02)');
+            expenseGradient.addColorStop(0, 'hsla(4, 72%, 58%, 0.45)');
+            expenseGradient.addColorStop(1, 'hsla(4, 72%, 58%, 0.02)');
 
             trendChartInstance = new Chart(ctx, {
                 type: 'line',
@@ -361,28 +361,28 @@
                         {
                             label: 'Income',
                             data: last30.map(d => incomeByDay[d] || 0),
-                            borderColor: 'hsl(142, 70%, 45%)',
+                            borderColor: 'hsl(152, 55%, 42%)',
                             backgroundColor: incomeGradient,
                             fill: true,
-                            tension: 0.4,
+                            tension: 0.45,
                             borderWidth: 2,
                             pointRadius: 0,
                             pointHoverRadius: 5,
-                            pointHoverBackgroundColor: 'hsl(142, 70%, 45%)',
+                            pointHoverBackgroundColor: 'hsl(152, 55%, 42%)',
                             pointHoverBorderColor: '#fff',
                             pointHoverBorderWidth: 2,
                         },
                         {
                             label: 'Expenses',
                             data: last30.map(d => expensesByDay[d] || 0),
-                            borderColor: 'hsl(0, 70%, 50%)',
+                            borderColor: 'hsl(4, 72%, 58%)',
                             backgroundColor: expenseGradient,
                             fill: true,
-                            tension: 0.4,
+                            tension: 0.45,
                             borderWidth: 2,
                             pointRadius: 0,
                             pointHoverRadius: 5,
-                            pointHoverBackgroundColor: 'hsl(0, 70%, 50%)',
+                            pointHoverBackgroundColor: 'hsl(4, 72%, 58%)',
                             pointHoverBorderColor: '#fff',
                             pointHoverBorderWidth: 2,
                         }
@@ -402,11 +402,11 @@
                             }
                         },
                         tooltip: {
-                            backgroundColor: dark ? '#27272a' : '#fff',
-                            titleColor: dark ? '#fafafa' : '#09090b',
+                            backgroundColor: dark ? 'rgba(30,30,35,0.95)' : 'rgba(255,255,255,0.95)',
+                            titleColor: dark ? '#f4f4f5' : '#18181b',
                             bodyColor: dark ? '#a1a1aa' : '#71717a',
-                            borderColor: dark ? '#3f3f46' : '#e4e4e7',
-                            borderWidth: 1, padding: 12, cornerRadius: 8,
+                            borderColor: dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)',
+                            borderWidth: 1, padding: 14, cornerRadius: 12,
                             titleFont: { weight: '600', family: 'Inter' },
                             bodyFont: { family: 'Inter' },
                             callbacks: {
@@ -423,7 +423,7 @@
                             border: { display: false }
                         },
                         y: {
-                            grid: { color: dark ? 'hsla(0,0%,100%,0.06)' : 'hsla(0,0%,0%,0.06)', drawTicks: false },
+                            grid: { color: dark ? 'hsla(0,0%,100%,0.05)' : 'hsla(0,0%,0%,0.04)', drawTicks: false },
                             ticks: { font: { size: 10, family: 'Inter' }, color: dark ? '#71717a' : '#a1a1aa', callback: v => '$' + v.toLocaleString(), padding: 8 },
                             border: { display: false }
                         }
@@ -431,7 +431,6 @@
                 }
             });
 
-            // Update footer with trend info
             updateTrendFooter(last30, incomeByDay, expensesByDay);
         }
 
@@ -456,7 +455,7 @@
                 changeEl.textContent = (up ? 'Trending up' : 'Trending down') + ' by ' + Math.abs(pctChange).toFixed(1) + '% this period';
                 if (iconEl) {
                     iconEl.setAttribute('data-lucide', up ? 'trending-up' : 'trending-down');
-                    labelEl.style.color = up ? 'hsl(142, 70%, 45%)' : 'hsl(0, 70%, 50%)';
+                    labelEl.style.color = up ? 'hsl(152, 55%, 42%)' : 'hsl(4, 72%, 58%)';
                 }
             }
 
@@ -488,28 +487,44 @@
             const data = sorted.map(e => e[1]);
             const total = data.reduce((s, v) => s + v, 0);
 
-            const colors = ['#166534', '#15803d', '#16a34a', '#22c55e', '#a16207', '#ca8a04', '#eab308'];
+            // Multi-colored palette for distinct segments
+            const colors = [
+                'hsl(152, 55%, 42%)',   // Green
+                'hsl(220, 65%, 54%)',   // Cobalt Blue
+                'hsl(4, 72%, 58%)',     // Coral
+                'hsl(38, 80%, 52%)',    // Amber
+                'hsl(270, 50%, 60%)',   // Violet
+                'hsl(178, 55%, 42%)',   // Teal
+                'hsl(24, 85%, 56%)',    // Orange
+            ];
 
             catChartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
                     labels,
-                    datasets: [{ data, backgroundColor: colors.slice(0, labels.length), borderWidth: 0, hoverOffset: 6 }]
+                    datasets: [{ data, backgroundColor: colors.slice(0, labels.length), borderWidth: 0, hoverOffset: 8 }]
                 },
                 options: {
                     responsive: true,
-                    cutout: '70%',
+                    cutout: '68%',
                     plugins: {
                         legend: { display: false },
-                        tooltip: { backgroundColor: dark ? '#27272a' : '#fff', titleColor: dark ? '#fafafa' : '#09090b', bodyColor: dark ? '#a1a1aa' : '#71717a', borderColor: dark ? '#3f3f46' : '#e4e4e7', borderWidth: 1, padding: 12, cornerRadius: 8, callbacks: { label: ctx => `${ctx.label}: ${formatCurrency(ctx.raw)} (${formatPercent(ctx.raw / total * 100)})` } }
+                        tooltip: {
+                            backgroundColor: dark ? 'rgba(30,30,35,0.95)' : 'rgba(255,255,255,0.95)',
+                            titleColor: dark ? '#f4f4f5' : '#18181b',
+                            bodyColor: dark ? '#a1a1aa' : '#71717a',
+                            borderColor: dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)',
+                            borderWidth: 1, padding: 14, cornerRadius: 12,
+                            callbacks: { label: ctx => `${ctx.label}: ${formatCurrency(ctx.raw)} (${formatPercent(ctx.raw / total * 100)})` }
+                        }
                     }
                 }
             });
 
-            // Custom legend
+            // Custom legend with colored dots
             const legendEl = document.getElementById('categoryLegend');
             legendEl.innerHTML = sorted.slice(0, 5).map((e, i) =>
-                `<div class="flex justify-between items-center" style="padding:4px 0;"><div class="flex items-center gap-2"><span style="width:8px;height:8px;border-radius:50%;background:${colors[i]};"></span><span class="text-xs">${e[0]}</span></div><span class="text-xs font-medium">${formatCurrency(e[1])}</span></div>`
+                `<div class="flex justify-between items-center" style="padding:5px 0;"><div class="flex items-center gap-2"><span style="width:10px;height:10px;border-radius:50%;background:${colors[i]};display:inline-block;"></span><span class="text-xs" style="font-weight:500;">${e[0]}</span></div><span class="text-xs font-medium" style="font-variant-numeric:tabular-nums;">${formatCurrency(e[1])}</span></div>`
             ).join('');
         }
 
@@ -528,7 +543,6 @@
                 labels.push(d.toLocaleString('default', { month: 'long' }));
             }
 
-            // Update period label
             const firstMonth = labels[0];
             const lastMonth = labels[labels.length - 1];
             const periodEl = document.getElementById('barChartPeriod');
@@ -556,15 +570,17 @@
                         {
                             label: 'Income',
                             data: incomeData,
-                            backgroundColor: 'hsl(142, 70%, 45%)',
-                            borderRadius: { topLeft: 0, topRight: 0, bottomLeft: 4, bottomRight: 4 },
+                            backgroundColor: 'hsl(152, 55%, 42%)',
+                            borderRadius: { topLeft: 0, topRight: 0, bottomLeft: 6, bottomRight: 6 },
+                            borderSkipped: false,
                             stack: 'a'
                         },
                         {
                             label: 'Expenses',
                             data: expenseData,
-                            backgroundColor: 'hsl(0, 70%, 50%)',
-                            borderRadius: { topLeft: 4, topRight: 4, bottomLeft: 0, bottomRight: 0 },
+                            backgroundColor: 'hsl(4, 72%, 58%)',
+                            borderRadius: { topLeft: 6, topRight: 6, bottomLeft: 0, bottomRight: 0 },
+                            borderSkipped: false,
                             stack: 'a'
                         }
                     ]
@@ -582,11 +598,11 @@
                             }
                         },
                         tooltip: {
-                            backgroundColor: dark ? '#27272a' : '#fff',
-                            titleColor: dark ? '#fafafa' : '#09090b',
+                            backgroundColor: dark ? 'rgba(30,30,35,0.95)' : 'rgba(255,255,255,0.95)',
+                            titleColor: dark ? '#f4f4f5' : '#18181b',
                             bodyColor: dark ? '#a1a1aa' : '#71717a',
-                            borderColor: dark ? '#3f3f46' : '#e4e4e7',
-                            borderWidth: 1, padding: 12, cornerRadius: 8,
+                            borderColor: dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)',
+                            borderWidth: 1, padding: 14, cornerRadius: 12,
                             titleFont: { weight: '600', family: 'Inter' },
                             bodyFont: { family: 'Inter' },
                             callbacks: {
@@ -605,7 +621,7 @@
                         },
                         y: {
                             stacked: true,
-                            grid: { color: dark ? 'hsla(0,0%,100%,0.06)' : 'hsla(0,0%,0%,0.06)', drawTicks: false },
+                            grid: { color: dark ? 'hsla(0,0%,100%,0.05)' : 'hsla(0,0%,0%,0.04)', drawTicks: false },
                             ticks: { font: { size: 10, family: 'Inter' }, color: dark ? '#71717a' : '#a1a1aa', callback: v => '$' + v.toLocaleString(), padding: 8 },
                             border: { display: false }
                         }
@@ -613,7 +629,6 @@
                 }
             });
 
-            // Update footer trend
             const firstHalf = incomeData.slice(0, 3).reduce((a, b) => a + b, 0);
             const secondHalf = incomeData.slice(3, 6).reduce((a, b) => a + b, 0);
             let pct = 0;

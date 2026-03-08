@@ -1,6 +1,6 @@
 /* ==========================================
-   EVERO BUDGET — Component Library
-   shadcn/ui-inspired, Radix UI principles
+   EVERO BUDGET — Glassmorphism Components
+   Frosted glass, soft shadows, micro-animations
    ========================================== */
 
 /* ==========================================
@@ -17,13 +17,14 @@
     font-weight: 500;
     line-height: 1;
     white-space: nowrap;
-    border-radius: calc(var(--radius) + 2px);
+    border-radius: var(--radius);
     border: none;
     cursor: pointer;
     padding: 10px 16px;
     height: 36px;
-    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
     outline: none;
+    position: relative;
 }
 
 .btn:focus-visible {
@@ -36,25 +37,33 @@
     opacity: 0.5;
 }
 
+.btn:active {
+    transform: scale(0.97);
+}
+
 .btn-default,
 .btn-primary {
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
+    box-shadow: 0 2px 8px hsl(var(--primary) / 0.3);
 }
 
 .btn-default:hover,
 .btn-primary:hover {
-    opacity: 0.9;
+    box-shadow: 0 4px 16px hsl(var(--primary) / 0.4);
+    transform: translateY(-1px);
 }
 
 .btn-secondary {
-    background: hsl(var(--secondary));
+    background: hsl(var(--card-solid));
     color: hsl(var(--secondary-foreground));
     border: 1px solid hsl(var(--border));
+    backdrop-filter: blur(var(--glass-blur));
 }
 
 .btn-secondary:hover {
     background: hsl(var(--accent));
+    border-color: hsl(var(--accent-foreground) / 0.2);
 }
 
 .btn-outline {
@@ -82,26 +91,30 @@
 .btn-destructive {
     background: hsl(var(--destructive));
     color: hsl(var(--destructive-foreground));
+    box-shadow: 0 2px 8px hsl(var(--destructive) / 0.3);
 }
 
 .btn-destructive:hover {
-    opacity: 0.9;
+    box-shadow: 0 4px 16px hsl(var(--destructive) / 0.4);
+    transform: translateY(-1px);
 }
 
 .btn-emerald {
     background: hsl(var(--emerald));
     color: white;
+    box-shadow: 0 2px 8px hsl(var(--emerald) / 0.3);
 }
 
 .btn-emerald:hover {
-    opacity: 0.9;
+    box-shadow: 0 4px 16px hsl(var(--emerald) / 0.4);
+    transform: translateY(-1px);
 }
 
 .btn-sm {
     height: 32px;
     padding: 6px 12px;
     font-size: 0.8125rem;
-    border-radius: var(--radius);
+    border-radius: calc(var(--radius) - 2px);
 }
 
 .btn-lg {
@@ -126,29 +139,36 @@
 }
 
 /* ==========================================
-   Card
+   Card — Glassmorphism
    ========================================== */
 
 .card {
     background: hsl(var(--card));
     color: hsl(var(--card-foreground));
-    border: 1px solid hsl(var(--border));
-    border-radius: calc(var(--radius) + 4px);
-    box-shadow: var(--shadow-sm);
+    border: var(--glass-border);
+    border-radius: calc(var(--radius) + 6px);
+    box-shadow: var(--shadow-glass);
     overflow: hidden;
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    transition: box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1), transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-lg);
 }
 
 .card-header {
     padding: 20px 24px 0;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
 }
 
 .card-title {
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
     line-height: 1.4;
 }
 
@@ -176,15 +196,16 @@
 .input {
     display: flex;
     width: 100%;
-    height: 36px;
-    border-radius: calc(var(--radius) + 2px);
+    height: 40px;
+    border-radius: var(--radius);
     border: 1px solid hsl(var(--input));
-    background: transparent;
-    padding: 8px 12px;
+    background: hsl(var(--card-solid) / 0.5);
+    backdrop-filter: blur(8px);
+    padding: 8px 14px;
     font-family: var(--font-sans);
     font-size: 0.875rem;
     color: hsl(var(--foreground));
-    transition: border-color 150ms, box-shadow 150ms;
+    transition: border-color 200ms, box-shadow 200ms, background 200ms;
     outline: none;
 }
 
@@ -194,7 +215,8 @@
 
 .input:focus {
     border-color: hsl(var(--ring));
-    box-shadow: 0 0 0 2px hsl(var(--ring) / 0.1);
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.12);
+    background: hsl(var(--card-solid) / 0.8);
 }
 
 .input:disabled {
@@ -211,10 +233,10 @@ textarea.input {
 select.input {
     appearance: none;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 8px center;
+    background-position: right 10px center;
     background-repeat: no-repeat;
     background-size: 16px;
-    padding-right: 32px;
+    padding-right: 36px;
 }
 
 .input-group {
@@ -239,13 +261,13 @@ select.input {
     align-items: center;
     gap: 4px;
     border-radius: 9999px;
-    padding: 2px 10px;
+    padding: 3px 10px;
     font-size: 0.6875rem;
     font-weight: 600;
     line-height: 1.5;
     letter-spacing: 0.01em;
     white-space: nowrap;
-    transition: color 150ms, background-color 150ms;
+    transition: all 200ms;
 }
 
 .badge-default {
@@ -334,7 +356,7 @@ select.input {
 .progress-bar {
     height: 100%;
     border-radius: 9999px;
-    transition: width 500ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1);
     background: hsl(var(--primary));
 }
 
@@ -359,14 +381,17 @@ select.input {
 }
 
 /* ==========================================
-   Tabs
+   Tabs — Polished Segmented Control Pills
    ========================================== */
 
 .tabs-list {
     display: inline-flex;
     align-items: center;
-    background: hsl(var(--muted));
-    border-radius: calc(var(--radius) + 2px);
+    background: hsl(var(--card-solid) / 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: var(--glass-border);
+    border-radius: calc(var(--radius) + 4px);
     padding: 4px;
     gap: 2px;
     height: 40px;
@@ -377,8 +402,8 @@ select.input {
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 6px 12px;
-    border-radius: var(--radius);
+    padding: 6px 14px;
+    border-radius: calc(var(--radius));
     border: none;
     background: transparent;
     font-family: var(--font-sans);
@@ -386,8 +411,9 @@ select.input {
     font-weight: 500;
     color: hsl(var(--muted-foreground));
     cursor: pointer;
-    transition: all 150ms;
+    transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
     white-space: nowrap;
+    position: relative;
 }
 
 .tab-trigger:hover {
@@ -395,9 +421,10 @@ select.input {
 }
 
 .tab-trigger.active {
-    background: hsl(var(--background));
+    background: hsl(var(--card-solid));
     color: hsl(var(--foreground));
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
+    font-weight: 600;
 }
 
 .tab-content {
@@ -409,7 +436,7 @@ select.input {
 }
 
 /* ==========================================
-   Sidebar
+   Sidebar — Glassmorphism
    ========================================== */
 
 .sidebar {
@@ -419,7 +446,9 @@ select.input {
     bottom: 0;
     width: 260px;
     background: hsl(var(--card));
-    border-right: 1px solid hsl(var(--border));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-right: var(--glass-border);
     display: flex;
     flex-direction: column;
     z-index: 40;
@@ -431,18 +460,19 @@ select.input {
     display: flex;
     align-items: center;
     gap: 12px;
-    border-bottom: 1px solid hsl(var(--border));
+    border-bottom: 1px solid hsl(var(--border) / 0.5);
 }
 
 .sidebar-logo {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: hsl(var(--primary));
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(152 55% 32%));
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    box-shadow: 0 2px 8px hsl(var(--primary) / 0.3);
 }
 
 .sidebar-logo svg {
@@ -486,19 +516,21 @@ select.input {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 8px 12px;
-    border-radius: calc(var(--radius) + 2px);
+    padding: 9px 12px;
+    border-radius: var(--radius);
     font-size: 0.8125rem;
     font-weight: 500;
     color: hsl(var(--muted-foreground));
     cursor: pointer;
-    transition: all 150ms;
+    transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
     text-decoration: none;
+    position: relative;
 }
 
 .sidebar-link:hover {
     background: hsl(var(--accent));
     color: hsl(var(--foreground));
+    transform: translateX(2px);
 }
 
 .sidebar-link.active {
@@ -507,14 +539,30 @@ select.input {
     font-weight: 600;
 }
 
+/* Active state micro-dot */
+.sidebar-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 16px;
+    background: hsl(var(--primary));
+    border-radius: 0 3px 3px 0;
+}
+
 .sidebar-link svg,
 .sidebar-link i {
     width: 18px;
     height: 18px;
     flex-shrink: 0;
-    opacity: 0.7;
+    opacity: 0.6;
+    transition: opacity 200ms;
 }
 
+.sidebar-link:hover svg,
+.sidebar-link:hover i,
 .sidebar-link.active svg,
 .sidebar-link.active i {
     opacity: 1;
@@ -522,7 +570,7 @@ select.input {
 
 .sidebar-footer {
     padding: 12px;
-    border-top: 1px solid hsl(var(--border));
+    border-top: 1px solid hsl(var(--border) / 0.5);
 }
 
 .sidebar-user {
@@ -530,9 +578,9 @@ select.input {
     align-items: center;
     gap: 10px;
     padding: 10px 12px;
-    border-radius: calc(var(--radius) + 2px);
+    border-radius: var(--radius);
     cursor: pointer;
-    transition: background 150ms;
+    transition: all 200ms;
 }
 
 .sidebar-user:hover {
@@ -543,7 +591,7 @@ select.input {
     width: 32px;
     height: 32px;
     border-radius: 9999px;
-    background: hsl(var(--muted));
+    background: linear-gradient(135deg, hsl(var(--muted)), hsl(var(--border)));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -567,37 +615,80 @@ select.input {
 }
 
 /* ==========================================
+   Upgrade Banner — Premium Gold Pulse
+   ========================================== */
+
+.upgrade-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg,
+            hsl(38 80% 52% / 0.08),
+            hsl(38 80% 52% / 0.15),
+            hsl(24 85% 56% / 0.08));
+    border: 1px solid hsl(38 80% 52% / 0.25);
+    text-decoration: none;
+    transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    animation: goldPulse 3s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.upgrade-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            hsl(38 80% 52% / 0.1),
+            transparent);
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+.upgrade-banner:hover {
+    box-shadow: 0 4px 20px hsl(38 80% 52% / 0.3);
+    transform: translateY(-1px);
+    border-color: hsl(38 80% 52% / 0.4);
+}
+
+/* ==========================================
    Page Layout
    ========================================== */
 
 .page-content {
     margin-left: 260px;
-    padding: 24px 32px;
+    padding: 28px 36px;
     min-height: 100vh;
 }
 
 .page-header {
-    margin-bottom: 24px;
+    margin-bottom: 28px;
 }
 
 .page-title {
-    font-size: 1.5rem;
+    font-size: 1.625rem;
     font-weight: 700;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
 }
 
 .page-description {
     font-size: 0.875rem;
     color: hsl(var(--muted-foreground));
-    margin-top: 2px;
+    margin-top: 4px;
 }
 
 /* ==========================================
-   Stat Card
+   Stat Card — Glassmorphism with Color Glows
    ========================================== */
 
 .stat-card {
-    padding: 20px 24px;
+    padding: 22px 24px;
+    position: relative;
 }
 
 .stat-card .stat-label {
@@ -606,21 +697,22 @@ select.input {
     color: hsl(var(--muted-foreground));
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 
 .stat-card .stat-value {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 700;
-    letter-spacing: -0.025em;
-    margin-top: 4px;
-    line-height: 1.2;
+    letter-spacing: -0.03em;
+    margin-top: 8px;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
 }
 
 .stat-card .stat-change {
     font-size: 0.75rem;
     font-weight: 500;
-    margin-top: 4px;
+    margin-top: 6px;
     display: flex;
     align-items: center;
     gap: 4px;
@@ -632,6 +724,31 @@ select.input {
 
 .stat-change.negative {
     color: hsl(var(--rose));
+}
+
+/* Stat card glow accents */
+.stat-card.glow-green {
+    box-shadow: var(--shadow-glass), inset 0 1px 0 hsl(152 55% 42% / 0.15);
+}
+
+.stat-card.glow-green:hover {
+    box-shadow: var(--shadow-glow-green), var(--shadow-lg);
+}
+
+.stat-card.glow-coral {
+    box-shadow: var(--shadow-glass), inset 0 1px 0 hsl(4 72% 58% / 0.15);
+}
+
+.stat-card.glow-coral:hover {
+    box-shadow: var(--shadow-glow-coral), var(--shadow-lg);
+}
+
+.stat-card.glow-blue {
+    box-shadow: var(--shadow-glass), inset 0 1px 0 hsl(220 65% 54% / 0.15);
+}
+
+.stat-card.glow-blue:hover {
+    box-shadow: var(--shadow-glow-blue), var(--shadow-lg);
 }
 
 /* ==========================================
@@ -664,11 +781,11 @@ select.input {
 }
 
 .data-table tbody tr {
-    transition: background-color 150ms;
+    transition: background-color 200ms;
 }
 
 .data-table tbody tr:hover {
-    background: hsl(var(--muted));
+    background: hsl(var(--muted) / 0.5);
 }
 
 .data-table tbody tr:last-child td {
@@ -688,16 +805,21 @@ select.input {
 }
 
 /* ==========================================
-   Transaction Row (compact)
+   Transaction Row — Enhanced
    ========================================== */
 
 .tx-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 0;
-    border-bottom: 1px solid hsl(var(--border));
-    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid hsl(var(--border) / 0.5);
+    gap: 14px;
+    transition: all 200ms;
+}
+
+.tx-row:hover {
+    padding-left: 4px;
 }
 
 .tx-row:last-child {
@@ -705,13 +827,13 @@ select.input {
 }
 
 .tx-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.875rem;
+    font-size: 1rem;
     flex-shrink: 0;
 }
 
@@ -721,7 +843,7 @@ select.input {
 }
 
 .tx-desc {
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     font-weight: 500;
     color: hsl(var(--foreground));
     white-space: nowrap;
@@ -730,13 +852,13 @@ select.input {
 }
 
 .tx-meta {
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     color: hsl(var(--muted-foreground));
-    margin-top: 1px;
+    margin-top: 2px;
 }
 
 .tx-amount {
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
@@ -755,7 +877,7 @@ select.input {
     border: none;
     cursor: pointer;
     opacity: 0;
-    transition: opacity 150ms;
+    transition: opacity 200ms;
     font-size: 0.8125rem;
     padding: 4px;
     border-radius: var(--radius);
@@ -776,9 +898,10 @@ select.input {
 .overlay {
     position: fixed;
     inset: 0;
-    background: hsl(var(--foreground) / 0.5);
+    background: hsl(var(--foreground) / 0.4);
+    backdrop-filter: blur(4px);
     z-index: 100;
-    animation: fadeIn 0.15s ease-out;
+    animation: fadeIn 0.2s ease-out;
 }
 
 .dialog {
@@ -788,14 +911,15 @@ select.input {
     transform: translate(-50%, -50%);
     z-index: 101;
     background: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
-    border-radius: calc(var(--radius) + 4px);
+    backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: calc(var(--radius) + 6px);
     box-shadow: var(--shadow-lg);
     width: 100%;
     max-width: 480px;
     max-height: 85vh;
     overflow-y: auto;
-    animation: scaleIn 0.2s ease-out;
+    animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dialog-header {
@@ -836,7 +960,7 @@ select.input {
     color: hsl(var(--muted-foreground));
     padding: 4px;
     border-radius: var(--radius);
-    transition: all 150ms;
+    transition: all 200ms;
 }
 
 .dialog-close:hover {
@@ -844,7 +968,6 @@ select.input {
     color: hsl(var(--foreground));
 }
 
-/* Sheet (side panel) */
 .sheet-right {
     position: fixed;
     top: 0;
@@ -854,10 +977,11 @@ select.input {
     max-width: 90vw;
     z-index: 101;
     background: hsl(var(--card));
-    border-left: 1px solid hsl(var(--border));
+    backdrop-filter: blur(var(--glass-blur));
+    border-left: var(--glass-border);
     box-shadow: var(--shadow-lg);
     overflow-y: auto;
-    animation: slideInRight 0.2s ease-out;
+    animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes slideInRight {
@@ -893,12 +1017,13 @@ select.input {
     padding: 14px 18px;
     border-radius: calc(var(--radius) + 4px);
     background: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
+    backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
     box-shadow: var(--shadow-lg);
     font-size: 0.8125rem;
     font-weight: 500;
     color: hsl(var(--foreground));
-    animation: slideUp 0.3s ease-out;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     min-width: 280px;
 }
 
@@ -927,7 +1052,7 @@ select.input {
     width: 18px;
     height: 18px;
     border: 2px solid hsl(var(--border));
-    border-top-color: hsl(var(--foreground));
+    border-top-color: hsl(var(--primary));
     border-radius: 50%;
     animation: spin 0.6s linear infinite;
 }
@@ -941,9 +1066,9 @@ select.input {
     width: 16px;
     height: 16px;
     border: 1px solid hsl(var(--input));
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: all 150ms;
+    transition: all 200ms;
     position: relative;
     flex-shrink: 0;
 }
@@ -970,20 +1095,20 @@ select.input {
 }
 
 /* ==========================================
-   Toggle ( Type selector )
+   Toggle (Type selector) — Polished Segmented
    ========================================== */
 
 .type-toggle {
     display: flex;
     background: hsl(var(--muted));
     border-radius: var(--radius);
-    padding: 3px;
+    padding: 4px;
     gap: 2px;
 }
 
 .type-toggle-btn {
     flex: 1;
-    padding: 6px 12px;
+    padding: 8px 12px;
     border: none;
     border-radius: calc(var(--radius) - 2px);
     background: transparent;
@@ -992,19 +1117,21 @@ select.input {
     font-weight: 500;
     color: hsl(var(--muted-foreground));
     cursor: pointer;
-    transition: all 150ms;
+    transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .type-toggle-btn.active-expense {
-    background: hsl(var(--background));
+    background: hsl(var(--card-solid));
     color: hsl(var(--rose));
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
+    font-weight: 600;
 }
 
 .type-toggle-btn.active-income {
-    background: hsl(var(--background));
+    background: hsl(var(--card-solid));
     color: hsl(var(--emerald));
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
+    font-weight: 600;
 }
 
 /* ==========================================
@@ -1032,28 +1159,6 @@ select.input {
 }
 
 /* ==========================================
-   Upgrade Banner
-   ========================================== */
-
-.upgrade-banner {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-radius: calc(var(--radius) + 2px);
-    background: linear-gradient(135deg,
-            hsl(var(--emerald-light)),
-            hsl(var(--blue-light)));
-    border: 1px solid hsl(var(--border));
-    text-decoration: none;
-    transition: all 150ms;
-}
-
-.upgrade-banner:hover {
-    box-shadow: var(--shadow-md);
-}
-
-/* ==========================================
    Legal pages shared nav
    ========================================== */
 
@@ -1063,7 +1168,8 @@ select.input {
     justify-content: space-between;
     padding: 12px 24px;
     background: hsl(var(--card));
-    border-bottom: 1px solid hsl(var(--border));
+    backdrop-filter: blur(var(--glass-blur));
+    border-bottom: var(--glass-border);
     position: sticky;
     top: 0;
     z-index: 50;
@@ -1090,7 +1196,7 @@ select.input {
 .skeleton {
     background: linear-gradient(90deg,
             hsl(var(--muted)),
-            hsl(var(--muted) / 0.6),
+            hsl(var(--muted) / 0.5),
             hsl(var(--muted)));
     background-size: 200% 100%;
     animation: shimmer 1.5s ease-in-out infinite;
