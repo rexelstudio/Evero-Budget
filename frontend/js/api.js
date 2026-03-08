@@ -84,7 +84,11 @@ const CATEGORY_COLORS = {
     'Gifts & Donations 🎁': { badge: 'badge-rose', icon: '🎁', color: 'var(--rose)' },
     'Investments 📈': { badge: 'badge-emerald', icon: '📈', color: 'var(--emerald)' },
     'Insurance 🛡️': { badge: 'badge-blue', icon: '🛡️', color: 'var(--blue)' },
-    'Income 💰': { badge: 'badge-emerald', icon: '💰', color: 'var(--emerald)' },
+    'Salary 💼': { badge: 'badge-emerald', icon: '💼', color: 'var(--emerald)' },
+    'Freelance 💻': { badge: 'badge-emerald', icon: '💻', color: 'var(--emerald)' },
+    'Investment Income 🏦': { badge: 'badge-emerald', icon: '🏦', color: 'var(--emerald)' },
+    'Rental Income 🏘️': { badge: 'badge-emerald', icon: '🏘️', color: 'var(--emerald)' },
+    'Bonuses 🎊': { badge: 'badge-emerald', icon: '🎊', color: 'var(--emerald)' },
     'Other 📦': { badge: 'badge-secondary', icon: '📦', color: 'var(--muted-foreground)' },
 };
 

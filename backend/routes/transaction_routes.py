@@ -29,7 +29,11 @@ CATEGORIES_KEYWORDS = {
     "Gifts & Donations 🎁": ["charity", "donation", "gift", "present", "birthday"],
     "Investments 📈": ["stock", "crypto", "bitcoin", "dividend", "brokerage"],
     "Insurance 🛡️": ["insurance", "geico", "progressive", "allstate", "state farm", "premium", "health insurance", "car insurance"],
-    "Income 💰": ["salary", "payroll", "dividend", "interest", "bonus", "transfer", "deposit", "venmo"],
+    "Salary 💼": ["salary", "paycheck", "payroll", "wage", "direct deposit"],
+    "Freelance 💻": ["freelance", "upwork", "fiverr", "contract", "consulting", "payment"],
+    "Investment Income 🏦": ["dividend", "interest", "capital gain", "brokerage", "fidelity", "vanguard"],
+    "Rental Income 🏘️": ["rent income", "airbnb", "tenant", "property"],
+    "Bonuses 🎊": ["bonus", "commission", "incentive", "award"],
 }
 
 
