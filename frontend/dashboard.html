@@ -296,10 +296,9 @@
 
         async function loadDashboard() {
             try {
-                const [txData, userInfo, subData] = await Promise.all([
+                const [txData, userInfo] = await Promise.all([
                     apiFetch('/api/transactions'),
-                    apiFetch('/api/user'),
-                    apiFetch('/api/subscriptions'),
+                    apiFetch('/api/user')
                 ]);
 
                 transactions = txData.transactions;
