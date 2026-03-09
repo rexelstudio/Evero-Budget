@@ -2,7 +2,7 @@
    Evero Budget — API Client + Utilities
    ================================================ */
 
-const API_BASE = 'http://127.0.0.1:8000';
+const API_BASE = ['localhost', '127.0.0.1'].includes(window.location.hostname) ? 'http://127.0.0.1:8000' : '';
 
 // ---- Token Management ----
 function getToken() { return localStorage.getItem('evero_token'); }
