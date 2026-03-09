@@ -18,7 +18,18 @@ from routes.subscription_routes import router as subscription_router
 # Create tables
 Base.metadata.create_all(bind=engine)
 
+from fastapi.requests import Request
+from fastapi.responses import JSONResponse
+import traceback
+
 app = FastAPI(title="Evero Budget API", version="2.0.0")
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={"detail": str(exc), "traceback": traceback.format_exc()}
+    )
 
 # CORS
 app.add_middleware(
