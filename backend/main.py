@@ -94,6 +94,7 @@ async def seed_demo_user():
         existing = db.query(User).filter(User.email == "demo@example.com").first()
         if not existing:
             demo = User(
+                id="demo-static-uuid-12345",
                 name="Demo User",
                 email="demo@example.com",
                 hashed_password=hash_password("demo1234"),
