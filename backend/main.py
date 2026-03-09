@@ -34,28 +34,37 @@ app.include_router(subscription_router)
 
 # Serve frontend static files
 frontend_dir = os.path.join(os.path.dirname(__file__), "..", "frontend")
-app.mount("/css", StaticFiles(directory=os.path.join(frontend_dir, "css")), name="css")
-app.mount("/js", StaticFiles(directory=os.path.join(frontend_dir, "js")), name="js")
+
+if not os.getenv("VERCEL"):
+    if os.path.exists(os.path.join(frontend_dir, "css")):
+        app.mount("/css", StaticFiles(directory=os.path.join(frontend_dir, "css")), name="css")
+    if os.path.exists(os.path.join(frontend_dir, "js")):
+        app.mount("/js", StaticFiles(directory=os.path.join(frontend_dir, "js")), name="js")
 
 # Serve user uploads
-uploads_dir = os.path.join(os.path.dirname(__file__), "uploads")
+uploads_dir = "/tmp/uploads" if os.getenv("VERCEL") else os.path.join(os.path.dirname(__file__), "uploads")
 if not os.path.exists(uploads_dir):
-    os.makedirs(uploads_dir)
-app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
+    try:
+        os.makedirs(uploads_dir)
+    except Exception:
+        pass
 
+if not os.getenv("VERCEL") and os.path.exists(uploads_dir):
+    app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
 
 # SPA-style routing: serve HTML files
 @app.get("/")
 async def root():
+    if os.getenv("VERCEL"):
+        return {"message": "Evero API Backend is running"}
     return FileResponse(os.path.join(frontend_dir, "index.html"))
-
 
 @app.get("/{page}.html")
 async def serve_page(page: str):
     file_path = os.path.join(frontend_dir, f"{page}.html")
-    if os.path.exists(file_path):
+    if not os.getenv("VERCEL") and os.path.exists(file_path):
         return FileResponse(file_path)
-    return FileResponse(os.path.join(frontend_dir, "index.html"))
+    return {"message": "Endpoint not found or handled by Vercel edge"}
 
 
 # Seed demo user on startup
